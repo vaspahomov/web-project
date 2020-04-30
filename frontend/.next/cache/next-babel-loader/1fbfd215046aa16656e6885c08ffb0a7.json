@@ -1,1 +1,0 @@
-{"ast":null,"code":"var __jsx = React.createElement;\nimport * as React from 'react';\nconst styles = {\n  imageContainer: {\n    margin: 'auto'\n  }\n};\n\nconst ImageContainer = () => {\n  const {\n    imageContainer\n  } = styles;\n  return __jsx(\"div\", {\n    style: imageContainer\n  });\n};\n\nexport default ImageContainer;","map":null,"metadata":{},"sourceType":"module"}

@@ -1,1 +1,0 @@
-{"ast":null,"code":"var __jsx = React.createElement;\nimport * as React from 'react';\nimport css from './ImageContainer.css';\n\nvar ImageContainer = function ImageContainer() {\n  return __jsx(\"div\", {\n    className: css.imageContainer\n  });\n};\n\nexport default ImageContainer;","map":null,"metadata":{},"sourceType":"module"}
