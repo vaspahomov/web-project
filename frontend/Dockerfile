@@ -7,7 +7,8 @@ COPY tsconfig.json /
 COPY .nvmrc /
 
 COPY src /src
-COPY src/public /public
+COPY next.config.js next.config.js
+COPY /public /public
 
 RUN npm run build
 
