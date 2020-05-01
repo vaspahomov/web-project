@@ -6,6 +6,7 @@ import {Button, TextField} from "@material-ui/core";
 const styles = {
     root: {
         width: '100vw',
+        minHeight: 'calc(100vh - 120px)'
     }, formContainer: {
         margin: 'auto',
         width: '400px',

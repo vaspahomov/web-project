@@ -3,6 +3,7 @@ import Link from "next/link";
 import {ListItemIcon, MenuItem, MenuList, Paper, Typography} from "@material-ui/core";
 
 import MainPageLayout from "../components/MainPageLayout";
+import {Palette, PermIdentity, PhotoLibrary} from "@material-ui/icons";
 
 
 const style = {
@@ -21,30 +22,32 @@ const style = {
         width: '100%',
         height: '33.33%',
         fontSize: '40px'
+    }, icon: {
+        fontSize: 80
     }
 }
 
 export default function Index() {
-    const {menuItem, root, list} = style;
+    const {menuItem, root, list, icon} = style;
     return (
         <MainPageLayout>
             <Paper style={root}>
                 <MenuList style={list}>
                     <Link href="/login">
                         <MenuItem style={menuItem}>
-                            <ListItemIcon> </ListItemIcon>
+                            <ListItemIcon> <PermIdentity style={icon}/></ListItemIcon>
                             <Typography variant="inherit">Login</Typography>
                         </MenuItem>
                     </Link>
                     <Link href="/myCollection">
                         <MenuItem style={menuItem}>
-                            <ListItemIcon> </ListItemIcon>
+                            <ListItemIcon> <PhotoLibrary style={icon}/></ListItemIcon>
                             <Typography variant="inherit">My collection</Typography>
                         </MenuItem>
                     </Link>
                     <Link href="/editor">
                         <MenuItem style={menuItem}>
-                            <ListItemIcon> </ListItemIcon>
+                            <ListItemIcon><Palette style={icon}/> </ListItemIcon>
                             <Typography variant="inherit">Editor</Typography>
                         </MenuItem>
                     </Link>

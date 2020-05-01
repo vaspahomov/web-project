@@ -6,15 +6,16 @@ import ImageCard from "../components/ImageCard";
 
 export default function MyCollection() {
     return (
-        <Layout title="Home | Next.js + TypeScript Example">
+        <Layout title="Photokek | Collection">
             <ImageCollectionWrapper>
-                <ImageCard height={"300px"} width={"400px"} name={"Картинка"}/>
-                <ImageCard height={"300px"} width={"400px"} name={"Картинка"}/>
-                <ImageCard height={"300px"} width={"400px"} name={"Картинка"}/>
-                <ImageCard height={"300px"} width={"400px"} name={"Картинка"}/>
-                <ImageCard height={"300px"} width={"400px"} name={"Картинка"}/>
-                <ImageCard height={"300px"} width={"400px"} name={"Картинка"}/>
-                <ImageCard height={"300px"} width={"400px"} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
+                <ImageCard width={400} ratio={4/3} name={"Картинка"}/>
             </ImageCollectionWrapper>
         </Layout>
     );

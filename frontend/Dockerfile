@@ -7,7 +7,7 @@ COPY tsconfig.json /
 COPY .nvmrc /
 
 COPY src /src
-COPY public /public
+COPY src/public /public
 
 RUN npm run build
 

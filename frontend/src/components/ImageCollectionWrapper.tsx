@@ -6,7 +6,7 @@ const styles = {
     container: {
         display: 'flex',
         'flex-wrap': 'wrap',
-        height: '90vh',
+        minHeight: 'calc(100vh - 120px)',
         width: '100vw',
     }
 }

@@ -5,10 +5,17 @@ import EditorContainer from "../components/EditorContainer";
 import ImageContainer from "../components/ImageContainer";
 
 export default function MyCollection() {
+    const width = 1600;
+    const ratio = 4/3;
+
+    const maxHeightCSS = `${width / ratio}px`;
+    const maxWidthCSS = `${width}px`;
+    const widthCSS = '90vw';
+    const heightCSS = `${90 / ratio}vw`;
     return (
-        <Layout title="Home | Next.js + TypeScript Example">
-            <EditorContainer imageHeight={"1200px"} imageWidth={"1600px"}>
-                <ImageContainer height={"1200px"} width={"1600px"}/>
+        <Layout title="Photokek | Editor">
+            <EditorContainer height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}>
+                <ImageContainer height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}/>
             </EditorContainer>
         </Layout>
     );

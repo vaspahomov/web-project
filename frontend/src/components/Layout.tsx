@@ -3,6 +3,7 @@ import Head from 'next/head'
 import {Link as L} from '@material-ui/core';
 
 import Header from "./Header";
+import {CSSProperties} from "react";
 
 type Props = {
     title?: string;
@@ -10,7 +11,8 @@ type Props = {
 
 const styles = {
     footer: {
-        height: '50px'
+        height: '50px',
+        position: 'sticky'
     }, footerLink: {
         fontSize: '24px',
         margin: '0 20px'
@@ -31,7 +33,7 @@ const Layout: React.FunctionComponent<Props> = (
         </Head>
         <Header/>
         {children}
-        <footer style={footer}>
+        <footer style={footer as CSSProperties}>
             <hr/>
             <L href={"https://github.com/vaspahomov/web-project"} style={footerLink}>Project home page</L>
         </footer>
