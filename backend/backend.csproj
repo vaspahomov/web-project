@@ -4,4 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ImageProcessor" Version="2.9.0" />
+    <PackageReference Include="ImageProcessor.Web" Version="4.12.0" />
+    <PackageReference Include="ImageProcessor.Web.Config" Version="2.6.0" />
+  </ItemGroup>
+
 </Project>

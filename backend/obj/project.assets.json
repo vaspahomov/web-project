@@ -1,11 +1,80 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "ImageProcessor/2.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/net452/ImageProcessor.dll": {}
+        },
+        "runtime": {
+          "lib/net452/ImageProcessor.dll": {}
+        }
+      },
+      "ImageProcessor.Web/4.12.0": {
+        "type": "package",
+        "compile": {
+          "lib/net452/ImageProcessor.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net452/ImageProcessor.Web.dll": {}
+        }
+      },
+      "ImageProcessor.Web.Config/2.6.0": {
+        "type": "package"
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "ImageProcessor/2.9.0": {
+      "sha512": "5FliI2L99AlSG1GRDcRfGzFhaBycAK70kDkG7UxKcxYWfRC7pvcU40LqCkVUTgzi6xMc7DD0rkRwj9fv1AHvWg==",
+      "type": "package",
+      "path": "imageprocessor/2.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "imageprocessor.2.9.0.nupkg.sha512",
+        "imageprocessor.nuspec",
+        "lib/net452/ImageProcessor.dll",
+        "lib/net452/ImageProcessor.xml"
+      ]
+    },
+    "ImageProcessor.Web/4.12.0": {
+      "sha512": "xjoi/A0IkHrDSLfjbpVSq+ZCKZ2dqwJrmSyrZlY5eFcOuan1XIJmKcX2pv/trfkcJFEfOwUnvAt7udHD4/eVzg==",
+      "type": "package",
+      "path": "imageprocessor.web/4.12.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/web.config.transform",
+        "imageprocessor.web.4.12.0.nupkg.sha512",
+        "imageprocessor.web.nuspec",
+        "lib/net452/ImageProcessor.Web.dll",
+        "lib/net452/ImageProcessor.Web.xml"
+      ]
+    },
+    "ImageProcessor.Web.Config/2.6.0": {
+      "sha512": "lxQRKPAWFQ6+EEKezbe8oxxU/JMOzLC3GUw5m9x9KD6kPX58U/BfTXPzJ0IQj8IYtM4k98zhn8u+qtGkDprn/w==",
+      "type": "package",
+      "path": "imageprocessor.web.config/2.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/config/imageprocessor/cache.config.transform",
+        "content/config/imageprocessor/processing.config.transform",
+        "content/config/imageprocessor/security.config.transform",
+        "content/web.config.transform",
+        "imageprocessor.web.config.2.6.0.nupkg.sha512",
+        "imageprocessor.web.config.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "ImageProcessor >= 2.9.0",
+      "ImageProcessor.Web >= 4.12.0",
+      "ImageProcessor.Web.Config >= 2.6.0"
+    ]
   },
   "packageFolders": {
     "/Users/budlyanskiy/.nuget/packages/": {}
@@ -41,6 +110,20 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "dependencies": {
+          "ImageProcessor": {
+            "target": "Package",
+            "version": "[2.9.0, )"
+          },
+          "ImageProcessor.Web": {
+            "target": "Package",
+            "version": "[4.12.0, )"
+          },
+          "ImageProcessor.Web.Config": {
+            "target": "Package",
+            "version": "[2.6.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -62,5 +145,27 @@
         "runtimeIdentifierGraphPath": "/Users/budlyanskiy/.dotnet/sdk/3.1.201/RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'ImageProcessor 2.9.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "ImageProcessor",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'ImageProcessor.Web 4.12.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "ImageProcessor.Web",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }

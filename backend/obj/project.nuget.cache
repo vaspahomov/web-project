@@ -1,8 +1,33 @@
 {
   "version": 2,
-  "dgSpecHash": "05O6uOEP6mlDADJBHwk5kXlUdUsrKQjsGkVDGIw6tQythI8UjHBapnq11E2dABF9neVp2xxcR1U4nqNVRFtRRA==",
+  "dgSpecHash": "BhO+7j32RVLT5DXTjb4cunmxl90PYF8t5bYP56dTVAIZx0ZRINFiMdC872tzItDUNFzS7r0sOkfCC5cV3V/1oA==",
   "success": true,
   "projectFilePath": "/Users/budlyanskiy/Desktop/Study/web-project/backend/backend.csproj",
-  "expectedPackageFiles": [],
-  "logs": []
+  "expectedPackageFiles": [
+    "/Users/budlyanskiy/.nuget/packages/imageprocessor/2.9.0/imageprocessor.2.9.0.nupkg.sha512",
+    "/Users/budlyanskiy/.nuget/packages/imageprocessor.web/4.12.0/imageprocessor.web.4.12.0.nupkg.sha512",
+    "/Users/budlyanskiy/.nuget/packages/imageprocessor.web.config/2.6.0/imageprocessor.web.config.2.6.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'ImageProcessor 2.9.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "ImageProcessor",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'ImageProcessor.Web 4.12.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "ImageProcessor.Web",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }
