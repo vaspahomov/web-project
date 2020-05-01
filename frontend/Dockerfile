@@ -5,11 +5,12 @@ RUN npm i
 
 COPY tsconfig.json /
 COPY .nvmrc /
-#COPY "@types" /
-#COPY config /config
+
 COPY src /src
 COPY public /public
 
 RUN npm run build
+
+EXPOSE $PORT
 
 CMD npm run start

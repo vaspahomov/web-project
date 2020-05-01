@@ -1,17 +1,20 @@
 import * as React from 'react';
 
-type Props = {}
+type Props = {
+    height: string;
+    width: string;
+}
 
 const styles = {
     imageContainer: {
-        margin: 'auto'
+        backgroundColor: '#f00',
     }
 }
-const ImageContainer: React.FunctionComponent<Props> = () => {
+const ImageContainer: React.FunctionComponent<Props> = ({height, width}) => {
     const {imageContainer} = styles;
     return (
-        <div style={imageContainer}>
-
+        <div style={{...imageContainer, height, width}}>
+            <img src={""} alt={""}/>
         </div>
     );
 };

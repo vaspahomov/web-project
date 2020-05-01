@@ -1,45 +1,41 @@
 import * as React from 'react'
-import Link from 'next/link'
 import Head from 'next/head'
+import {Link as L} from '@material-ui/core';
+
+import Header from "./Header";
 
 type Props = {
     title?: string;
 }
 
+const styles = {
+    footer: {
+        height: '50px'
+    }, footerLink: {
+        fontSize: '24px',
+        margin: '0 20px'
+    }
+};
+
 const Layout: React.FunctionComponent<Props> = (
     {
         children,
-        title = 'This is the default title',
-    }) => (
-    <div>
+        title = 'Photokek',
+    }) => {
+    const {footer, footerLink} = styles;
+    return (<div>
         <Head>
             <title>{title}</title>
             <meta charSet="utf-8"/>
             <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
         </Head>
-        <header>
-            <nav>
-                <Link href="/">
-                    <a>Home</a>
-                </Link>{' '}
-                |{' '}
-                <Link href="/about">
-                    <a>About</a>
-                </Link>{' '}
-                |{' '}
-                <Link href="/users">
-                    <a>Users List</a>
-                </Link>
-                {' '}
-                | <a href="/api/users">Users API</a>
-            </nav>
-        </header>
+        <Header/>
         {children}
-        <footer>
+        <footer style={footer}>
             <hr/>
-            <span>I'm here to stay (Footer)</span>
+            <L href={"https://github.com/vaspahomov/web-project"} style={footerLink}>Project home page</L>
         </footer>
-    </div>
-)
+    </div>);
+};
 
 export default Layout

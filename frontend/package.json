@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.9.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -15,6 +16,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "styled-jsx": "^3.2.5",
     "typescript": "^3.7.5"
   },
   "devDependencies": {
@@ -27,17 +29,17 @@
     "stylelint-config-standard": "^20.0.0"
   },
   "scripts": {
-    "start": "next start",
+    "start": "next start -p $PORT",
     "build": "next build",
     "dev": "next dev",
     "lint": "npm-run-all lint:*",
-    "lint:es": "eslint --ext=.ts src/**/*",
+    "lint:es": "eslint --ext=.ts src/**/**/*",
     "lint:ts": "tsc --noEmit",
     "deps:all": "npm ci",
     "docker": "npm-run-all docker:*",
     "deps:production": "npm ci --production",
     "docker:build": "docker build -t $npm_package_name .",
-    "docker:run": "docker run -p 8080:80 $npm_package_name",
+    "docker:run": "docker run -p 80:8080 $npm_package_name",
     "heroku:login": "heroku container:login",
     "heroku:push": "heroku container:push web",
     "heroku:release": "heroku container:release web",
