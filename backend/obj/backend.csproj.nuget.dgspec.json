@@ -47,6 +47,10 @@
             "ImageProcessor.Web.Config": {
               "target": "Package",
               "version": "[2.6.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[4.7.0, )"
             }
           },
           "imports": [

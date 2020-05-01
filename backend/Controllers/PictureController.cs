@@ -4,18 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
-    public class MainController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PictureController : Controller
     {
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            return Ok();
+            return Ok(file.FileName);
         }
         
         [HttpGet]
         public async Task<IActionResult> DownloadFile()
         {
-            return Ok();
+            return Ok("Some");
         }
         
         [HttpPut]
