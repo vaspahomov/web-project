@@ -11,11 +11,13 @@ namespace backend.Services
     {
         public MemoryStream Crop(MemoryStream inputStream, CropRectange cropRectange)
         {
-            var cropLayer = new CropLayer(left: cropRectange.Left,
+            var cropLayer = new CropLayer(
+                left: cropRectange.Left,
                 top: cropRectange.Top,
                 right: cropRectange.Right,
-                bottom: cropRectange.Bottom);
-            
+                bottom: cropRectange.Bottom
+            );
+
             using (inputStream)
             using (var outputStream = new MemoryStream())
             using (var imageFactory = new ImageFactory(preserveExifData: true))
