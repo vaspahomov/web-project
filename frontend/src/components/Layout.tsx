@@ -3,10 +3,11 @@ import {CSSProperties} from 'react'
 import Head from 'next/head'
 import {Link as L, Typography} from '@material-ui/core';
 
-import Header from "./Header";
+import Header, {NavTab} from "./Header";
 
 type Props = {
     title?: string;
+    activeTab: NavTab;
 }
 
 const styles = {
@@ -23,6 +24,7 @@ const Layout: React.FunctionComponent<Props> = (
     {
         children,
         title = 'Photokek',
+        activeTab
     }) => {
     const {footer, footerLink} = styles;
     return (<div>
@@ -42,7 +44,7 @@ const Layout: React.FunctionComponent<Props> = (
             <link rel="apple-touch-icon" href="/apple-icon.png"></link>
             <meta name="theme-color" content="#317EFB"/>
         </Head>
-        <Header/>
+        <Header activeTab={activeTab}/>
         {children}
         <footer style={footer as CSSProperties}>
             <hr/>

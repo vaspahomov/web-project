@@ -3,6 +3,7 @@ import * as React from 'react'
 import Layout from "../components/Layout";
 import EditorContainer from "../components/EditorContainer";
 import ImageContainer from "../components/ImageContainer";
+import {NavTab} from "../components/Header";
 
 export default function MyCollection() {
     const width = 1600;
@@ -13,7 +14,7 @@ export default function MyCollection() {
     const widthCSS = '90vw';
     const heightCSS = `${90 / ratio}vw`;
     return (
-        <Layout title="Photokek | Editor">
+        <Layout title="Photokek | Editor" activeTab={NavTab.Editor}>
             <EditorContainer height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}>
                 <ImageContainer src={"https://i.kym-cdn.com/photos/images/facebook/000/323/614/edf.jpg"} height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}/>
             </EditorContainer>

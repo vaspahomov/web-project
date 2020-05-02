@@ -1,11 +1,13 @@
 import * as React from 'react';
+import SwipeableViews from 'react-swipeable-views';
+import {AppBar, Box, Card, Tab, Tabs, Typography} from "@material-ui/core";
+
 import CutFunction from "./editorFunctions/CutFunction";
 import RotateFunction from "./editorFunctions/RotateFunction";
 import TextFunction from "./editorFunctions/TextFunction";
 import ColorFilterFunction from "./editorFunctions/ColorFilterFunction";
 import BlurFunction from "./editorFunctions/BlurFunction";
 import SaveFunction from "./editorFunctions/SaveFunction";
-import {AppBar, Box, Card, Tab, Tabs, Typography} from "@material-ui/core";
 import {EditorService} from "../api/editor";
 
 type Props = {
@@ -70,6 +72,9 @@ const EditorContainer: React.FunctionComponent<Props> = ({children, width, heigh
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
     };
+    const handleChangeIndex = (index: number) => {
+        setValue(index);
+    };
     return (
         <div style={mainWrapper}>
             <Card style={card}>
@@ -78,7 +83,7 @@ const EditorContainer: React.FunctionComponent<Props> = ({children, width, heigh
                 </div>
                 <div>
                     <AppBar position="static">
-                        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                        <Tabs value={value} onChange={handleChange} scrollButtons="auto" variant="scrollable" aria-label="Editor tabs">
                             <Tab label="Crop" {...a11yProps(0)} />
                             <Tab label="Rotate" {...a11yProps(1)} />
                             <Tab label="Add text" {...a11yProps(2)} />
@@ -89,24 +94,30 @@ const EditorContainer: React.FunctionComponent<Props> = ({children, width, heigh
                     </AppBar>
                 </div>
                 <div>
-                    <TabPanel value={value} index={0}>
-                        <CutFunction style={inputGroupWrapper}/>
-                    </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        <RotateFunction style={inputGroupWrapper}/>
-                    </TabPanel>
-                    <TabPanel value={value} index={2}>
-                        <TextFunction style={inputGroupWrapper}/>
-                    </TabPanel>
-                    <TabPanel value={value} index={3}>
-                        <ColorFilterFunction style={inputGroupWrapper}/>
-                    </TabPanel>
-                    <TabPanel value={value} index={4}>
-                        <BlurFunction style={inputGroupWrapper} editorService={editorService}/>
-                    </TabPanel>
-                    <TabPanel value={value} index={5}>
-                        <SaveFunction style={inputGroupWrapper}/>
-                    </TabPanel>
+                    <SwipeableViews
+                        axis={'x'}
+                        index={value}
+                        onChangeIndex={handleChangeIndex}
+                    >
+                        <TabPanel value={value} index={0}>
+                            <CutFunction style={inputGroupWrapper}/>
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <RotateFunction style={inputGroupWrapper}/>
+                        </TabPanel>
+                        <TabPanel value={value} index={2}>
+                            <TextFunction style={inputGroupWrapper}/>
+                        </TabPanel>
+                        <TabPanel value={value} index={3}>
+                            <ColorFilterFunction style={inputGroupWrapper}/>
+                        </TabPanel>
+                        <TabPanel value={value} index={4}>
+                            <BlurFunction style={inputGroupWrapper} editorService={editorService}/>
+                        </TabPanel>
+                        <TabPanel value={value} index={5}>
+                            <SaveFunction style={inputGroupWrapper}/>
+                        </TabPanel>
+                    </SwipeableViews>
                 </div>
             </Card>
         </div>
