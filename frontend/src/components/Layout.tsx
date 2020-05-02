@@ -1,9 +1,9 @@
 import * as React from 'react'
+import {CSSProperties} from 'react'
 import Head from 'next/head'
-import {Link as L} from '@material-ui/core';
+import {Link as L, Typography} from '@material-ui/core';
 
 import Header from "./Header";
-import {CSSProperties} from "react";
 
 type Props = {
     title?: string;
@@ -14,7 +14,7 @@ const styles = {
         height: '50px',
         position: 'sticky'
     }, footerLink: {
-        fontSize: '24px',
+        fontSize: '18px',
         margin: '0 20px'
     }
 };
@@ -36,7 +36,6 @@ const Layout: React.FunctionComponent<Props> = (
                   content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no'/>
             <meta name='description' content='Description'/>
             <meta name='keywords' content='Keywords'/>
-            <title>Next.js PWA Example</title>
             <link rel="manifest" href="/manifest.json"/>
             <link href='/favicon-16x16.png' rel='icon' type='image/png' sizes='16x16'/>
             <link href='/favicon-32x32.png' rel='icon' type='image/png' sizes='32x32'/>
@@ -47,7 +46,9 @@ const Layout: React.FunctionComponent<Props> = (
         {children}
         <footer style={footer as CSSProperties}>
             <hr/>
-            <L href={"https://github.com/vaspahomov/web-project"} style={footerLink}>Project home page</L>
+            <Typography>
+                <L href={"https://github.com/vaspahomov/web-project"} style={footerLink}>Project home page</L>
+            </Typography>
         </footer>
     </div>);
 };

@@ -39,7 +39,6 @@ const RotateFunction: React.FunctionComponent<Props> = ({style}) => (
     <div style={style}>
         <Card>
             <CardContent>
-                <Typography variant="h5" component="h2">Rotate</Typography>
                 <Slider
                     min={0}
                     max={360}

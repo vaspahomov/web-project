@@ -6,6 +6,7 @@ const styles = {
     container: {
         display: 'flex',
         'flex-wrap': 'wrap',
+        'justify-content': 'space-around',
         minHeight: 'calc(100vh - 120px)',
         width: '100vw',
     }

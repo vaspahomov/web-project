@@ -15,7 +15,7 @@ export default function MyCollection() {
     return (
         <Layout title="Photokek | Editor">
             <EditorContainer height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}>
-                <ImageContainer height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}/>
+                <ImageContainer src={"https://i.kym-cdn.com/photos/images/facebook/000/323/614/edf.jpg"} height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}/>
             </EditorContainer>
         </Layout>
     );

@@ -9,9 +9,10 @@ const styles = {
         minHeight: 'calc(100vh - 120px)'
     }, formContainer: {
         margin: 'auto',
-        width: '400px',
+        maxWidth: '400px',
+        width: '90%',
     }, formInput: {
-        width: '390px',
+        width: '100%'
     }
 }
 

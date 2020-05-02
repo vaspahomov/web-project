@@ -17,6 +17,7 @@
     "next-pwa": "^2.3.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-images-upload": "^1.2.8",
     "react-responsive": "^8.0.3",
     "react-scripts": "3.4.1",
     "styled-jsx": "^3.2.5",

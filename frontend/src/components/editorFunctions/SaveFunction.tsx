@@ -10,7 +10,6 @@ const SaveFunction: React.FunctionComponent<Props> = ({style}) => (
     <div style={style}>
         <Card>
             <CardContent>
-                <Typography variant="h5" component="h2">Save</Typography>
                 <ButtonGroup variant="contained" color="primary"
                              aria-label="contained primary button group">
                     <Button>PNG</Button>
