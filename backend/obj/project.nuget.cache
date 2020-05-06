@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "gAl9r7e1wfG7+hODxG++FsT+7ud3s41p1P3eVldXCeJBbMlmPYLF91x0cyL4btLTA/uAAdM4Sc9gSGzP4hcUCg==",
-  "success": true,
-  "projectFilePath": "/Users/voytsishevskiy/dev/web-project/backend/backend.csproj",
+  "dgSpecHash": "A6vnnXaTyX2br69YAdfxhiGRGt3VgtOwnJNCbXgBERxYudKEgWrp9P1xjCe+sjY54eklIjnL31KCVlUj6h3CIA==",
+  "success": false,
+  "projectFilePath": "/Users/budlyanskiy/Desktop/Study/web-project/backend/backend.csproj",
   "expectedPackageFiles": [
-    "/Users/voytsishevskiy/.nuget/packages/imageprocessor/2.9.0/imageprocessor.2.9.0.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/imageprocessor.web/4.12.0/imageprocessor.web.4.12.0.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/imageprocessor.web.config/2.6.0/imageprocessor.web.config.2.6.0.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/system.drawing.common/4.7.0/system.drawing.common.4.7.0.nupkg.sha512"
+    "/Users/budlyanskiy/.nuget/packages/imageprocessor/2.9.0/imageprocessor.2.9.0.nupkg.sha512",
+    "/Users/budlyanskiy/.nuget/packages/imageprocessor.web/4.12.0/imageprocessor.web.4.12.0.nupkg.sha512",
+    "/Users/budlyanskiy/.nuget/packages/imageprocessor.web.config/2.6.0/imageprocessor.web.config.2.6.0.nupkg.sha512",
+    "/Users/budlyanskiy/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "/Users/budlyanskiy/.nuget/packages/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "/Users/budlyanskiy/.nuget/packages/system.drawing.common/4.7.0/system.drawing.common.4.7.0.nupkg.sha512"
   ],
   "logs": [
     {
@@ -28,6 +28,15 @@
       "warningLevel": 1,
       "message": "Package 'ImageProcessor.Web 4.12.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
       "libraryId": "ImageProcessor.Web",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1108",
+      "level": "Error",
+      "message": "Cycle detected. \n  backend -> backend.",
+      "libraryId": "backend",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]
