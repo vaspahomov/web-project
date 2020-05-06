@@ -17,4 +17,8 @@
     <Content Include="main.yml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="backend.csproj" />
+  </ItemGroup>
+
 </Project>
