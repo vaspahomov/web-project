@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using backend.Services;
 
 namespace backend.Data
 {
-    public interface IRepositoryPictures
+    public interface IPictureRepository
     {
-        Task<bool> IsPictureExistAsync(Guid id);
-        Task<PictureEntity> GetPictureAsync(Guid id);
-        Task<bool> IsPictureOwnerAsync(Guid id, string ownerId);
-        Task AddPictureAsync(PictureEntity photo);
-        Task UpdatePictureAsync(PictureEntity photo);
-        Task DeletePictureAsync(PictureEntity photo);
-        Task<bool> SaveAsync();
+        Task<Picture?> Get(Guid id);
+        Task<Guid> Save(Picture picture);
     }
 }

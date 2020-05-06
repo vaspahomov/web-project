@@ -6,14 +6,14 @@ namespace backend.Services
 {
     public interface IPictureModificator
     {
-        Image Crop(Image image, CropRectange cropRectangle);
-        Image Rotate(Image image, float degrees);
-        Image AddText(Image image, string text);
-        Image AddBlackAndWhiteFilter(Image image);
-        Image AddSepiaFilter(Image image);
-        Image AddGaussianBlur(Image image, int size);
-        Image AddCircularBlur(Image image);
-        Image ToJPEG(Image image);
-        Image ToPNG(Image image);
+        Picture Crop(Picture picture, CropRectange cropRectangle);
+        Picture Rotate(Picture picture, float degrees);
+        Picture AddText(Picture picture, string text);
+        Picture AddBlackAndWhiteFilter(Picture picture);
+        Picture AddSepiaFilter(Picture picture);
+        Picture AddGaussianBlur(Picture picture, int size);
+        Picture AddCircularBlur(Picture picture);
+        Picture ToJPEG(Picture picture);
+        Picture ToPNG(Picture picture);
     }
 }
