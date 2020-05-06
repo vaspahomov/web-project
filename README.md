@@ -1,4 +1,4 @@
-![CI](https://github.com/vaspahomov/web-project/workflows/CI/badge.svg?branch=backend)
+![API](https://github.com/vaspahomov/web-project/workflows/API/badge.svg)
 
 # Редактор изображений
 Сервис для загрузки изображения, его редактирования и скачивания отредактированного изображения.
