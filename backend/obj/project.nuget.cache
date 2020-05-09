@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "ZgT9ARbZxs9bC/6BjBUk8reduH/5HNdK3BA+jGBXn+KUSN+q3q38bayxId7Cx30M5zE4Q670BzuNNsmhkgCHEw==",
+  "dgSpecHash": "gAl9r7e1wfG7+hODxG++FsT+7ud3s41p1P3eVldXCeJBbMlmPYLF91x0cyL4btLTA/uAAdM4Sc9gSGzP4hcUCg==",
   "success": true,
-  "projectFilePath": "/Users/budlyanskiy/Desktop/Study/web-project/backend/backend.csproj",
+  "projectFilePath": "/Users/voytsishevskiy/dev/web-project/backend/backend.csproj",
   "expectedPackageFiles": [
-    "/Users/budlyanskiy/.nuget/packages/imageprocessor/2.9.0/imageprocessor.2.9.0.nupkg.sha512",
-    "/Users/budlyanskiy/.nuget/packages/imageprocessor.web/4.12.0/imageprocessor.web.4.12.0.nupkg.sha512",
-    "/Users/budlyanskiy/.nuget/packages/imageprocessor.web.config/2.6.0/imageprocessor.web.config.2.6.0.nupkg.sha512",
-    "/Users/budlyanskiy/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
-    "/Users/budlyanskiy/.nuget/packages/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg.sha512",
-    "/Users/budlyanskiy/.nuget/packages/system.drawing.common/4.7.0/system.drawing.common.4.7.0.nupkg.sha512"
+    "/Users/voytsishevskiy/.nuget/packages/imageprocessor/2.9.0/imageprocessor.2.9.0.nupkg.sha512",
+    "/Users/voytsishevskiy/.nuget/packages/imageprocessor.web/4.12.0/imageprocessor.web.4.12.0.nupkg.sha512",
+    "/Users/voytsishevskiy/.nuget/packages/imageprocessor.web.config/2.6.0/imageprocessor.web.config.2.6.0.nupkg.sha512",
+    "/Users/voytsishevskiy/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "/Users/voytsishevskiy/.nuget/packages/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "/Users/voytsishevskiy/.nuget/packages/system.drawing.common/4.7.0/system.drawing.common.4.7.0.nupkg.sha512"
   ],
   "logs": [
     {

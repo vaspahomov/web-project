@@ -5,6 +5,9 @@ using backend.Services;
 
 namespace backend.Data
 {
+    /// <summary>
+    /// Версионность поддерживаем, нет апдейта, только сейвы.
+    /// </summary>
     public interface IPictureRepository
     {
         Task<Picture?> Get(Guid id);
