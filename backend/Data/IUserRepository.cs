@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Entities;
 
 namespace backend.Data
 {
     public interface IUserRepository
     {
-        Task<Guid> AddUser();
+        Task<Guid> AddUser(User user);
+
+        Task<List<User>> GetAllUsers();
 
         Task<bool> AddImageForUser(Guid userId, Guid imageId, DateTime time);
 
@@ -21,17 +24,23 @@ namespace backend.Data
     public class InMemoryUserRepository : IUserRepository
     {
         private readonly Dictionary<Guid, List<(Guid, DateTime)>> storage;
-
+        private readonly Dictionary<Guid, User> userStorage;
         public InMemoryUserRepository()
         {
             storage = new Dictionary<Guid, List<(Guid, DateTime)>>();
+            userStorage = new Dictionary<Guid, User>();
+        }
+        
+        public async Task<List<User>> GetAllUsers()
+        {
+            return userStorage.Values.ToList();
         }
 
-        public async Task<Guid> AddUser()
+        public async Task<Guid> AddUser(User user)
         {
-            var userId = Guid.NewGuid();
-            storage[userId] = new List<(Guid, DateTime)>();
-            return userId;
+            userStorage[user.Id] = user;
+            storage[user.Id] = new List<(Guid, DateTime)>();
+            return user.Id;
         }
 
         public async Task<bool> AddImageForUser(Guid userId, Guid imageId, DateTime time)
