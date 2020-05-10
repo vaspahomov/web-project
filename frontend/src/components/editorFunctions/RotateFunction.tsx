@@ -1,10 +1,14 @@
 import * as React from 'react';
-import {CSSProperties} from 'react';
-import {Button, Card, CardContent, Slider, Typography} from "@material-ui/core";
+import {CSSProperties, Dispatch, useState} from 'react';
+import {Button, Card, CardContent, Slider} from "@material-ui/core";
+import {EditorService} from "../../api/editor";
 
 
 type Props = {
     style: CSSProperties;
+    editorService: EditorService;
+    changeLoaded: Dispatch<boolean>;
+    pictureId: string;
 }
 
 const rotateAngleMarks = [
@@ -35,24 +39,32 @@ const valuetext = (value: number) => {
     return `${value}°C`;
 }
 
-const RotateFunction: React.FunctionComponent<Props> = ({style}) => (
-    <div style={style}>
-        <Card>
-            <CardContent>
-                <Slider
-                    min={0}
-                    max={360}
-                    defaultValue={90}
-                    getAriaValueText={valuetext}
-                    aria-labelledby="discrete-slider-custom"
-                    step={10}
-                    marks={rotateAngleMarks}
-                    valueLabelDisplay="auto"
-                />
-                <Button variant="contained" color="primary">Submit</Button>
-            </CardContent>
-        </Card>
-    </div>
-);
+const RotateFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
+    const [value, changeValue] = useState(90);
+    return (
+        <div style={style}>
+            <Card>
+                <CardContent>
+                    <Slider
+                        min={0}
+                        max={360}
+                        value={value}
+                        onChange={(_, v) => changeValue(Number(v))}
+                        getAriaValueText={valuetext}
+                        aria-labelledby="discrete-slider-custom"
+                        step={10}
+                        marks={rotateAngleMarks}
+                        valueLabelDisplay="auto"
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary" onClick={() => {
+                        editorService.rotate(pictureId, value)
+                    }}>Submit</Button>
+                </CardContent>
+            </Card>
+        </div>
+    )
+};
 
 export default RotateFunction;

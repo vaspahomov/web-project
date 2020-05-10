@@ -1,4 +1,4 @@
-const serverUrl = 'https://api.web-project-ddddddd.herokuapp.com'
+const serverUrl = 'https://api-picture.herokuapp.com'
 
 export enum CropForm {
     Round,
@@ -12,8 +12,8 @@ export enum ColorFilters {
 }
 
 export enum BlurFilters {
-    Round,
-    Gauss,
+    Round = 'circular',
+    Gauss = 'gaussian',
 }
 
 export enum ImageFormat {
@@ -21,28 +21,63 @@ export enum ImageFormat {
     PNG
 }
 
+const defaultHeaders = {
+    'Content-Type': 'application/json'
+};
+
 export class EditorService {
-    async crop(form: CropForm) {
-
+    async crop(pictureId: string, form: CropForm) {
+        const resp = await fetch(`${serverUrl}/crop/${pictureId}`,
+            {
+                method: 'PATCH',
+                body: JSON.stringify({cropForm: form}),
+                headers: defaultHeaders,
+            });
+        return resp.text();
     }
 
-    async rotate(angle: number) {
-
+    async rotate(pictureId: string, angle: number): Promise<string> {
+        const resp = await fetch(`${serverUrl}/rotate/${pictureId}`,
+            {
+                method: 'PATCH',
+                body: JSON.stringify({degrees: angle}),
+                headers: defaultHeaders,
+            });
+        return resp.text();
     }
 
-    async addText(text: string, color: string) {
-
+    async addText(pictureId: string, text: string, color: string): Promise<string> {
+        const resp = await fetch(`${serverUrl}/text/${pictureId}`,
+            {
+                method: 'PATCH',
+                body: JSON.stringify({text}),
+                headers: defaultHeaders,
+            });
+        return resp.text();
     }
 
-    async applyColorFilter(colorFilter: ColorFilters) {
-
+    async applyColorFilter(pictureId: string, colorFilter: ColorFilters): Promise<string> {
+        const resp = await fetch(`${serverUrl}/${colorFilter}/${pictureId}`,
+            {
+                method: 'PATCH',
+            });
+        return resp.text();
     }
 
-    async applyBlurFilter(blurFilter: BlurFilters) {
-
+    async applyBlurFilter(pictureId: string, blurFilter: BlurFilters): Promise<string> {
+        const resp = await fetch(`${serverUrl}/blur/${blurFilter}/${pictureId}`,
+            {
+                method: 'PATCH',
+            });
+        return resp.text();
     }
 
-    async getImage(format: ImageFormat) {
+    async downloadImage(pictureId: string, format: ImageFormat): Promise<string> {
+        return '';
+    }
 
+    async getImage(pictureId: string): Promise<string> {
+        const resp = await fetch(`${serverUrl}/download/${pictureId}`);
+        return resp.text();
     }
 }

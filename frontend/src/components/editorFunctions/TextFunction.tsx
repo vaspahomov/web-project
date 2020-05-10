@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {CSSProperties} from 'react';
+import {CSSProperties, Dispatch} from 'react';
 import {
     Button,
     Card,
@@ -11,10 +11,14 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
+import {EditorService} from "../../api/editor";
 
 
 type Props = {
     style: CSSProperties;
+    editorService: EditorService;
+    changeLoaded: Dispatch<boolean>;
+    pictureId: string;
 }
 
 const styles = {
@@ -27,7 +31,7 @@ const styles = {
     }
 }
 
-const TextFunction: React.FunctionComponent<Props> = ({style}) => {
+const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
     const {card, control} = styles;
     return (
         <div style={style}>

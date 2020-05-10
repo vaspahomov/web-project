@@ -13,7 +13,8 @@ export default function MyCollection() {
         <Layout title="Photokek | Collection" activeTab={NavTab.MyCollection}>
             <ImageCollectionWrapper>
                 {images.map((image) =>
-                    <ImageCard imageId={image.id} width={400} name={image.name} ratio={4/3} src={image.url}/>
+                    <ImageCard imageId={image.id} width={image.width <= 400 ? image.width : 400} name={image.name}
+                               ratio={image.width / image.height} src={image.url}/>
                 )}
             </ImageCollectionWrapper>
         </Layout>
