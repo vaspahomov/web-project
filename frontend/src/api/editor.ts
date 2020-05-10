@@ -33,6 +33,8 @@ export class EditorService {
                 body: JSON.stringify({cropForm: form}),
                 headers: defaultHeaders,
             });
+        if (!resp.ok)
+            throw new Error('Bad server response');
         return resp.text();
     }
 
@@ -43,6 +45,8 @@ export class EditorService {
                 body: JSON.stringify({degrees: angle}),
                 headers: defaultHeaders,
             });
+        if (!resp.ok)
+            throw new Error('Bad server response');
         return resp.text();
     }
 
@@ -53,6 +57,8 @@ export class EditorService {
                 body: JSON.stringify({text}),
                 headers: defaultHeaders,
             });
+        if (!resp.ok)
+            throw new Error('Bad server response');
         return resp.text();
     }
 
@@ -61,6 +67,8 @@ export class EditorService {
             {
                 method: 'PATCH',
             });
+        if (!resp.ok)
+            throw new Error('Bad server response');
         return resp.text();
     }
 
@@ -69,6 +77,8 @@ export class EditorService {
             {
                 method: 'PATCH',
             });
+        if (!resp.ok)
+            throw new Error('Bad server response');
         return resp.text();
     }
 
@@ -78,6 +88,8 @@ export class EditorService {
 
     async getImage(pictureId: string): Promise<string> {
         const resp = await fetch(`${serverUrl}/download/${pictureId}`);
+        if (!resp.ok)
+            throw new Error('Bad server response');
         return resp.text();
     }
 }

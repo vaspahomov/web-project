@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {CSSProperties, Dispatch} from 'react';
+import {CSSProperties, Dispatch, useState} from 'react';
 import {
     Button,
     Card,
@@ -12,6 +12,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {EditorService} from "../../api/editor";
+import MuiAlert from "@material-ui/lab/Alert";
 
 
 type Props = {
@@ -31,8 +32,16 @@ const styles = {
     }
 }
 
+const handleOperation = (setCtx: Dispatch<boolean>) => {
+    setCtx(true);
+    setTimeout(() => setCtx(false), 3000);
+}
+
 const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
     const {card, control} = styles;
+    const [inProgress, setInProgress] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
     return (
         <div style={style}>
             <Card>
@@ -64,6 +73,10 @@ const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pic
                     </FormControl>
                 </CardContent>
             </Card>
+            {success ? <MuiAlert variant="filled" severity="success">Operation successfully finished</MuiAlert> :
+                error ? <MuiAlert variant="filled" severity="error">Operation has failed</MuiAlert> :
+                    inProgress ? <MuiAlert variant="filled" severity="info">Operation in progress</MuiAlert>
+                        : undefined}
         </div>
     );
 };
