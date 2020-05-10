@@ -17,6 +17,7 @@ namespace backend
             services.AddControllers();
             services.AddSingleton<IPictureModificator, PictureModificator>();
             services.AddSingleton<IPictureRepository, InMemoryPictureRepository>();
+            services.AddSingleton<IUserRepository, InMemoryUserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
