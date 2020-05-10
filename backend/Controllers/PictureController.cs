@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using backend.Data;
 using backend.Services;
@@ -14,26 +15,31 @@ namespace backend.Controllers
         private readonly IPictureModificator _modifier;
         private readonly IPictureRepository _pictureRepository;
 
-        private Picture GetPictureFromFormFile(IFormFile file) => throw new NotImplementedException();
+        private Picture GetPictureFromFormFile(IFormFile file)
+        {
+            var ms = new MemoryStream();
+            file.CopyToAsync(ms);
+            return new Picture(ms, file.FileName);
+        }
         public PictureController(IPictureModificator modifier, IPictureRepository pictureRepository)
         {
             _modifier = modifier;
             _pictureRepository = pictureRepository;
         }
         [HttpPost]
-        public async Task<ActionResult<Guid>> UploadFile(IFormFile file)
+        public async Task<ActionResult<string>> UploadFile(IFormFile file)
         {
             var picture = GetPictureFromFormFile(file);
             return await _pictureRepository.Save(picture);
         }
         
         [HttpGet]
-        public async Task<ActionResult<Picture>> DownloadFile(Guid id)
+        public async Task<ActionResult<Picture>> DownloadFile(string id)
         {
             var actionResult = await _pictureRepository.Get(id);
             if (actionResult != null)
                 return actionResult;
-            return  NotFound();
+            return NotFound();
         }
         
         [HttpPost]

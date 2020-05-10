@@ -1,10 +1,15 @@
 using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace backend.Models
 {
-    public class Photo
+    public class PictureDto
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public Guid Id { get; set; }
+        public Guid ImageId { get; set; } // image link
         public string Title { get; set; }
         public string FileName { get; set; }
     }

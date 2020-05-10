@@ -13,16 +13,15 @@ namespace backend.Data
         {
             this.storage = new Dictionary<Guid, Picture>();
         }
-        public Task<Picture?> Get(Guid id)
+        public Task<Picture?> Get(string id)
         {
-            return Task.Run(() => storage.GetValueOrDefault(id));
+            return Task.Run(() => storage.GetValueOrDefault(new Guid(id)));
         }
 
-        public Task<Guid> Save(Picture picture)
+        public Task<string> Save(Picture picture)
         {
             var id = Guid.NewGuid();
-            return Task.Run(() => storage[id] = picture).ContinueWith(_ => id);
-
+            return Task.Run(() => storage[id] = picture).ContinueWith(_ => id.ToString());
         }
     }
 }
