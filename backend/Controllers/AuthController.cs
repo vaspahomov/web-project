@@ -60,11 +60,11 @@ namespace backend.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            HttpContext.Response.Cookies.Append("user_token", tokenString,
+            Response.Cookies.Append("user_token", tokenString,
                 new CookieOptions
                 {
                     MaxAge = TimeSpan.FromMinutes(60),
-                    Domain = Urls.Front
+                    IsEssential = true,
                 });
             // return basic user info and authentication token
             return Ok(new
