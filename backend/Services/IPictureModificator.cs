@@ -6,7 +6,7 @@ namespace backend.Services
 {
     public interface IPictureModificator
     {
-        Picture Crop(Picture picture, CropRectange cropRectangle);
+        Picture Crop(Picture picture, CropRectangle cropRectangle);
         Picture Rotate(Picture picture, float degrees);
         Picture AddText(Picture picture, string text);
         Picture AddBlackAndWhiteFilter(Picture picture);
@@ -16,4 +16,7 @@ namespace backend.Services
         Picture ToJPEG(Picture picture);
         Picture ToPNG(Picture picture);
     }
+
+
+
 }

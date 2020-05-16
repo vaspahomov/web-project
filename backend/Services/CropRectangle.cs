@@ -4,9 +4,9 @@ using ImageProcessor.Imaging;
 
 namespace backend.Services
 {
-    public class CropRectange
+    public class CropRectangle
     {
-        public CropRectange(float left, float top, float right, float bottom)
+        public CropRectangle(float left, float top, float right, float bottom)
         {
             if ((double) left < 0.0)
                 throw new ArgumentOutOfRangeException(nameof(left));
