@@ -10,6 +10,7 @@ using backend.Helpers;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +20,7 @@ namespace backend.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class AuthController: Controller
+    public class AuthController : Controller
     {
         private IUserService _userService;
         private IMapper _mapper;
@@ -34,15 +35,15 @@ namespace backend.Controllers
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
-        
+
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody]AuthenticateModel model)
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateModel model)
         {
             var user = await _userService.Authenticate(model.Username, model.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new {message = "Username or password is incorrect"});
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -53,11 +54,17 @@ namespace backend.Controllers
                     new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
+            HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", tokenString,
+                new CookieOptions
+                {
+                    MaxAge = TimeSpan.FromMinutes(60)
+                });
             // return basic user info and authentication token
             return Ok(new
             {
@@ -68,11 +75,11 @@ namespace backend.Controllers
                 Token = tokenString
             });
         }
-        
-        
+
+
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]RegisterModel model)
+        public IActionResult Register([FromBody] RegisterModel model)
         {
             // map model to entity
             var user = _mapper.Map<User>(model);
@@ -86,7 +93,7 @@ namespace backend.Controllers
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new {message = ex.Message});
             }
         }
 
