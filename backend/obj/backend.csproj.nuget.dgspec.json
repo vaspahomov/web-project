@@ -24,7 +24,11 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "/Users/budlyanskiy/Desktop/Study/web-project/backend/backend.csproj": {
+                "projectPath": "/Users/budlyanskiy/Desktop/Study/web-project/backend/backend.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
