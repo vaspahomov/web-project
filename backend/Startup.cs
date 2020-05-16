@@ -20,11 +20,12 @@ namespace backend
     public class Startup
     {
         public readonly IConfiguration Configuration;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
@@ -37,7 +38,7 @@ namespace backend
                         .AllowCredentials()
                 );
             });
-            
+
             services.AddControllers();
             services.AddSingleton<IPictureModificator, PictureModificator>();
             services.AddSingleton<IPictureRepository, InMemoryPictureRepository>();
@@ -81,14 +82,14 @@ namespace backend
                 .AllowCredentials()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
-            
+
             app.UseCookiePolicy(new CookiePolicyOptions
             {
                 MinimumSameSitePolicy = SameSiteMode.None,
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always
             });
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -101,12 +102,12 @@ namespace backend
                 var token = context.Request.Cookies["user_token"];
                 if (!string.IsNullOrEmpty(token))
                     context.Request.Headers.Add("Authorization", "Bearer " + token);
- 
+
                 await next();
             });
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 // endpoints.MapGet("/", async context =>
@@ -117,7 +118,7 @@ namespace backend
             });
         }
     }
-    
+
     public static class Policies
     {
         public const string CorsPolicy = "CorsPolicy";
