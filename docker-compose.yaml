@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    build: .
+    build: ./frontend
     env_file:
       - .env
     ports:
