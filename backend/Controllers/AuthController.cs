@@ -59,20 +59,16 @@ namespace backend.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
+            var cookieOptions = new CookieOptions
+            {
+                Path = "/", HttpOnly = false, IsEssential = true,
+                Expires = DateTime.Now.AddMonths(1)
+            };
+            
+            Response.Cookies.Append("user_token", tokenString, cookieOptions);
 
-            Response.Cookies.Append("user_token", tokenString,
-                new CookieOptions
-                {
-                    MaxAge = TimeSpan.FromMinutes(60),
-                    IsEssential = true,
-                });
-            // return basic user info and authentication token
             return Ok(new
             {
-                Id = user.Id,
-                Username = user.Username,
-                // FirstName = user.FirstName,
-                // LastName = user.LastName,
                 Token = tokenString
             });
         }
