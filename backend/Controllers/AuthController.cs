@@ -64,7 +64,6 @@ namespace backend.Controllers
                 new CookieOptions
                 {
                     MaxAge = TimeSpan.FromMinutes(60),
-                    Domain = "herokuapp.com",
                     IsEssential = true,
                 });
             // return basic user info and authentication token
