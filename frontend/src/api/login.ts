@@ -11,6 +11,7 @@ export class LoginService {
                 method: 'POST',
                 body: JSON.stringify({username, password}),
                 headers: defaultHeaders,
+                credentials: 'include'
             });
         if (!resp.ok)
             throw new Error('Bad server response');
@@ -23,6 +24,7 @@ export class LoginService {
                 method: 'POST',
                 body: JSON.stringify({username, password}),
                 headers: defaultHeaders,
+                credentials: 'include'
             });
         if (!resp.ok)
             throw new Error('Bad server response');
