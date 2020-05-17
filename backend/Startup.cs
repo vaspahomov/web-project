@@ -83,14 +83,6 @@ namespace backend
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                CheckConsentNeeded = context => true,
-                MinimumSameSitePolicy = SameSiteMode.None,
-                HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always
-            });
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
