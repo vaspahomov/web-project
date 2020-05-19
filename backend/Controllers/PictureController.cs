@@ -53,31 +53,31 @@ namespace backend.Controllers
             return Ok(await Task.WhenAll(pics));
         }
 
-        [HttpPatch("for/{userId}/rotate/{id}")]
+        [HttpPatch("user/{userId}/rotation/{id}")]
         public async Task<ActionResult<Guid>> Rotate(Guid userId, Guid id, float degrees) =>
             await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.Rotate(pic, degrees));
 
-        [HttpPatch("for/{userId}/text/{id}")]
+        [HttpPatch("user/{userId}/text_addition/{id}")]
         public async Task<ActionResult<Guid>> AddText(Guid userId, Guid id, string text) =>
             await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.AddText(pic, text));
 
-        [HttpPatch("for/{userId}/crop/{id}")]
+        [HttpPatch("user/{userId}/crop/{id}")]
         public async Task<ActionResult<Guid>> AddText(Guid userId, Guid id, [FromBody] CropRectangle rectangle) =>
             await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.Crop(pic, rectangle));
 
-        [HttpPatch("for/{userId}/blur/gaussian/{id}")]
+        [HttpPatch("user/{userId}/gaussian_blur/{id}")]
         public async Task<ActionResult<Guid>> AddGaussianBlur(Guid userId, Guid id, int size) =>
             await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.AddGaussianBlur(pic, size));
 
-        [HttpPatch("for/{userId}/blur/circular/{id}")]
+        [HttpPatch("user/{userId}/circular_blur/{id}")]
         public async Task<ActionResult<Guid>> AddCircularBlur(Guid userId, Guid id) =>
             await ModifyPictureAndSaveForUser(userId, id, _modifier.AddCircularBlur);
 
-        [HttpPatch("for/{userId}/sepia/{id}")]
+        [HttpPatch("user/{userId}/sepia_filter/{id}")]
         public async Task<ActionResult<Guid>> AddSepiaFilter(Guid userId, Guid id) =>
             await ModifyPictureAndSaveForUser(userId, id, _modifier.AddSepiaFilter);
 
-        [HttpPatch("for/{userId}/black_and_white/{id}")]
+        [HttpPatch("user/{userId}/black_and_white_filter/{id}")]
         public async Task<ActionResult<Guid>> AddBnWFilter(Guid userId, Guid id) =>
             await ModifyPictureAndSaveForUser(userId, id, _modifier.AddBlackAndWhiteFilter);
 
