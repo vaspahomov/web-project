@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
+using backend.Data.Repositories;
 using backend.Services;
 using ImageProcessor.Processors;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +36,10 @@ namespace backend.Controllers
         public async Task<ActionResult<Guid>> UploadFile(IFormFile file)
         {
             var picture = GetPictureFromFormFile(file);
-            return await _pictureRepository.Save(picture);
+            var pictureEntity = await _pictureRepository.Save(picture);
+            //TODO: get user from auth info
+            
+            await _userRepository.AddPictureAsync(userId, pictureEntity);
         }
 
         [HttpGet("download/{id}")]
@@ -50,7 +54,7 @@ namespace backend.Controllers
         [HttpGet("users/download/{userId}")]
         public async Task<ActionResult<IEnumerable<Picture>>> DownloadAllForUser(Guid userId)
         {
-            var ids = await _userRepository.GetImageIdsForUser(userId);
+            var ids = await _userRepository.GetUserPictures(userId);
             var pics = ids.Select(id => _pictureRepository.Get(id));
             return Ok(await Task.WhenAll(pics));
         }
@@ -86,12 +90,13 @@ namespace backend.Controllers
 
         private async Task<ActionResult<Guid>> ModifyPictureAndSaveForUser(Guid userId, Guid id, Func<Picture, Picture> f)
         {
+            //TODO: add converter between PictureEntity ObjectId and Guid
             var picture = await _pictureRepository.Get(id);
             if (picture == null)
                 return NotFound();
             var modified = f(picture);
             var savedId = await _pictureRepository.Save(modified);
-            await _userRepository.AddImageForUser(userId, savedId, DateTime.Now);
+            await _userRepository.AddPictureAsync(userId, savedId, DateTime.Now);
             return savedId;
         }
     }

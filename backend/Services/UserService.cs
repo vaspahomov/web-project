@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Data;
-using backend.Entities;
+using backend.Data.Entities;
+using backend.Data.Repositories;
 using backend.Helpers;
+using backend.Models;
 
 namespace backend.Services
 {
@@ -17,26 +17,20 @@ namespace backend.Services
             _userRepository = userRepository;
         }
         
-        public async Task<User> Authenticate(string username, string password)
+        public async Task<UserEntity?> Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
 
-            var user = (await _userRepository.GetAllUsers()).SingleOrDefault(x => x.Username == username);
+            var userEntity = await _userRepository.FindByUsernameAsync(username);
 
-            // check if username exists
-            if (user == null)
+            if (userEntity == null)
                 return null;
 
-            // check if password is correct
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                return null;
-
-            // authentication successful
-            return user;
+            return IsVerifiedPassword(password, userEntity.PasswordHash, userEntity.PasswordSalt) ? userEntity : null;
         }
         
-        public async Task<User> Create(User user, string password)
+        public async Task<UserEntity> Create(UserModel user, string password)
         {
             // validation
             if (string.IsNullOrWhiteSpace(password))
@@ -47,12 +41,11 @@ namespace backend.Services
 
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            
+            var userEntity = new UserEntity(user.Id, user.Username, passwordHash, passwordSalt);
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            await _userRepository.AddUser(user);
-            return user;
+            await _userRepository.InsertAsync(userEntity);
+            return userEntity;
         }
         
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -67,7 +60,7 @@ namespace backend.Services
             }
         }
         
-        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        private static bool IsVerifiedPassword(string password, byte[] storedHash, byte[] storedSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
@@ -89,7 +82,7 @@ namespace backend.Services
     
     public interface IUserService
     {
-        Task<User> Authenticate(string username, string password);
-        Task<User> Create(User user, string password);
+        Task<UserEntity?> Authenticate(string username, string password);
+        Task<UserEntity> Create(UserModel user, string password);
     }
 }

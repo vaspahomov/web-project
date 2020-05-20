@@ -1,5 +1,5 @@
 using AutoMapper;
-using backend.Entities;
+using backend.Data.Entities;
 using backend.Models;
 
 namespace backend.Helpers
@@ -8,8 +8,8 @@ namespace backend.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserModel>();
-            CreateMap<RegisterModel, User>();
+            CreateMap<UserEntity, UserModel>();
+            CreateMap<RegisterModel, UserEntity>();
         }
     }
 }

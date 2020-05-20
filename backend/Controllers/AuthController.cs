@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using backend.Entities;
+using backend.Data.Entities;
 using backend.Helpers;
 using backend.Models;
 using backend.Services;
@@ -49,7 +48,7 @@ namespace backend.Controllers
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
@@ -65,6 +64,8 @@ namespace backend.Controllers
                 Expires = DateTime.Now.AddMonths(1)
             };
             
+            //TODO: think about cookieOptions, it should be secured enough
+            //TODO: learn how to get user info from cookie
             Response.Cookies.Append("user_token", tokenString, cookieOptions);
 
             return Ok(new
@@ -79,7 +80,7 @@ namespace backend.Controllers
         public IActionResult Register([FromBody] RegisterModel model)
         {
             // map model to entity
-            var user = _mapper.Map<User>(model);
+            var user = _mapper.Map<UserModel>(model);
 
             try
             {
