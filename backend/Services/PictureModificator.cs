@@ -10,7 +10,7 @@ namespace backend.Services
 {
     public class PictureModificator : IPictureModificator
     {
-        public Picture Crop(Picture picture, CropRectange cropRectangle) =>
+        public Picture Crop(Picture picture, CropRectangle cropRectangle) =>
             MapWithImageFactory(picture, img => img.Crop(cropRectangle.ToCropLayer));
 
         public Picture Rotate(Picture picture, float degrees) => MapWithImageFactory(picture, img => img.Rotate(degrees));
