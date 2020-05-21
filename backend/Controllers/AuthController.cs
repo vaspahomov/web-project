@@ -80,7 +80,7 @@ namespace backend.Controllers
         public IActionResult Register([FromBody] RegisterModel model)
         {
             // map model to entity
-            var user = _mapper.Map<UserModel>(model);
+            var user = new UserModel(model.Username);
 
             try
             {
