@@ -10,18 +10,25 @@ namespace backend.Services
             AsStream = stream;
             Filename = filename;
         }
+        
+        public Picture(byte[] bytes, string filename)
+        {
+            AsBytes = bytes;
+            Filename = filename;
+        }
 
         public MemoryStream AsStream { get; }
+        public byte[] AsBytes { get; }
         public string Filename { get; }
 
 
         public Picture StreamMap(Action<MemoryStream, MemoryStream> f)
         {
-            using (var inputStream = AsStream)
+            using (var inputStream = new MemoryStream(AsBytes))
             using (var outputStream = new MemoryStream())
             {
                 f(inputStream, outputStream);
-                return new Picture(outputStream, Filename);
+                return new Picture(outputStream.ToArray(), Filename);
             }
         }
     }

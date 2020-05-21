@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.Data;
@@ -28,9 +29,11 @@ namespace backend.Controllers
 
         private Picture GetPictureFromFormFile(IFormFile file)
         {
-            var ms = new MemoryStream();
-            file.CopyToAsync(ms);
-            return new Picture(ms, file.FileName);
+            using(var ms = new MemoryStream())
+            {
+                file.CopyToAsync(ms);
+                return new Picture(ms.ToArray(), file.FileName);
+            }
         }
 
         public PictureController(IPictureModificator modifier, IPictureRepository pictureRepository,
@@ -42,9 +45,10 @@ namespace backend.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<ActionResult<PictureEntity>> UploadFile(IFormFile file)
+        public async Task<ActionResult<string>> UploadFile(IFormFile file)
         {
             var picture = GetPictureFromFormFile(file);
+            Console.WriteLine(picture.AsBytes.Length);
             var pictureEntity = await _pictureRepository.Save(picture);
             //TODO: get user from auth info
             var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -54,59 +58,76 @@ namespace backend.Controllers
                 await _userRepository.AddPictureAsync(userId, pictureEntity, DateTime.Now);
             }
 
-            return pictureEntity;
+            return pictureEntity.Id.ToString();
+        }
+
+        private Guid? GetUser()
+        {
+            var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (user != null)
+                return new Guid(user);
+            return null;
         }
 
         [HttpGet("download/{id}")]
-        public async Task<ActionResult<Picture>> DownloadFile(string id)
+        public async Task<ActionResult<byte[]>> DownloadFile([FromRoute] string id)
         {
             var entity = new PictureEntity(new ObjectId(id));
             var picture = await _pictureRepository.Get(entity);
             if (picture != null)
-                return Ok(picture);
+                return File(picture.AsBytes, "image/jpeg");
             return NotFound();
         }
 
-        [HttpGet("users/download/{userId}")]
-        public async Task<ActionResult<IEnumerable<Picture>>> DownloadAllForUser(Guid userId)
+        [HttpGet("download/all")]
+        public async Task<ActionResult<IEnumerable<Picture>>> DownloadAllForUser()
         {
+            var user = GetUser();
+            if (user == null)
+                return NotFound();
+            var userId = user.Value;
             var ids = await _userRepository.GetUserPictures(userId);
             var pics = ids.Select(id => _pictureRepository.Get(id));
             return Ok(await Task.WhenAll(pics));
         }
 
-        [HttpPatch("user/{userId}/rotation/{id}")]
-        public async Task<ActionResult<PictureEntity>> Rotate(Guid userId, string id, float degrees) =>
-            await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.Rotate(pic, degrees));
+        [HttpPatch("rotation/{id}")]
+        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromRoute] float degrees) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, degrees));
 
-        [HttpPatch("user/{userId}/text_addition/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddText(Guid userId, string id, string text) =>
-            await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.AddText(pic, text));
+        [HttpPatch("text_addition/{id}")]
+        public async Task<ActionResult<PictureEntity>> AddText(string id, string text) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, text));
 
-        [HttpPatch("user/{userId}/crop/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddText(Guid userId, string id, [FromBody] CropRectangle rectangle) =>
-            await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.Crop(pic, rectangle));
+        [HttpPatch("crop/{id}")]
+        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRectangle rectangle) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
 
-        [HttpPatch("user/{userId}/gaussian_blur/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddGaussianBlur(Guid userId, string id, int size) =>
-            await ModifyPictureAndSaveForUser(userId, id, pic => _modifier.AddGaussianBlur(pic, size));
+        [HttpPatch("blur/gaussian/{id}")]
+        public async Task<ActionResult<PictureEntity>> AddGaussianBlur(string id, int size) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size));
 
-        [HttpPatch("user/{userId}/circular_blur/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddCircularBlur(Guid userId, string id) =>
-            await ModifyPictureAndSaveForUser(userId, id, _modifier.AddCircularBlur);
+        [HttpPatch("blur/circular/{id}")]
+        public async Task<ActionResult<PictureEntity>> AddCircularBlur(string id) =>
+            await ModifyPictureAndSaveForUser(id, _modifier.AddCircularBlur);
 
-        [HttpPatch("user/{userId}/sepia_filter/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddSepiaFilter(Guid userId, string id) =>
-            await ModifyPictureAndSaveForUser(userId, id, _modifier.AddSepiaFilter);
+        [HttpPatch("filter/sepia/{id}")]
+        public async Task<ActionResult<PictureEntity>> AddSepiaFilter(string id) =>
+            await ModifyPictureAndSaveForUser(id, _modifier.AddSepiaFilter);
 
-        [HttpPatch("user/{userId}/black_and_white_filter/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddBnWFilter(Guid userId, string id) =>
-            await ModifyPictureAndSaveForUser(userId, id, _modifier.AddBlackAndWhiteFilter);
+        [HttpPatch("filter/bw/{id}")]
+        public async Task<ActionResult<PictureEntity>> AddBnWFilter(string id) =>
+            await ModifyPictureAndSaveForUser(id, _modifier.AddBlackAndWhiteFilter);
 
 
-        private async Task<ActionResult<PictureEntity>> ModifyPictureAndSaveForUser(Guid userId, string id, Func<Picture, Picture> f)
+        private async Task<ActionResult<PictureEntity>> ModifyPictureAndSaveForUser(string id, Func<Picture, Picture> f)
         {
             //TODO: add converter between PictureEntity ObjectId and Guid
+            var user = GetUser();
+            if (user == null)
+                return NotFound();
+            var userId = user.Value;
+            
             var entity = new PictureEntity(new ObjectId(id));
             var picture = await _pictureRepository.Get(entity);
             if (picture == null)
@@ -114,7 +135,7 @@ namespace backend.Controllers
             var modified = f(picture);
             var savedId = await _pictureRepository.Save(modified);
             await _userRepository.AddPictureAsync(userId, savedId, DateTime.Now);
-            return savedId;
+            return File(modified.AsBytes, "image/jpeg");
         }
     }
 }

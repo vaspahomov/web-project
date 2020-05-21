@@ -51,8 +51,13 @@ namespace backend
             
             services.Configure<DatabaseSettings>(
                 Configuration.GetSection(nameof(DatabaseSettings)));
+            services.Configure<PictureDatabaseSettings>(
+                Configuration.GetSection(nameof(PictureDatabaseSettings)));
+            
             services.AddSingleton<IDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+            services.AddSingleton<IPictureDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<PictureDatabaseSettings>>().Value);
             
             services.AddSingleton<IPictureRepository, MongoPictureRepository>();
             services.AddSingleton<IUserRepository, MongoUserRepository>();
@@ -108,7 +113,7 @@ namespace backend
                 var token = context.Request.Cookies["user_token"];
                 if (!string.IsNullOrEmpty(token))
                     context.Request.Headers.Add("Authorization", "Bearer " + token);
-
+            
                 await next();
             });
             app.UseAuthentication();

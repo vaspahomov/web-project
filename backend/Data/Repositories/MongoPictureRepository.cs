@@ -16,7 +16,7 @@ namespace backend.Data
         private readonly IMongoCollection<PictureDto> pictures;
         private readonly GridFSBucket gridFs;
 
-        public MongoPictureRepository(IDatabaseSettings settings)
+        public MongoPictureRepository(IPictureDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
@@ -27,18 +27,21 @@ namespace backend.Data
         public async Task<Picture?> Get(PictureEntity picture)
         {
             var ms = new MemoryStream();
-            var filter = Builders<GridFSFileInfo>.Filter.Eq(info => info.Id, picture.Id);
+            var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", picture.Id);
             var fileInfos = await gridFs.FindAsync(filter);
             var fileInfo = fileInfos.FirstOrDefault();
+            Console.WriteLine($"info -> {fileInfo.Id}");
             if (fileInfo == null)
                 return null;
-            await gridFs.DownloadToStreamAsync(picture.Id, ms);
-            return new Picture(ms, fileInfo.Filename);
+            var pic = await gridFs.DownloadAsBytesAsync(picture.Id);
+            Console.WriteLine(pic.Length);
+            return new Picture(pic, fileInfo.Filename);
         }
 
         public async Task<PictureEntity> Save(Picture picture)
         {
-            var imageId = await gridFs.UploadFromStreamAsync(picture.Filename, picture.AsStream);
+            var imageId = await gridFs.UploadFromBytesAsync(picture.Filename, picture.AsBytes);
+            Console.WriteLine(picture.AsBytes.Length);
             var pictureEntity = new PictureEntity(imageId);
             return pictureEntity;
         }

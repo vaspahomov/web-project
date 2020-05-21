@@ -13,7 +13,8 @@ namespace backend.Services
         public Picture Crop(Picture picture, CropRectangle cropRectangle) =>
             MapWithImageFactory(picture, img => img.Crop(cropRectangle.ToCropLayer));
 
-        public Picture Rotate(Picture picture, float degrees) => MapWithImageFactory(picture, img => img.Rotate(degrees));
+        public Picture Rotate(Picture picture, float degrees) 
+            => MapWithImageFactory(picture, img => img.Rotate(degrees));
 
         public Picture AddText(Picture picture, string text) =>
             MapWithImageFactory(picture, img => img.Watermark(new TextLayer {Text = text}));
@@ -36,11 +37,12 @@ namespace backend.Services
         [Pure]
         private static Picture MapWithImageFactory(Picture picture, Func<ImageFactory, ImageFactory> f)
         {
-            return picture.StreamMap((inStream, outStream) =>
+            using (var outputStream = new MemoryStream())
+            using (var imageFactory = new ImageFactory())
             {
-                using var imageFactory = new ImageFactory(preserveExifData: true);
-                f(imageFactory.Load(inStream)).Save(outStream);
-            });
+                f(imageFactory.Load(picture.AsBytes)).Save(outputStream);
+                return new Picture(outputStream.ToArray(), picture.Filename);
+            }
         }
     }
 }
