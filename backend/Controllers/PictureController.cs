@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -25,7 +26,12 @@ namespace backend.Controllers
         private readonly IPictureRepository _pictureRepository;
         private readonly IUserRepository _userRepository;
 
-        private Picture GetPictureFromFormFile(IFormFile file) => throw new NotImplementedException();
+        private Picture GetPictureFromFormFile(IFormFile file)
+        {
+            var ms = new MemoryStream();
+            file.CopyToAsync(ms);
+            return new Picture(ms, file.FileName);
+        }
 
         public PictureController(IPictureModificator modifier, IPictureRepository pictureRepository,
             IUserRepository userRepository)
