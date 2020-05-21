@@ -36,13 +36,15 @@ namespace backend.Services
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Password is required");
 
-            if ((await _userRepository.GetAllUsers()).Any(x => x.Username == user.Username))
+            var found = await _userRepository.FindByUsernameAsync(user.Username);
+
+            if (found != null)
                 throw new AppException("Username \"" + user.Username + "\" is already taken");
 
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
             
-            var userEntity = new UserEntity(user.Id, user.Username, passwordHash, passwordSalt);
+            var userEntity = new UserEntity(Guid.NewGuid(), user.Username, passwordHash, passwordSalt);
 
             await _userRepository.InsertAsync(userEntity);
             return userEntity;

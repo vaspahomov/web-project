@@ -11,7 +11,6 @@ namespace backend.Data
     public class MongoUserRepository: IUserRepository
     {
         public IMongoCollection<UserEntity> userCollection;
-            
         public MongoUserRepository(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
