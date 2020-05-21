@@ -39,7 +39,7 @@ namespace backend
             {
                 options.AddPolicy(Policies.CorsPolicy, builder =>
                     builder
-                        .WithOrigins(Urls.Front)
+                        .WithOrigins(Urls.Front, Urls.DevServer)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()
@@ -95,11 +95,7 @@ namespace backend
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(x => x
-                .WithOrigins(Urls.Front)
-                .AllowCredentials()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors(Policies.CorsPolicy);
 
             if (env.IsDevelopment())
             {
