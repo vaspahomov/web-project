@@ -5,6 +5,7 @@ import ImageCollectionWrapper from "../components/ImageCollectionWrapper";
 import ImageCard from "../components/ImageCard";
 import {ImagesCollection} from "../static/ImagesCollection";
 import {NavTab} from "../components/Header";
+import UploadButton from "../components/UploadButton";
 
 export default function MyCollection() {
     const imagesCollection = new ImagesCollection();
@@ -16,6 +17,7 @@ export default function MyCollection() {
                     <ImageCard imageId={image.id} width={image.width <= 400 ? image.width : 400} name={image.name}
                                ratio={image.width / image.height} src={image.url}/>
                 )}
+                <UploadButton />
             </ImageCollectionWrapper>
         </Layout>
     );
