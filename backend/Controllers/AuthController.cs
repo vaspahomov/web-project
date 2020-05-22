@@ -78,7 +78,7 @@ namespace backend.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             // map model to entity
             var user = new UserModel(model.Username);
@@ -86,8 +86,8 @@ namespace backend.Controllers
             try
             {
                 // create user
-                _userService.Create(user, model.Password);
-                return Ok();
+                var userEntity = await _userService.Create(user, model.Password);
+                return Ok(userEntity.Id);
             }
             catch (AppException ex)
             {

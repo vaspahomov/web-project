@@ -49,15 +49,14 @@ namespace backend
             services.AddControllers();
             services.AddSingleton<IPictureModificator, PictureModificator>();
             
-            services.Configure<DatabaseSettings>(
-                Configuration.GetSection(nameof(DatabaseSettings)));
-            services.Configure<PictureDatabaseSettings>(
-                Configuration.GetSection(nameof(PictureDatabaseSettings)));
-            
-            services.AddSingleton<IDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
-            services.AddSingleton<IPictureDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<PictureDatabaseSettings>>().Value);
+            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+            services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<DatabaseSettings>();
+                var builder = new MongoDatabaseBuilder(settings);
+                return builder.Build();
+            });
             
             services.AddSingleton<IPictureRepository, MongoPictureRepository>();
             services.AddSingleton<IUserRepository, MongoUserRepository>();
