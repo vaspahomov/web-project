@@ -56,7 +56,9 @@ namespace backend.Data
         public async Task<List<PictureEntity>> GetUserPictures(Guid userId)
         {
             var user = await FindByIdAsync(userId);
-            return user.Pictures;
+            return user != null 
+                ? user.Pictures 
+                : new List<PictureEntity>();
         }
     }
 }

@@ -86,9 +86,10 @@ namespace backend.Controllers
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-            var ids = await _userRepository.GetUserPictures(userId);
-            var pics = ids.Select(id => _pictureRepository.Get(id));
-            return Ok(await Task.WhenAll(pics));
+            Console.WriteLine(userId);
+            var entities = await _userRepository.GetUserPictures(userId);
+            var ids = entities.Select(e => e.Id.ToString());
+            return Ok(ids);
         }
 
         [HttpPatch("rotation/{id}")]
