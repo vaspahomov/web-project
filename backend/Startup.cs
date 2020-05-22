@@ -1,19 +1,20 @@
 using System;
 using System.Text;
-using System.Threading.Tasks;
 using backend.Data;
 using AutoMapper;
+using backend.Data.Repositories;
 using backend.Helpers;
+using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace backend
 {
@@ -38,7 +39,7 @@ namespace backend
             {
                 options.AddPolicy(Policies.CorsPolicy, builder =>
                     builder
-                        .WithOrigins(Urls.Front)
+                        .WithOrigins(Urls.Front, Urls.DevServer)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()
@@ -47,8 +48,18 @@ namespace backend
 
             services.AddControllers();
             services.AddSingleton<IPictureModificator, PictureModificator>();
-            services.AddSingleton<IPictureRepository, InMemoryPictureRepository>();
-            services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            
+            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+            services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<DatabaseSettings>();
+                var builder = new MongoDatabaseBuilder(settings);
+                return builder.Build();
+            });
+            
+            services.AddSingleton<IPictureRepository, MongoPictureRepository>();
+            services.AddSingleton<IUserRepository, MongoUserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -83,11 +94,7 @@ namespace backend
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(x => x
-                .WithOrigins(Urls.Front)
-                .AllowCredentials()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors(Policies.CorsPolicy);
 
             if (env.IsDevelopment())
             {
@@ -101,7 +108,7 @@ namespace backend
                 var token = context.Request.Cookies["user_token"];
                 if (!string.IsNullOrEmpty(token))
                     context.Request.Headers.Add("Authorization", "Bearer " + token);
-
+            
                 await next();
             });
             app.UseAuthentication();
@@ -109,10 +116,6 @@ namespace backend
 
             app.UseEndpoints(endpoints =>
             {
-                // endpoints.MapGet("/", async context =>
-                // {
-                //     await context.Response.WriteAsync("Hello World!");
-                // });
                 endpoints.MapControllers();
             });
         }
