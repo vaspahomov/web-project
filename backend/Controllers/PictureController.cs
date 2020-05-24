@@ -88,7 +88,7 @@ namespace backend.Controllers
             return Ok(ids);
         }
 
-        [HttpPatch("rotation/{id}")]
+        [HttpPatch("rotation/{id}/angle/{degrees}")]
         public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromRoute] float degrees) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, degrees));
 
@@ -100,7 +100,7 @@ namespace backend.Controllers
         public async Task<ActionResult<PictureEntity>> AddText([FromRoute]string id, [FromBody] CropRectangle rectangle) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
 
-        [HttpPatch("blur/gaussian/{id}")]
+        [HttpPatch("blur/gaussian/{id}/size/{size}")]
         public async Task<ActionResult<PictureEntity>> AddGaussianBlur([FromRoute]string id, [FromRoute]int size) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size));
 

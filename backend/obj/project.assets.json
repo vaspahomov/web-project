@@ -28,6 +28,18 @@
           "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
         }
       },
+      "CoreCompat.System.Drawing.v2/5.2.0-preview1-r131": {
+        "type": "package",
+        "dependencies": {
+          "System.Security.Permissions": "4.4.0-preview1-25305-02"
+        },
+        "compile": {
+          "lib/netstandard2.0/CoreCompat.System.Drawing.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/CoreCompat.System.Drawing.dll": {}
+        }
+      },
       "DnsClient/1.3.1": {
         "type": "package",
         "compile": {
@@ -37,13 +49,17 @@
           "lib/netstandard2.1/DnsClient.dll": {}
         }
       },
-      "ImageProcessor/2.9.0": {
+      "ImageProcessor.Core.CoreCompat/1.3.0": {
         "type": "package",
+        "dependencies": {
+          "CoreCompat.System.Drawing.v2": "5.2.0-preview1-r131",
+          "Microsoft.CSharp": "4.6.0-preview3.19128.7"
+        },
         "compile": {
-          "lib/net452/ImageProcessor.dll": {}
+          "lib/netstandard2.0/ImageProcessor.Core.CoreCompat.dll": {}
         },
         "runtime": {
-          "lib/net452/ImageProcessor.dll": {}
+          "lib/netstandard2.0/ImageProcessor.Core.CoreCompat.dll": {}
         }
       },
       "ImageProcessor.Web/4.12.0": {
@@ -91,7 +107,7 @@
           "lib/netcoreapp2.1/Microsoft.Bcl.HashCode.dll": {}
         }
       },
-      "Microsoft.CSharp/4.5.0": {
+      "Microsoft.CSharp/4.6.0-preview3.19128.7": {
         "type": "package",
         "compile": {
           "ref/netcoreapp2.0/_._": {}
@@ -724,6 +740,69 @@
           "runtimes/opensuse.42.1-x64/native/System.Security.Cryptography.Native.OpenSsl.so": {
             "assetType": "native",
             "rid": "opensuse.42.1-x64"
+          }
+        }
+      },
+      "runtime.osx.10.10-x64.CoreCompat.System.Drawing/5.8.64": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/osx-x64/native/libcairo.2.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libfontconfig.1.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libfreetype.6.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libgdiplus-lighthouse.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libgdiplus.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libgif.7.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libglib-2.0.0.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libintl.8.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libjpeg.9.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpcre.1.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpixman-1.0.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpng16.16.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libtiff.5.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
           }
         }
       },
@@ -1817,6 +1896,29 @@
           "lib/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
         }
       },
+      "System.Security.AccessControl/4.4.0-preview1-25305-02": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.0.0-preview1-25305-02",
+          "System.Security.Principal.Windows": "4.4.0-preview1-25305-02"
+        },
+        "compile": {
+          "ref/netstandard2.0/System.Security.AccessControl.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.AccessControl.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.0/System.Security.AccessControl.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "System.Security.Claims/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -2038,6 +2140,18 @@
           }
         }
       },
+      "System.Security.Permissions/4.4.0-preview1-25305-02": {
+        "type": "package",
+        "dependencies": {
+          "System.Security.AccessControl": "4.4.0-preview1-25305-02"
+        },
+        "compile": {
+          "ref/netstandard2.0/System.Security.Permissions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.Permissions.dll": {}
+        }
+      },
       "System.Security.Principal/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -2050,33 +2164,23 @@
           "lib/netstandard1.0/System.Security.Principal.dll": {}
         }
       },
-      "System.Security.Principal.Windows/4.3.0": {
+      "System.Security.Principal.Windows/4.4.0-preview1-25305-02": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "Microsoft.Win32.Primitives": "4.3.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Security.Claims": "4.3.0",
-          "System.Security.Principal": "4.3.0",
-          "System.Text.Encoding": "4.3.0",
-          "System.Threading": "4.3.0"
+          "Microsoft.NETCore.Platforms": "2.0.0-preview1-25305-02"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard2.0/System.Security.Principal.Windows.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.Principal.Windows.dll": {}
         },
         "runtimeTargets": {
-          "runtimes/unix/lib/netstandard1.3/System.Security.Principal.Windows.dll": {
+          "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.dll": {
             "assetType": "runtime",
             "rid": "unix"
           },
-          "runtimes/win/lib/netstandard1.3/System.Security.Principal.Windows.dll": {
+          "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.dll": {
             "assetType": "runtime",
             "rid": "win"
           }
@@ -2339,6 +2443,18 @@
         "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.pdb"
       ]
     },
+    "CoreCompat.System.Drawing.v2/5.2.0-preview1-r131": {
+      "sha512": "+WrScg+skrIiNLBwbl+BFdlSyzUqKOZtAUskW2xfI8vcKQdDJp+UoreUFC9uMSEgSiAR32e5l3fTtFDUKEpRaA==",
+      "type": "package",
+      "path": "corecompat.system.drawing.v2/5.2.0-preview1-r131",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "corecompat.system.drawing.v2.5.2.0-preview1-r131.nupkg.sha512",
+        "corecompat.system.drawing.v2.nuspec",
+        "lib/netstandard2.0/CoreCompat.System.Drawing.dll"
+      ]
+    },
     "DnsClient/1.3.1": {
       "sha512": "b9XczgqSjs3dd+OlV799jn+LXxdfirln1q36GKjs3QwWBhjhgIvgHLEG5s2VrBLcP4ogQjtA0PZ5+AmRJ35Vhg==",
       "type": "package",
@@ -2361,17 +2477,16 @@
         "lib/netstandard2.1/DnsClient.xml"
       ]
     },
-    "ImageProcessor/2.9.0": {
-      "sha512": "5FliI2L99AlSG1GRDcRfGzFhaBycAK70kDkG7UxKcxYWfRC7pvcU40LqCkVUTgzi6xMc7DD0rkRwj9fv1AHvWg==",
+    "ImageProcessor.Core.CoreCompat/1.3.0": {
+      "sha512": "3W7C02U12rrRVpvM1+OEFytkdDbFdTkOL5jJnpIEqglNudJqHjN0QHn1BUxVwl4tOZe9JtzQsoKU8jZHlGURDA==",
       "type": "package",
-      "path": "imageprocessor/2.9.0",
+      "path": "imageprocessor.core.corecompat/1.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "imageprocessor.2.9.0.nupkg.sha512",
-        "imageprocessor.nuspec",
-        "lib/net452/ImageProcessor.dll",
-        "lib/net452/ImageProcessor.xml"
+        "imageprocessor.core.corecompat.1.3.0.nupkg.sha512",
+        "imageprocessor.core.corecompat.nuspec",
+        "lib/netstandard2.0/ImageProcessor.Core.CoreCompat.dll"
       ]
     },
     "ImageProcessor.Web/4.12.0": {
@@ -2468,10 +2583,10 @@
         "version.txt"
       ]
     },
-    "Microsoft.CSharp/4.5.0": {
-      "sha512": "kaj6Wb4qoMuH3HySFJhxwQfe8R/sJsNJnANrvv8WdFPMoNbKY5htfNscv+LHCu5ipz+49m2e+WQXpLXr9XYemQ==",
+    "Microsoft.CSharp/4.6.0-preview3.19128.7": {
+      "sha512": "9yECMX2xrjv0+4CNKxB8BwgMu8q7q7pu6UdlGhYQcbuPaFyy/eBzCeIzC/5oYBIqHReUHracsVrL7hrwnbjoMg==",
       "type": "package",
-      "path": "microsoft.csharp/4.5.0",
+      "path": "microsoft.csharp/4.6.0-preview3.19128.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2484,6 +2599,7 @@
         "lib/netcoreapp2.0/_._",
         "lib/netstandard1.3/Microsoft.CSharp.dll",
         "lib/netstandard2.0/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.xml",
         "lib/portable-net45+win8+wp8+wpa81/_._",
         "lib/uap10.0.16299/_._",
         "lib/win8/_._",
@@ -2493,7 +2609,7 @@
         "lib/xamarinmac20/_._",
         "lib/xamarintvos10/_._",
         "lib/xamarinwatchos10/_._",
-        "microsoft.csharp.4.5.0.nupkg.sha512",
+        "microsoft.csharp.4.6.0-preview3.19128.7.nupkg.sha512",
         "microsoft.csharp.nuspec",
         "ref/MonoAndroid10/_._",
         "ref/MonoTouch10/_._",
@@ -3292,6 +3408,31 @@
         "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
         "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl.nuspec",
         "runtimes/opensuse.42.1-x64/native/System.Security.Cryptography.Native.OpenSsl.so"
+      ]
+    },
+    "runtime.osx.10.10-x64.CoreCompat.System.Drawing/5.8.64": {
+      "sha512": "Ey7xQgWwixxdrmhzEUvaR4kxZDSQMWQScp8ViLvmL5xCBKG6U3TaMv/jzHilpfQXpHmJ4IylKGzzMvnYX2FwHQ==",
+      "type": "package",
+      "path": "runtime.osx.10.10-x64.corecompat.system.drawing/5.8.64",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll",
+        "runtime.osx.10.10-x64.corecompat.system.drawing.5.8.64.nupkg.sha512",
+        "runtime.osx.10.10-x64.corecompat.system.drawing.nuspec",
+        "runtimes/osx-x64/native/libcairo.2.dylib",
+        "runtimes/osx-x64/native/libfontconfig.1.dylib",
+        "runtimes/osx-x64/native/libfreetype.6.dylib",
+        "runtimes/osx-x64/native/libgdiplus-lighthouse.dylib",
+        "runtimes/osx-x64/native/libgdiplus.dylib",
+        "runtimes/osx-x64/native/libgif.7.dylib",
+        "runtimes/osx-x64/native/libglib-2.0.0.dylib",
+        "runtimes/osx-x64/native/libintl.8.dylib",
+        "runtimes/osx-x64/native/libjpeg.9.dylib",
+        "runtimes/osx-x64/native/libpcre.1.dylib",
+        "runtimes/osx-x64/native/libpixman-1.0.dylib",
+        "runtimes/osx-x64/native/libpng16.16.dylib",
+        "runtimes/osx-x64/native/libtiff.5.dylib"
       ]
     },
     "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {
@@ -6468,6 +6609,66 @@
         "system.runtime.serialization.primitives.nuspec"
       ]
     },
+    "System.Security.AccessControl/4.4.0-preview1-25305-02": {
+      "sha512": "E3acs1/hAThiFxLFwfS0XXEOk/qw9+Wf2He4y0hj8ZQ7wQZum4/q7nv+zHUA/MigdYChM94qTArnUWkXdcFNkw==",
+      "type": "package",
+      "path": "system.security.accesscontrol/4.4.0-preview1-25305-02",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/net46/System.Security.AccessControl.dll",
+        "lib/net461/System.Security.AccessControl.dll",
+        "lib/netstandard1.3/System.Security.AccessControl.dll",
+        "lib/netstandard2.0/System.Security.AccessControl.dll",
+        "ref/net46/System.Security.AccessControl.dll",
+        "ref/net461/System.Security.AccessControl.dll",
+        "ref/netstandard1.3/System.Security.AccessControl.dll",
+        "ref/netstandard1.3/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/de/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/es/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/fr/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/it/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ja/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ko/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ru/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/zh-hans/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/zh-hant/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/System.Security.AccessControl.dll",
+        "ref/netstandard2.0/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/de/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/es/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/fr/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/it/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/ja/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/ko/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/ru/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/zh-hans/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/zh-hant/System.Security.AccessControl.xml",
+        "ref/uap10.1/System.Security.AccessControl.dll",
+        "ref/uap10.1/System.Security.AccessControl.xml",
+        "ref/uap10.1/de/System.Security.AccessControl.xml",
+        "ref/uap10.1/es/System.Security.AccessControl.xml",
+        "ref/uap10.1/fr/System.Security.AccessControl.xml",
+        "ref/uap10.1/it/System.Security.AccessControl.xml",
+        "ref/uap10.1/ja/System.Security.AccessControl.xml",
+        "ref/uap10.1/ko/System.Security.AccessControl.xml",
+        "ref/uap10.1/ru/System.Security.AccessControl.xml",
+        "ref/uap10.1/zh-hans/System.Security.AccessControl.xml",
+        "ref/uap10.1/zh-hant/System.Security.AccessControl.xml",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net46/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net461/System.Security.AccessControl.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll",
+        "runtimes/win/lib/netstandard1.3/System.Security.AccessControl.dll",
+        "runtimes/win/lib/uap10.1/System.Security.AccessControl.dll",
+        "system.security.accesscontrol.4.4.0-preview1-25305-02.nupkg.sha512",
+        "system.security.accesscontrol.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Security.Claims/4.3.0": {
       "sha512": "P/+BR/2lnc4PNDHt/TPBAWHVMLMRHsyYZbU1NphW4HIWzCggz8mJbTQQ3MKljFE7LS3WagmVFuBgoLcFzYXlkA==",
       "type": "package",
@@ -6785,6 +6986,27 @@
         "system.security.cryptography.x509certificates.nuspec"
       ]
     },
+    "System.Security.Permissions/4.4.0-preview1-25305-02": {
+      "sha512": "W4+sOQhP/hijYNMx/TQK2zXP1+8a9WYAvuMQS4XBe+Phfv8fqc4h+U/fzkWC5BuNN0InNY46F5WT1bbOyObQdg==",
+      "type": "package",
+      "path": "system.security.permissions/4.4.0-preview1-25305-02",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/net461/System.Security.Permissions.dll",
+        "lib/netstandard2.0/System.Security.Permissions.dll",
+        "ref/net461/System.Security.Permissions.dll",
+        "ref/netstandard2.0/System.Security.Permissions.dll",
+        "ref/uap10.1/System.Security.Permissions.dll",
+        "runtimes/win/lib/net461/System.Security.Permissions.dll",
+        "system.security.permissions.4.4.0-preview1-25305-02.nupkg.sha512",
+        "system.security.permissions.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Security.Principal/4.3.0": {
       "sha512": "I1tkfQlAoMM2URscUtpcRo/hX0jinXx6a/KUtEQoz3owaYwl3qwsO8cbzYVVnjxrzxjHo3nJC+62uolgeGIS9A==",
       "type": "package",
@@ -6844,17 +7066,21 @@
         "system.security.principal.nuspec"
       ]
     },
-    "System.Security.Principal.Windows/4.3.0": {
-      "sha512": "HVL1rvqYtnRCxFsYag/2le/ZfKLK4yMw79+s6FmKXbSCNN0JeAhrYxnRAHFoWRa0dEojsDcbBSpH3l22QxAVyw==",
+    "System.Security.Principal.Windows/4.4.0-preview1-25305-02": {
+      "sha512": "i/87uUlutjoXKIGEgjAh6tzpFtwhBZxMqX+ZW38UoJqHxaW0+cglUovfEfPRJeEYFhck9SqJqJnEqsVvAgu6oQ==",
       "type": "package",
-      "path": "system.security.principal.windows/4.3.0",
+      "path": "system.security.principal.windows/4.4.0-preview1-25305-02",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net46/System.Security.Principal.Windows.dll",
+        "lib/net461/System.Security.Principal.Windows.dll",
+        "lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "lib/netstandard2.0/System.Security.Principal.Windows.dll",
         "ref/net46/System.Security.Principal.Windows.dll",
+        "ref/net461/System.Security.Principal.Windows.dll",
         "ref/netstandard1.3/System.Security.Principal.Windows.dll",
         "ref/netstandard1.3/System.Security.Principal.Windows.xml",
         "ref/netstandard1.3/de/System.Security.Principal.Windows.xml",
@@ -6866,11 +7092,38 @@
         "ref/netstandard1.3/ru/System.Security.Principal.Windows.xml",
         "ref/netstandard1.3/zh-hans/System.Security.Principal.Windows.xml",
         "ref/netstandard1.3/zh-hant/System.Security.Principal.Windows.xml",
-        "runtimes/unix/lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "ref/netstandard2.0/System.Security.Principal.Windows.dll",
+        "ref/netstandard2.0/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/de/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/es/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/fr/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/it/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/ja/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/ko/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/ru/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/zh-hans/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/zh-hant/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/System.Security.Principal.Windows.dll",
+        "ref/uap10.1/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/de/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/es/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/fr/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/it/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/ja/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/ko/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/ru/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/zh-hans/System.Security.Principal.Windows.xml",
+        "ref/uap10.1/zh-hant/System.Security.Principal.Windows.xml",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
         "runtimes/win/lib/net46/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/net461/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
         "runtimes/win/lib/netstandard1.3/System.Security.Principal.Windows.dll",
-        "system.security.principal.windows.4.3.0.nupkg.sha512",
-        "system.security.principal.windows.nuspec"
+        "runtimes/win/lib/uap10.1/System.Security.Principal.Windows.dll",
+        "system.security.principal.windows.4.4.0-preview1-25305-02.nupkg.sha512",
+        "system.security.principal.windows.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Security.SecureString/4.0.0": {
@@ -7646,7 +7899,7 @@
     ".NETCoreApp,Version=v3.1": [
       "AutoMapper >= 9.0.0",
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 7.0.0",
-      "ImageProcessor >= 2.9.0",
+      "ImageProcessor.Core.CoreCompat >= 1.3.0",
       "ImageProcessor.Web >= 4.12.0",
       "ImageProcessor.Web.Config >= 2.6.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 3.1.3",
@@ -7657,23 +7910,24 @@
       "MongoDB.Driver.GridFS >= 2.10.4",
       "Swashbuckle.AspNetCore >= 5.4.1",
       "System.Drawing.Common >= 4.7.0",
-      "System.IdentityModel.Tokens.Jwt >= 6.5.1"
+      "System.IdentityModel.Tokens.Jwt >= 6.5.1",
+      "runtime.osx.10.10-x64.CoreCompat.System.Drawing >= 5.8.64"
     ]
   },
   "packageFolders": {
-    "/Users/budlyanskiy/.nuget/packages/": {}
+    "/Users/voytsishevskiy/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/budlyanskiy/Desktop/Study/web-project/backend/backend.csproj",
+      "projectUniqueName": "/Users/voytsishevskiy/dev/web-project/backend/backend.csproj",
       "projectName": "backend",
-      "projectPath": "/Users/budlyanskiy/Desktop/Study/web-project/backend/backend.csproj",
-      "packagesPath": "/Users/budlyanskiy/.nuget/packages/",
-      "outputPath": "/Users/budlyanskiy/Desktop/Study/web-project/backend/obj/",
+      "projectPath": "/Users/voytsishevskiy/dev/web-project/backend/backend.csproj",
+      "packagesPath": "/Users/voytsishevskiy/.nuget/packages/",
+      "outputPath": "/Users/voytsishevskiy/dev/web-project/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/budlyanskiy/.nuget/NuGet/NuGet.Config"
+        "/Users/voytsishevskiy/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -7703,9 +7957,9 @@
             "target": "Package",
             "version": "[7.0.0, )"
           },
-          "ImageProcessor": {
+          "ImageProcessor.Core.CoreCompat": {
             "target": "Package",
-            "version": "[2.9.0, )"
+            "version": "[1.3.0, )"
           },
           "ImageProcessor.Web": {
             "target": "Package",
@@ -7750,6 +8004,10 @@
           "System.IdentityModel.Tokens.Jwt": {
             "target": "Package",
             "version": "[6.5.1, )"
+          },
+          "runtime.osx.10.10-x64.CoreCompat.System.Drawing": {
+            "target": "Package",
+            "version": "[5.8.64, )"
           }
         },
         "imports": [
@@ -7770,21 +8028,11 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/budlyanskiy/.dotnet/sdk/3.1.201/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.101/RuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'ImageProcessor 2.9.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
-      "libraryId": "ImageProcessor",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    },
     {
       "code": "NU1701",
       "level": "Warning",

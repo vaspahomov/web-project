@@ -1,7 +1,3 @@
-using System.IO;
-using System.Threading.Tasks;
-using ImageProcessor.Imaging;
-
 namespace backend.Services
 {
     public interface IPictureModificator
@@ -16,7 +12,5 @@ namespace backend.Services
         Picture ToJPEG(Picture picture);
         Picture ToPNG(Picture picture);
     }
-
-
 
 }
