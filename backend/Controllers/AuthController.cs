@@ -65,9 +65,16 @@ namespace backend.Controllers
                 Expires = DateTime.Now.AddMonths(1)
             };
             
+            var cookieFrontOptions = new CookieOptions
+            {
+                Path = "/", HttpOnly = false, IsEssential = true,
+                Expires = DateTime.Now.AddMonths(1), Domain = "photokek.herokuapp.com"
+            };
+            
             //TODO: think about cookieOptions, it should be secured enough
             //TODO: learn how to get user info from cookie
             Response.Cookies.Append("user_token", tokenString, cookieOptions);
+            Response.Cookies.Append("user_token", tokenString, cookieFrontOptions);
 
             return Ok(new
             {
