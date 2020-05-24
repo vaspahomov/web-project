@@ -11,11 +11,9 @@ namespace backend.Data
     public class MongoUserRepository: IUserRepository
     {
         public IMongoCollection<UserEntity> userCollection;
-        public MongoUserRepository(IDatabaseSettings settings)
+        public MongoUserRepository(IMongoDatabase database, DatabaseSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
-            userCollection = database.GetCollection<UserEntity>(settings.CollectionName);
+            userCollection = database.GetCollection<UserEntity>(settings.UserCollectionName);
         }
 
         public async Task<Guid> InsertAsync(UserEntity user)
@@ -58,7 +56,9 @@ namespace backend.Data
         public async Task<List<PictureEntity>> GetUserPictures(Guid userId)
         {
             var user = await FindByIdAsync(userId);
-            return user.Pictures;
+            return user != null 
+                ? user.Pictures 
+                : new List<PictureEntity>();
         }
     }
 }

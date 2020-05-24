@@ -9,12 +9,14 @@ using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 namespace backend
 {
@@ -29,12 +31,6 @@ namespace backend
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-            
             services.AddCors(options =>
             {
                 options.AddPolicy(Policies.CorsPolicy, builder =>
@@ -47,17 +43,22 @@ namespace backend
             });
 
             services.AddControllers();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo{Title = "Backend", Version = "v1"});
+            });
+
             services.AddSingleton<IPictureModificator, ImageProcessorPictureModificator>();
-            
-            services.Configure<DatabaseSettings>(
-                Configuration.GetSection(nameof(DatabaseSettings)));
-            services.Configure<PictureDatabaseSettings>(
-                Configuration.GetSection(nameof(PictureDatabaseSettings)));
-            
-            services.AddSingleton<IDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
-            services.AddSingleton<IPictureDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<PictureDatabaseSettings>>().Value);
+
+            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+            services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<DatabaseSettings>();
+                var builder = new MongoDatabaseBuilder(settings);
+                return builder.Build();
+            });
             
             services.AddSingleton<IPictureRepository, MongoPictureRepository>();
             services.AddSingleton<IUserRepository, MongoUserRepository>();
@@ -97,11 +98,24 @@ namespace backend
         {
             app.UseCors(Policies.CorsPolicy);
 
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.None,
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend API-Picture");
+            });
             app.UseRouting();
 
             app.Use(async (context, next) =>

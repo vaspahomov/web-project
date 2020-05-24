@@ -16,12 +16,10 @@ namespace backend.Data
         private readonly IMongoCollection<PictureDto> pictures;
         private readonly GridFSBucket gridFs;
 
-        public MongoPictureRepository(IPictureDatabaseSettings settings)
+        public MongoPictureRepository(IMongoDatabase database, DatabaseSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
             gridFs = new GridFSBucket(database);
-            pictures = database.GetCollection<PictureDto>(settings.CollectionName);
+            pictures = database.GetCollection<PictureDto>(settings.PictureCollectionName);
         }
 
         public async Task<Picture?> Get(PictureEntity picture)

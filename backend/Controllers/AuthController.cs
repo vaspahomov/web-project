@@ -59,13 +59,13 @@ namespace backend.Controllers
             var tokenString = tokenHandler.WriteToken(token);
             var cookieOptions = new CookieOptions
             {
-                Path = "/", HttpOnly = false, IsEssential = true,
                 Expires = DateTime.Now.AddMonths(1)
             };
             
             //TODO: think about cookieOptions, it should be secured enough
             //TODO: learn how to get user info from cookie
             Response.Cookies.Append("user_token", tokenString, cookieOptions);
+            // Response.Cookies.Append("user_token", tokenString, cookieFrontOptions);
 
             return Ok(new
             {
@@ -76,7 +76,7 @@ namespace backend.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             // map model to entity
             var user = new UserModel(model.Username);
@@ -84,8 +84,8 @@ namespace backend.Controllers
             try
             {
                 // create user
-                _userService.Create(user, model.Password);
-                return Ok();
+                var userEntity = await _userService.Create(user, model.Password);
+                return Ok(userEntity.Id);
             }
             catch (AppException ex)
             {

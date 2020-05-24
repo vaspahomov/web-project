@@ -82,9 +82,10 @@ namespace backend.Controllers
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-            var ids = await _userRepository.GetUserPictures(userId);
-            var pics = ids.Select(id => _pictureRepository.Get(id));
-            return Ok(await Task.WhenAll(pics));
+            Console.WriteLine(userId);
+            var entities = await _userRepository.GetUserPictures(userId);
+            var ids = entities.Select(e => e.Id.ToString());
+            return Ok(ids);
         }
 
         [HttpPatch("rotation/{id}")]
@@ -92,15 +93,15 @@ namespace backend.Controllers
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, degrees));
 
         [HttpPatch("text_addition/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddText(string id, string text) =>
+        public async Task<ActionResult<PictureEntity>> AddText([FromRoute]string id, [FromBody]string text) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, text));
 
         [HttpPatch("crop/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRectangle rectangle) =>
+        public async Task<ActionResult<PictureEntity>> AddText([FromRoute]string id, [FromBody] CropRectangle rectangle) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
 
         [HttpPatch("blur/gaussian/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddGaussianBlur(string id, int size) =>
+        public async Task<ActionResult<PictureEntity>> AddGaussianBlur([FromRoute]string id, [FromRoute]int size) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size));
 
         [HttpPatch("blur/circular/{id}")]
