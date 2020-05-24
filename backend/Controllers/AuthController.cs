@@ -62,7 +62,7 @@ namespace backend.Controllers
             var cookieOptions = new CookieOptions
             {
                 Path = "/", HttpOnly = false, IsEssential = true,
-                Expires = DateTime.Now.AddMonths(1), Domain = ".heroku.com"
+                Expires = DateTime.Now.AddMonths(1), Domain = ".herokuapp.com"
             };
             
             var cookieFrontOptions = new CookieOptions
