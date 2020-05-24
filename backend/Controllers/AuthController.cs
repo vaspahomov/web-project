@@ -62,7 +62,7 @@ namespace backend.Controllers
             var cookieOptions = new CookieOptions
             {
                 Path = "/", HttpOnly = false, IsEssential = true,
-                Expires = DateTime.Now.AddMonths(1)
+                Expires = DateTime.Now.AddMonths(1), Domain = ".heroku.com"
             };
             
             var cookieFrontOptions = new CookieOptions
@@ -74,7 +74,7 @@ namespace backend.Controllers
             //TODO: think about cookieOptions, it should be secured enough
             //TODO: learn how to get user info from cookie
             Response.Cookies.Append("user_token", tokenString, cookieOptions);
-            Response.Cookies.Append("user_token", tokenString, cookieFrontOptions);
+            // Response.Cookies.Append("user_token", tokenString, cookieFrontOptions);
 
             return Ok(new
             {
