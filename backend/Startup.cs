@@ -47,7 +47,7 @@ namespace backend
             });
 
             services.AddControllers();
-            services.AddSingleton<IPictureModificator, PictureModificator>();
+            services.AddSingleton<IPictureModificator, ImageProcessorPictureModificator>();
             
             services.Configure<DatabaseSettings>(
                 Configuration.GetSection(nameof(DatabaseSettings)));

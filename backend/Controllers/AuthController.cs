@@ -22,7 +22,6 @@ namespace backend.Controllers
     public class AuthController : Controller
     {
         private IUserService _userService;
-        private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
         public AuthController(
@@ -31,7 +30,6 @@ namespace backend.Controllers
             IOptions<AppSettings> appSettings)
         {
             _userService = userService;
-            _mapper = mapper;
             _appSettings = appSettings.Value;
         }
 

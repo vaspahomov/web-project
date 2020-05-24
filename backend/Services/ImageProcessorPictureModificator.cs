@@ -8,7 +8,7 @@ using ImageProcessor.Imaging.Formats;
 
 namespace backend.Services
 {
-    public class PictureModificator : IPictureModificator
+    public class ImageProcessorPictureModificator : IPictureModificator
     {
         public Picture Crop(Picture picture, CropRectangle cropRectangle) =>
             MapWithImageFactory(picture, img => img.Crop(cropRectangle.ToCropLayer));
@@ -37,12 +37,10 @@ namespace backend.Services
         [Pure]
         private static Picture MapWithImageFactory(Picture picture, Func<ImageFactory, ImageFactory> f)
         {
-            using (var outputStream = new MemoryStream())
-            using (var imageFactory = new ImageFactory())
-            {
-                f(imageFactory.Load(picture.AsBytes)).Save(outputStream);
-                return new Picture(outputStream.ToArray(), picture.Filename);
-            }
+            using var outputStream = new MemoryStream();
+            using var imageFactory = new ImageFactory();
+            f(imageFactory.Load(picture.AsBytes)).Save(outputStream);
+            return new Picture(outputStream.ToArray(), picture.Filename);
         }
     }
 }

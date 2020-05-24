@@ -1,16 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using backend.Data;
 using backend.Data.Entities;
 using backend.Data.Repositories;
 using backend.Services;
-using ImageProcessor.Processors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
