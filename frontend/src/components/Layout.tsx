@@ -3,11 +3,12 @@ import {CSSProperties} from 'react'
 import Head from 'next/head'
 import {Link as L, Typography} from '@material-ui/core';
 
-import Header, {NavTab} from "./Header";
+import UserCard from "./UserCard";
 
 type Props = {
     title?: string;
-    activeTab: NavTab;
+    disableUserCard?: boolean;
+    disableLibrary?: boolean;
 }
 
 const styles = {
@@ -23,8 +24,9 @@ const styles = {
 const Layout: React.FunctionComponent<Props> = (
     {
         children,
+        disableUserCard,
+        disableLibrary,
         title = 'Photokek',
-        activeTab
     }) => {
     const {footer, footerLink} = styles;
     return (<div>
@@ -44,7 +46,7 @@ const Layout: React.FunctionComponent<Props> = (
             <link rel="apple-touch-icon" href="/apple-icon.png"></link>
             <meta name="theme-color" content="#317EFB"/>
         </Head>
-        <Header activeTab={activeTab}/>
+        {!disableUserCard? <UserCard username={"My user"} handleLogout={() => {}} disableLibrary={disableLibrary}/>: null}
         {children}
         <footer style={footer as CSSProperties}>
             <hr/>

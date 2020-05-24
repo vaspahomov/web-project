@@ -3,7 +3,6 @@ import {NextPageContext} from "next";
 
 import Layout from "../components/Layout";
 import EditorContainer from "../components/EditorContainer";
-import {NavTab} from "../components/Header";
 import {Image, ImagesCollection} from "../static/ImagesCollection";
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
 const Editor = ({image}: Props) => {
     if (!image) {
         return (
-            <Layout title="Photokek | Editor" activeTab={NavTab.Editor}>
+            <Layout title="Photokek | Editor">
                 Картинка не была найдена
             </Layout>
         );
@@ -24,7 +23,7 @@ const Editor = ({image}: Props) => {
     const widthCSS = '90vw';
     const heightCSS = `${90 / ratio}vw`;
     return (
-        <Layout title="Photokek | Editor" activeTab={NavTab.Editor}>
+        <Layout title="Photokek | Editor">
             {image &&
             <EditorContainer height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}
                              image={image}>
