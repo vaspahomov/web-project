@@ -61,14 +61,7 @@ namespace backend.Controllers
             var tokenString = tokenHandler.WriteToken(token);
             var cookieOptions = new CookieOptions
             {
-                Path = "/", HttpOnly = false, IsEssential = true,
-                Expires = DateTime.Now.AddMonths(1), Domain = ".herokuapp.com"
-            };
-            
-            var cookieFrontOptions = new CookieOptions
-            {
-                Path = "/", HttpOnly = false, IsEssential = true,
-                Expires = DateTime.Now.AddMonths(1), Domain = "photokek.herokuapp.com"
+                Expires = DateTime.Now.AddMonths(1)
             };
             
             //TODO: think about cookieOptions, it should be secured enough
