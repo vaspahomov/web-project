@@ -29,7 +29,7 @@ namespace backend.Services
 
         public Picture AddCircularBlur(Picture picture) => MapWithImageFactory(picture, img => img.Saturation(50));
 
-        public Picture ToJPEG(Picture picture) =>
+        protected Picture ToJPEG(Picture picture) =>
             MapWithImageFactory(picture, img => img.Format(new JpegFormat {Quality = 70}));
 
         public Picture ToPNG(Picture picture) => MapWithImageFactory(picture, img => img.Format(new PngFormat {Quality = 70}));

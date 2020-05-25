@@ -9,8 +9,5 @@ namespace backend.Services
         Picture AddSepiaFilter(Picture picture);
         Picture AddGaussianBlur(Picture picture, int size);
         Picture AddCircularBlur(Picture picture);
-        Picture ToJPEG(Picture picture);
-        Picture ToPNG(Picture picture);
     }
-
 }

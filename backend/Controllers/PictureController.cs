@@ -92,8 +92,8 @@ namespace backend.Controllers
         public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromRoute] float degrees) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, degrees));
 
-        [HttpPatch("text_addition/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddText([FromRoute]string id, [FromBody]string text) =>
+        [HttpPatch("text_addition/{id}/text/{text}")]
+        public async Task<ActionResult<PictureEntity>> AddText([FromRoute]string id, [FromRoute] string text) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, text));
 
         [HttpPatch("crop/{id}")]

@@ -1,5 +1,6 @@
 using System;
 using ImageProcessor.Imaging;
+using SixLabors.ImageSharp;
 
 namespace backend.Services
 {
@@ -7,8 +8,8 @@ namespace backend.Services
     {
         public CropRectangle()
         {
-
         }
+
         public CropRectangle(float left, float top, float right, float bottom)
         {
             if (left < 0.0)
@@ -34,5 +35,8 @@ namespace backend.Services
             top: Top,
             right: Right,
             bottom: Bottom);
+
+        public Rectangle ToRectangle =>
+            new Rectangle((int) Left, (int) Top, (int) (Right - Left), (int) (Bottom - Top));
     }
 }

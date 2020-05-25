@@ -49,7 +49,7 @@ namespace backend
                 c.SwaggerDoc("v1", new OpenApiInfo{Title = "Backend", Version = "v1"});
             });
 
-            services.AddSingleton<IPictureModificator, ImageProcessorPictureModificator>();
+            services.AddSingleton<IPictureModificator, ImageSharpPictureModificator>();
 
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
             services.AddSingleton(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
