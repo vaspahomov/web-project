@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.IO;
@@ -15,7 +16,7 @@ using Size = SixLabors.ImageSharp.Size;
 
 namespace backend.Services
 {
-    class ImageSharpPictureModificator : IPictureModificator
+    internal class ImageSharpPictureModificator : IPictureModificator
     {
         public Picture Crop(Picture picture, CropRectangle cropRectangle)
             => MapWithImageContext(picture, x => x.Crop(cropRectangle.ToRectangle));

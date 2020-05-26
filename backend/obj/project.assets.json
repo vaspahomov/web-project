@@ -62,18 +62,6 @@
           "lib/netstandard2.0/ImageProcessor.Core.CoreCompat.dll": {}
         }
       },
-      "ImageProcessor.Web/4.12.0": {
-        "type": "package",
-        "compile": {
-          "lib/net452/ImageProcessor.Web.dll": {}
-        },
-        "runtime": {
-          "lib/net452/ImageProcessor.Web.dll": {}
-        }
-      },
-      "ImageProcessor.Web.Config/2.6.0": {
-        "type": "package"
-      },
       "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.3": {
         "type": "package",
         "dependencies": {
@@ -740,69 +728,6 @@
           "runtimes/opensuse.42.1-x64/native/System.Security.Cryptography.Native.OpenSsl.so": {
             "assetType": "native",
             "rid": "opensuse.42.1-x64"
-          }
-        }
-      },
-      "runtime.osx.10.10-x64.CoreCompat.System.Drawing/5.8.64": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/osx-x64/native/libcairo.2.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libfontconfig.1.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libfreetype.6.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libgdiplus-lighthouse.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libgdiplus.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libgif.7.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libglib-2.0.0.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libintl.8.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libjpeg.9.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libpcre.1.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libpixman-1.0.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libpng16.16.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libtiff.5.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
           }
         }
       },
@@ -2533,35 +2458,6 @@
         "lib/netstandard2.0/ImageProcessor.Core.CoreCompat.dll"
       ]
     },
-    "ImageProcessor.Web/4.12.0": {
-      "sha512": "xjoi/A0IkHrDSLfjbpVSq+ZCKZ2dqwJrmSyrZlY5eFcOuan1XIJmKcX2pv/trfkcJFEfOwUnvAt7udHD4/eVzg==",
-      "type": "package",
-      "path": "imageprocessor.web/4.12.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "content/web.config.transform",
-        "imageprocessor.web.4.12.0.nupkg.sha512",
-        "imageprocessor.web.nuspec",
-        "lib/net452/ImageProcessor.Web.dll",
-        "lib/net452/ImageProcessor.Web.xml"
-      ]
-    },
-    "ImageProcessor.Web.Config/2.6.0": {
-      "sha512": "lxQRKPAWFQ6+EEKezbe8oxxU/JMOzLC3GUw5m9x9KD6kPX58U/BfTXPzJ0IQj8IYtM4k98zhn8u+qtGkDprn/w==",
-      "type": "package",
-      "path": "imageprocessor.web.config/2.6.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "content/config/imageprocessor/cache.config.transform",
-        "content/config/imageprocessor/processing.config.transform",
-        "content/config/imageprocessor/security.config.transform",
-        "content/web.config.transform",
-        "imageprocessor.web.config.2.6.0.nupkg.sha512",
-        "imageprocessor.web.config.nuspec"
-      ]
-    },
     "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.3": {
       "sha512": "F19wwKzyE1K/KF30XZq2STKNJNxBrTKa1wLxTy5qdgXh7akzgLreMdC3j7rPzIQVGHlPCMeI30fpmD1k5zHkCQ==",
       "type": "package",
@@ -3452,31 +3348,6 @@
         "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
         "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl.nuspec",
         "runtimes/opensuse.42.1-x64/native/System.Security.Cryptography.Native.OpenSsl.so"
-      ]
-    },
-    "runtime.osx.10.10-x64.CoreCompat.System.Drawing/5.8.64": {
-      "sha512": "Ey7xQgWwixxdrmhzEUvaR4kxZDSQMWQScp8ViLvmL5xCBKG6U3TaMv/jzHilpfQXpHmJ4IylKGzzMvnYX2FwHQ==",
-      "type": "package",
-      "path": "runtime.osx.10.10-x64.corecompat.system.drawing/5.8.64",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll",
-        "runtime.osx.10.10-x64.corecompat.system.drawing.5.8.64.nupkg.sha512",
-        "runtime.osx.10.10-x64.corecompat.system.drawing.nuspec",
-        "runtimes/osx-x64/native/libcairo.2.dylib",
-        "runtimes/osx-x64/native/libfontconfig.1.dylib",
-        "runtimes/osx-x64/native/libfreetype.6.dylib",
-        "runtimes/osx-x64/native/libgdiplus-lighthouse.dylib",
-        "runtimes/osx-x64/native/libgdiplus.dylib",
-        "runtimes/osx-x64/native/libgif.7.dylib",
-        "runtimes/osx-x64/native/libglib-2.0.0.dylib",
-        "runtimes/osx-x64/native/libintl.8.dylib",
-        "runtimes/osx-x64/native/libjpeg.9.dylib",
-        "runtimes/osx-x64/native/libpcre.1.dylib",
-        "runtimes/osx-x64/native/libpixman-1.0.dylib",
-        "runtimes/osx-x64/native/libpng16.16.dylib",
-        "runtimes/osx-x64/native/libtiff.5.dylib"
       ]
     },
     "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {
@@ -8058,8 +7929,6 @@
       "AutoMapper >= 9.0.0",
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 7.0.0",
       "ImageProcessor.Core.CoreCompat >= 1.3.0",
-      "ImageProcessor.Web >= 4.12.0",
-      "ImageProcessor.Web.Config >= 2.6.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 3.1.3",
       "Microsoft.EntityFrameworkCore >= 3.1.3",
       "Microsoft.Extensions.Configuration >= 3.1.3",
@@ -8070,8 +7939,7 @@
       "SixLabors.ImageSharp.Drawing >= 1.0.0-beta0008",
       "Swashbuckle.AspNetCore >= 5.4.1",
       "System.Drawing.Common >= 4.7.0",
-      "System.IdentityModel.Tokens.Jwt >= 6.5.1",
-      "runtime.osx.10.10-x64.CoreCompat.System.Drawing >= 5.8.64"
+      "System.IdentityModel.Tokens.Jwt >= 6.5.1"
     ]
   },
   "packageFolders": {
@@ -8121,14 +7989,6 @@
             "target": "Package",
             "version": "[1.3.0, )"
           },
-          "ImageProcessor.Web": {
-            "target": "Package",
-            "version": "[4.12.0, )"
-          },
-          "ImageProcessor.Web.Config": {
-            "target": "Package",
-            "version": "[2.6.0, )"
-          },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[3.1.3, )"
@@ -8172,10 +8032,6 @@
           "System.IdentityModel.Tokens.Jwt": {
             "target": "Package",
             "version": "[6.5.1, )"
-          },
-          "runtime.osx.10.10-x64.CoreCompat.System.Drawing": {
-            "target": "Package",
-            "version": "[5.8.64, )"
           }
         },
         "imports": [
@@ -8199,17 +8055,5 @@
         "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.101/RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'ImageProcessor.Web 4.12.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
-      "libraryId": "ImageProcessor.Web",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    }
-  ]
+  }
 }

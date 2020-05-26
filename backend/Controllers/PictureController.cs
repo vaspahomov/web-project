@@ -10,6 +10,7 @@ using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 
 namespace backend.Controllers
@@ -22,38 +23,35 @@ namespace backend.Controllers
         private readonly IPictureModificator _modifier;
         private readonly IPictureRepository _pictureRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<PictureController> _logger;
 
-        private Picture GetPictureFromFormFile(IFormFile file)
+        private static Picture GetPictureFromFormFile(IFormFile file)
         {
-            using(var ms = new MemoryStream())
-            {
-                file.CopyToAsync(ms);
-                return new Picture(ms.ToArray(), file.FileName);
-            }
+            using var ms = new MemoryStream();
+            file.CopyToAsync(ms);
+            return new Picture(ms.ToArray(), file.FileName);
         }
 
         public PictureController(IPictureModificator modifier, IPictureRepository pictureRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository, ILogger<PictureController> logger)
         {
             _modifier = modifier;
             _pictureRepository = pictureRepository;
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         [HttpPost("upload")]
         public async Task<ActionResult<string>> UploadFile(IFormFile file)
         {
             var picture = GetPictureFromFormFile(file);
-            Console.WriteLine(picture.AsBytes.Length);
+            _logger.LogInformation("Uploading picture");
             var pictureEntity = await _pictureRepository.Save(picture);
-            //TODO: get user from auth info
             var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (user != null)
-            {
-                var userId = new Guid(user);
-                await _userRepository.AddPictureAsync(userId, pictureEntity, DateTime.Now);
-            }
-
+            if (user == null) return pictureEntity.Id.ToString();
+            var userId = new Guid(user);
+            _logger.LogInformation($"User was not found; Created user {userId}");
+            await _userRepository.AddPictureAsync(userId, pictureEntity, DateTime.Now);
             return pictureEntity.Id.ToString();
         }
 
@@ -93,15 +91,16 @@ namespace backend.Controllers
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, degrees));
 
         [HttpPatch("text_addition/{id}/text/{text}")]
-        public async Task<ActionResult<PictureEntity>> AddText([FromRoute]string id, [FromRoute] string text) =>
+        public async Task<ActionResult<PictureEntity>> AddText([FromRoute] string id, [FromRoute] string text) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, text));
 
         [HttpPatch("crop/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddText([FromRoute]string id, [FromBody] CropRectangle rectangle) =>
+        public async Task<ActionResult<PictureEntity>> AddText([FromRoute] string id,
+            [FromBody] CropRectangle rectangle) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
 
         [HttpPatch("blur/gaussian/{id}/size/{size}")]
-        public async Task<ActionResult<PictureEntity>> AddGaussianBlur([FromRoute]string id, [FromRoute]int size) =>
+        public async Task<ActionResult<PictureEntity>> AddGaussianBlur([FromRoute] string id, [FromRoute] int size) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size));
 
         [HttpPatch("blur/circular/{id}")]
@@ -124,7 +123,7 @@ namespace backend.Controllers
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-            
+
             var entity = new PictureEntity(new ObjectId(id));
             var picture = await _pictureRepository.Get(entity);
             if (picture == null)

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "7xZ1PLyhq71R4DxlUXhNhmZB0ZM8/fWIoaMJuBPdIzyw0rVb5hVPXU9nUUDjWHpuvxaOKGW/Q0GZxAQ4QEf73Q==",
+  "dgSpecHash": "u0MLGFvSEHN/JbiQUJhsmAJYip852twRjr/gprJCa6pJrunPvfT2jscN+4Wi/fp+gH8oqLeeeZN0BcEt95JXEg==",
   "success": true,
   "projectFilePath": "/Users/voytsishevskiy/dev/web-project/backend/backend.csproj",
   "expectedPackageFiles": [
@@ -9,8 +9,6 @@
     "/Users/voytsishevskiy/.nuget/packages/corecompat.system.drawing.v2/5.2.0-preview1-r131/corecompat.system.drawing.v2.5.2.0-preview1-r131.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/dnsclient/1.3.1/dnsclient.1.3.1.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/imageprocessor.core.corecompat/1.3.0/imageprocessor.core.corecompat.1.3.0.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/imageprocessor.web/4.12.0/imageprocessor.web.4.12.0.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/imageprocessor.web.config/2.6.0/imageprocessor.web.config.2.6.0.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/3.1.3/microsoft.aspnetcore.authentication.jwtbearer.3.1.3.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.0/microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/microsoft.bcl.hashcode/1.1.0/microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
@@ -59,7 +57,6 @@
     "/Users/voytsishevskiy/.nuget/packages/runtime.native.system.security.cryptography.openssl/4.3.2/runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
-    "/Users/voytsishevskiy/.nuget/packages/runtime.osx.10.10-x64.corecompat.system.drawing/5.8.64/runtime.osx.10.10-x64.corecompat.system.drawing.5.8.64.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple/4.3.0/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple.4.3.0.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
@@ -158,16 +155,5 @@
     "/Users/voytsishevskiy/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
     "/Users/voytsishevskiy/.nuget/packages/system.xml.xmldocument/4.3.0/system.xml.xmldocument.4.3.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'ImageProcessor.Web 4.12.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
-      "libraryId": "ImageProcessor.Web",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    }
-  ]
+  "logs": []
 }
