@@ -5,6 +5,7 @@ using backend.Data.Entities;
 using backend.Data.Repositories;
 using backend.Models;
 using backend.Services;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
@@ -13,37 +14,40 @@ namespace backend.Data
 {
     public class MongoPictureRepository : IPictureRepository
     {
-        private readonly IMongoCollection<PictureDto> pictures;
-        private readonly GridFSBucket gridFs;
+        private readonly ILogger<MongoPictureRepository> _logger;
+        private readonly IMongoCollection<PictureDto> _pictures;
+        private readonly GridFSBucket _gridFs;
 
-        public MongoPictureRepository(IMongoDatabase database, DatabaseSettings settings)
+        public MongoPictureRepository(IMongoDatabase database, DatabaseSettings settings, ILogger<MongoPictureRepository> logger)
         {
-            gridFs = new GridFSBucket(database);
-            pictures = database.GetCollection<PictureDto>(settings.PictureCollectionName);
+            _logger = logger;
+            _gridFs = new GridFSBucket(database);
+            _pictures = database.GetCollection<PictureDto>(settings.PictureCollectionName);
+            _pictures.Indexes.CreateOne(
+                new CreateIndexModel<PictureDto>(Builders<PictureDto>.IndexKeys.Ascending("expireAt"),
+                    new CreateIndexOptions
+                        {ExpireAfter = new TimeSpan(30 * 24, 0, 0)}));
         }
 
         public async Task<Picture?> Get(PictureEntity picture)
         {
-            var ms = new MemoryStream();
             var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", picture.Id);
-            var fileInfos = await gridFs.FindAsync(filter);
+            var fileInfos = await _gridFs.FindAsync(filter);
             var fileInfo = fileInfos.FirstOrDefault();
-            Console.WriteLine($"info -> {fileInfo.Id}");
             if (fileInfo == null)
                 return null;
-            var pic = await gridFs.DownloadAsBytesAsync(picture.Id);
-            Console.WriteLine(pic.Length);
+            var pic = await _gridFs.DownloadAsBytesAsync(picture.Id);
+            _logger.LogInformation($"Got picture data for {picture.Id} with length {pic.Length}");
             return new Picture(pic, fileInfo.Filename);
         }
 
         public async Task<PictureEntity> Save(Picture picture)
         {
-            var imageId = await gridFs.UploadFromBytesAsync(picture.Filename, picture.AsBytes);
-            Console.WriteLine(picture.AsBytes.Length);
+            var imageId = await _gridFs.UploadFromBytesAsync(picture.Filename, picture.AsBytes);
+            _logger.LogInformation($"Saved picture {picture.Filename} for {imageId}");
+
             var pictureEntity = new PictureEntity(imageId);
             return pictureEntity;
         }
     }
-
-
 }

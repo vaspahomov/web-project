@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Threading.Tasks;
 using backend.Data;
 using AutoMapper;
 using backend.Data.Repositories;
@@ -16,7 +15,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
@@ -141,32 +139,5 @@ namespace backend
     public static class Policies
     {
         public const string CorsPolicy = "CorsPolicy";
-    }
-    public class RequestLoggingMiddleware
-    {
-        private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-
-        public RequestLoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
-        {
-            _next = next;
-            _logger = loggerFactory.CreateLogger<RequestLoggingMiddleware>();
-        }
-
-        public async Task Invoke(HttpContext context)
-        {
-            try
-            {
-                await _next(context);
-            }
-            finally
-            {
-                _logger.LogInformation(
-                    "Request {method} {url} => {statusCode}",
-                    context.Request?.Method,
-                    context.Request?.Path.Value,
-                    context.Response?.StatusCode);
-            }
-        }
     }
 }
