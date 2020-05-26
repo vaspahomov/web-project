@@ -16,7 +16,7 @@ const images = [
     },
     {
         id: "1",
-        name: "Хуинка",
+        name: "Картинка 2",
         url: "https://lh3.googleusercontent.com/proxy/gwh7CbYhaLMSnWe0piivSeeXYZ-5hBPNAarql8KCOarKsJiW8nW3YhwKfDqDoXWUkOePz1UcXqEIVHewUGZmpZh0pEpD23CrQaiK",
         height: 540,
         width: 720
@@ -30,7 +30,7 @@ const images = [
     },
     {
         id: "3",
-        name: "Охуел?",
+        name: "Овал",
         url: "https://sun9-32.userapi.com/c636321/v636321125/21b8d/aD7FZEcuH7g.jpg?ava=1",
         height: 400,
         width: 400
