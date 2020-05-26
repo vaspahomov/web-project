@@ -2,9 +2,9 @@ import * as React from 'react'
 import {Dispatch, useState} from 'react'
 import Layout from "../components/Layout";
 import {Button, TextField} from "@material-ui/core";
-import {NavTab} from "../components/Header";
 import {LoginService} from "../api/login";
 import MuiAlert from "@material-ui/lab/Alert";
+import Link from "next/link";
 
 
 const styles = {
@@ -37,7 +37,7 @@ export default function Login() {
     const [password, changePassword] = useState('');
     const loginService = new LoginService();
     return (
-        <Layout title="Photokek | Login" activeTab={NavTab.Login}>
+        <Layout title="Photokek | Login" disableUserCard>
             <main style={root}>
                 <div style={formContainer}>
                     <form noValidate autoComplete="off">
@@ -52,32 +52,36 @@ export default function Login() {
                                    type="password"
                                    onChange={(e) => changePassword(e.target.value)}/>
                         <div style={formInput}>
-                            <Button style={{width: '50%', height: '100%'}}
-                                    href="#text-buttons"
-                                    variant="outlined"
-                                    color="primary"
-                                    onClick={async () => {
-                                        handleOperation(setInProgress);
-                                        try {
-                                            await loginService.login(username, password)
-                                        } catch {
-                                            return handleOperation(setError)
-                                        }
-                                        handleOperation(setSuccess)
-                                    }}>Log in</Button>
-                            <Button style={{width: '50%', height: '100%'}}
-                                    href="#text-buttons"
-                                    variant="outlined"
-                                    color="primary"
-                                    onClick={async () => {
-                                        handleOperation(setInProgress);
-                                        try {
-                                            await loginService.register(username, password)
-                                        } catch {
-                                            return handleOperation(setError)
-                                        }
-                                        handleOperation(setSuccess)
-                                    }}>Register</Button>
+                            <Link href={'myCollection'}>
+                                <Button style={{width: '50%', height: '100%'}}
+                                        href="#text-buttons"
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={async () => {
+                                            handleOperation(setInProgress);
+                                            try {
+                                                await loginService.login(username, password)
+                                            } catch {
+                                                return handleOperation(setError)
+                                            }
+                                            handleOperation(setSuccess)
+                                        }}>Log in</Button>
+                            </Link>
+                            <Link href={'myCollection'}>
+                                <Button style={{width: '50%', height: '100%'}}
+                                        href="#text-buttons"
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={async () => {
+                                            handleOperation(setInProgress);
+                                            try {
+                                                await loginService.register(username, password)
+                                            } catch {
+                                                return handleOperation(setError)
+                                            }
+                                            handleOperation(setSuccess)
+                                        }}>Register</Button>
+                            </Link>
                         </div>
                     </form>
                     {success ?

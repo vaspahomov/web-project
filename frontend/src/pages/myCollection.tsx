@@ -4,14 +4,13 @@ import Layout from "../components/Layout";
 import ImageCollectionWrapper from "../components/ImageCollectionWrapper";
 import ImageCard from "../components/ImageCard";
 import {ImagesCollection} from "../static/ImagesCollection";
-import {NavTab} from "../components/Header";
 import UploadButton from "../components/UploadButton";
 
 export default function MyCollection() {
     const imagesCollection = new ImagesCollection();
     const images = imagesCollection.getAllImages();
     return (
-        <Layout title="Photokek | Collection" activeTab={NavTab.MyCollection}>
+        <Layout title="Photokek | Collection" disableLibrary>
             <ImageCollectionWrapper>
                 {images.map((image) =>
                     <ImageCard imageId={image.id} width={image.width <= 400 ? image.width : 400} name={image.name}

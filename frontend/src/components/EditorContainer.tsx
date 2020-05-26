@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useState} from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import {AppBar, Box, Card, CircularProgress, Tab, Tabs, Typography} from "@material-ui/core";
+import {AppBar, Box, CircularProgress, Tab, Tabs, Typography} from "@material-ui/core";
 
 import CutFunction from "./editorFunctions/CutFunction";
 import RotateFunction from "./editorFunctions/RotateFunction";
@@ -26,7 +26,7 @@ const styles = {
         margin: '30px auto',
     }, mainWrapper: {
         width: '100%',
-        minHeight: 'calc(100vh - 120px)',
+        minHeight: 'calc(100vh - 215px)',
     }, editorFunctionsContainer: {
         margin: 'auto',
         width: '95%'
@@ -82,72 +82,70 @@ const EditorContainer: React.FunctionComponent<Props> = ({children, width, heigh
     const [loaded, changeLoaded] = useState(false);
     return (
         <div style={mainWrapper}>
-            <Card style={card}>
-                <div style={{...wrapper, height, width, maxWidth, maxHeight}}>
-                    <ImageContainer src={image === undefined ? "" : image.url}
-                                    height={height} width={width}
-                                    maxWidth={maxWidth} maxHeight={maxHeight}
-                                    onLoad={() => changeLoaded(true)}/>
-                    {!loaded && <CircularProgress/>}
-                </div>
-                <div>
-                    <AppBar position="static">
-                        <Tabs value={value} onChange={handleChange} scrollButtons="auto" variant="scrollable"
-                              aria-label="Editor tabs">
-                            <Tab label="Crop" {...a11yProps(0)} />
-                            <Tab label="Rotate" {...a11yProps(1)} />
-                            <Tab label="Add text" {...a11yProps(2)} />
-                            <Tab label="Color filters" {...a11yProps(3)} />
-                            <Tab label="Blure filters" {...a11yProps(4)} />
-                            <Tab label="Save" {...a11yProps(5)} />
-                        </Tabs>
-                    </AppBar>
-                </div>
-                <div>
-                    <SwipeableViews
-                        axis={'x'}
-                        index={value}
-                        onChangeIndex={handleChangeIndex}
-                    >
-                        <TabPanel value={value} index={0}>
-                            <CutFunction style={inputGroupWrapper}
-                                         editorService={editorService}
-                                         changeLoaded={changeLoaded}
-                                         pictureId={image.id}/>
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                            <RotateFunction style={inputGroupWrapper}
-                                            editorService={editorService}
-                                            changeLoaded={changeLoaded}
-                                            pictureId={image.id}/>
-                        </TabPanel>
-                        <TabPanel value={value} index={2}>
-                            <TextFunction style={inputGroupWrapper}
-                                          editorService={editorService}
-                                          changeLoaded={changeLoaded}
-                                          pictureId={image.id}/>
-                        </TabPanel>
-                        <TabPanel value={value} index={3}>
-                            <ColorFilterFunction style={inputGroupWrapper}
-                                                 editorService={editorService}
-                                                 changeLoaded={changeLoaded}
-                                                 pictureId={image.id}/>
-                        </TabPanel>
-                        <TabPanel value={value} index={4}>
-                            <BlurFunction style={inputGroupWrapper}
-                                          editorService={editorService}
-                                          changeLoaded={changeLoaded}
-                                          pictureId={image.id}/>
-                        </TabPanel>
-                        <TabPanel value={value} index={5}>
-                            <SaveFunction style={inputGroupWrapper}
-                                          editorService={editorService}
-                                          changeLoaded={changeLoaded}
-                                          pictureId={image.id}/>
-                        </TabPanel>
-                    </SwipeableViews>
-                </div>
-            </Card>
+            <div>
+                <AppBar position="static">
+                    <Tabs value={value} onChange={handleChange} scrollButtons="auto" variant="scrollable"
+                          aria-label="Editor tabs">
+                        <Tab label="Crop" {...a11yProps(0)} />
+                        <Tab label="Rotate" {...a11yProps(1)} />
+                        <Tab label="Add text" {...a11yProps(2)} />
+                        <Tab label="Color filters" {...a11yProps(3)} />
+                        <Tab label="Blure filters" {...a11yProps(4)} />
+                        <Tab label="Save" {...a11yProps(5)} />
+                    </Tabs>
+                </AppBar>
+            </div>
+            <div>
+                <SwipeableViews
+                    axis={'x'}
+                    index={value}
+                    onChangeIndex={handleChangeIndex}
+                >
+                    <TabPanel value={value} index={0}>
+                        <CutFunction style={inputGroupWrapper}
+                                     editorService={editorService}
+                                     changeLoaded={changeLoaded}
+                                     pictureId={image.id}/>
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <RotateFunction style={inputGroupWrapper}
+                                        editorService={editorService}
+                                        changeLoaded={changeLoaded}
+                                        pictureId={image.id}/>
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        <TextFunction style={inputGroupWrapper}
+                                      editorService={editorService}
+                                      changeLoaded={changeLoaded}
+                                      pictureId={image.id}/>
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+                        <ColorFilterFunction style={inputGroupWrapper}
+                                             editorService={editorService}
+                                             changeLoaded={changeLoaded}
+                                             pictureId={image.id}/>
+                    </TabPanel>
+                    <TabPanel value={value} index={4}>
+                        <BlurFunction style={inputGroupWrapper}
+                                      editorService={editorService}
+                                      changeLoaded={changeLoaded}
+                                      pictureId={image.id}/>
+                    </TabPanel>
+                    <TabPanel value={value} index={5}>
+                        <SaveFunction style={inputGroupWrapper}
+                                      editorService={editorService}
+                                      changeLoaded={changeLoaded}
+                                      pictureId={image.id}/>
+                    </TabPanel>
+                </SwipeableViews>
+            </div>
+            <div style={{...wrapper, height, width, maxWidth, maxHeight}}>
+                <ImageContainer src={image === undefined ? "" : image.url}
+                                height={height} width={width}
+                                maxWidth={maxWidth} maxHeight={maxHeight}
+                                onLoad={() => changeLoaded(true)}/>
+                {!loaded && <CircularProgress/>}
+            </div>
         </div>
     );
 };
