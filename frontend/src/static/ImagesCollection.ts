@@ -17,7 +17,7 @@ const images = [
     {
         id: "1",
         name: "Картинка 2",
-        url: "https://lh3.googleusercontent.com/proxy/gwh7CbYhaLMSnWe0piivSeeXYZ-5hBPNAarql8KCOarKsJiW8nW3YhwKfDqDoXWUkOePz1UcXqEIVHewUGZmpZh0pEpD23CrQaiK",
+        url: "https://www.meme-arsenal.com/memes/bd4489bf8ba9cfc10e8fcf3601ef986f.jpg",
         height: 540,
         width: 720
     },
