@@ -1,9 +1,10 @@
 import * as React from 'react'
-import {CSSProperties} from 'react'
+import {CSSProperties, useEffect, useState} from 'react'
 import Head from 'next/head'
 import {Link as L, Typography} from '@material-ui/core';
 
 import UserCard from "./UserCard";
+import {LoginService, UserEntity} from "../api/login";
 
 type Props = {
     title?: string;
@@ -21,6 +22,8 @@ const styles = {
     }
 };
 
+const authService = new LoginService();
+
 const Layout: React.FunctionComponent<Props> = (
     {
         children,
@@ -29,6 +32,10 @@ const Layout: React.FunctionComponent<Props> = (
         title = 'Photokek',
     }) => {
     const {footer, footerLink} = styles;
+    const [user, setUser] = useState(null as UserEntity | null);
+    useEffect(() => {
+        authService.me().then(r => setUser(r));
+    }, []);
     return (<div>
         <Head>
             <title>{title}</title>
@@ -46,7 +53,7 @@ const Layout: React.FunctionComponent<Props> = (
             <link rel="apple-touch-icon" href="/apple-icon.png"></link>
             <meta name="theme-color" content="#317EFB"/>
         </Head>
-        {!disableUserCard? <UserCard username={"My user"} handleLogout={() => {}} disableLibrary={disableLibrary}/>: null}
+        {!disableUserCard? <UserCard username={user? user.username: ''} handleLogout={() => {}} disableLibrary={disableLibrary}/>: null}
         {children}
         <footer style={footer as CSSProperties}>
             <hr/>
