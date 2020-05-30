@@ -37,11 +37,11 @@ namespace backend.Controllers
         private readonly IUserRepository _userRepository;
         private readonly ILogger<PictureController> _logger;
 
-        private static Picture GetPictureFromFormFile(IFormFile file)
+        private static (byte[] imageData, string name) GetPictureFromFormFile(IFormFile file)
         {
             using var ms = new MemoryStream();
             file.CopyToAsync(ms);
-            return new Picture(ms.ToArray(), file.FileName);
+            return (ms.ToArray(), file.FileName);
         }
 
         public PictureController(IPictureModificator modifier, IPictureRepository pictureRepository,
@@ -56,15 +56,16 @@ namespace backend.Controllers
         [HttpPost("upload")]
         public async Task<ActionResult<string>> UploadFile(IFormFile file)
         {
-            var picture = GetPictureFromFormFile(file);
+            var (imgData, name) = GetPictureFromFormFile(file);
             _logger.LogInformation("Uploading picture");
-            var pictureEntity = await _pictureRepository.Save(picture);
+            var picture = await _pictureRepository.Save(imgData, name);
             var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (user == null) return pictureEntity.Id.ToString();
+            _logger.LogWarning($"Did not find the user for image {file.FileName}");
+            if (user == null) return picture.Id.ToString();
             var userId = new Guid(user);
             _logger.LogInformation($"User was not found; Created user {userId}");
-            await _userRepository.AddPictureAsync(userId, pictureEntity, DateTime.Now);
-            return pictureEntity.Id.ToString();
+            await _userRepository.AddPictureAsync(userId, picture, DateTime.Now);
+            return picture.Id.ToString();
         }
 
         private Guid? GetUser()
@@ -78,7 +79,7 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<byte[]>> DownloadFile([FromRoute] string id)
         {
-            var entity = new PictureEntity(new ObjectId(id));
+            var entity = new ObjectId(id);
             var picture = await _pictureRepository.Get(entity);
             if (picture != null)
                 return File(picture.AsBytes, "image/jpeg");
@@ -86,7 +87,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("/")]
-        public async Task<ActionResult<IEnumerable<Picture>>> DownloadAllForUser()
+        public async Task<ActionResult<IEnumerable<ObjectId>>> DownloadAllForUser()
         {
             var user = GetUser();
             if (user == null)
@@ -134,18 +135,19 @@ namespace backend.Controllers
 
         private async Task<ActionResult<PictureEntity>> ModifyPictureAndSaveForUser(string id, Func<Picture, Picture> f)
         {
-            //TODO: add converter between PictureEntity ObjectId and Guid
             var user = GetUser();
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-            var entity = new PictureEntity(new ObjectId(id));
-            var picture = await _pictureRepository.Get(entity);
+            var pictureId = ObjectId.Parse(id);
+            var picture = await _pictureRepository.Get(pictureId);
             if (picture == null)
                 return NotFound();
             var modified = f(picture);
-            var savedId = await _pictureRepository.Save(modified);
-            await _userRepository.AddPictureAsync(userId, savedId, DateTime.Now);
+            var saved = await _pictureRepository.TryUpdate(modified, pictureId);
+            if (!saved)
+                return BadRequest("Что-то пошло не так во время сохранения картинки в Монгу");
+            await _userRepository.AddPictureAsync(userId, picture, DateTime.Now);
             return File(modified.AsBytes, "image/jpeg");
         }
     }

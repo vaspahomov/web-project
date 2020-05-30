@@ -63,7 +63,7 @@ namespace backend.Services
             using Image image = Image.Load(picture.AsBytes);
             image.Mutate(x => f(x, image.Size()));
             image.SaveAsJpeg(outputStream);
-            return new Picture(outputStream.ToArray(), picture.Filename);
+            return new Picture(outputStream.ToArray(), picture.Filename, picture.Id);
         }
     }
 }

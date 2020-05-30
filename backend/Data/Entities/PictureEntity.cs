@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -5,18 +7,16 @@ namespace backend.Data.Entities
 {
     public class PictureEntity
     {
-        public ObjectId Id { get; private set; }
-        public string Name { get; private set; }
-        public int Height { get; private set; }
-        public int Width { get; private set; }
+        [BsonId] public ObjectId Id { get; set;}
+
+        [BsonElement] public List<ObjectId> GridFsIds { get; set; }
+        [BsonElement] public string Filename { get; set; }
 
         [BsonConstructor]
-        public PictureEntity(ObjectId id, string name = "", int height = 300, int width = 400)
+        public PictureEntity(string filename, ObjectId? pictureMadeFrom, List<ObjectId> gridFsIds)
         {
-            Id = id;
-            Name = name;
-            Height = height;
-            Width = width;
+            Filename = filename;
+            GridFsIds = gridFsIds;
         }
     }
 }

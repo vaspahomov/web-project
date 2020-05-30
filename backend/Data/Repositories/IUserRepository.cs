@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Data.Entities;
+using backend.Services;
+using MongoDB.Bson;
 
 namespace backend.Data.Repositories
 {
@@ -11,8 +13,8 @@ namespace backend.Data.Repositories
         Task<Guid> UpdateAsync(UserEntity user);
         //TODO: Why we need this? Looks useless
         Task<UserEntity[]> GetAllUsers();
-        Task<bool> AddPictureAsync(Guid userId, PictureEntity imageId, DateTime time);
-        Task<List<PictureEntity>> GetUserPictures(Guid userId);
+        Task<bool> AddPictureAsync(Guid userId, Picture picture, DateTime time);
+        Task<List<Picture>> GetUserPictures(Guid userId);
         Task<UserEntity> FindByIdAsync(Guid userId);
         Task<UserEntity> FindByUsernameAsync(string username);
     }
