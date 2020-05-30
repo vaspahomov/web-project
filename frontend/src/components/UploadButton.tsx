@@ -27,6 +27,8 @@ const UploadButton: React.FunctionComponent<Props> = ({onUpload}) => {
     const collectionService = new PicturesService();
     const handleFile = async (e: any) => {
         const file = e.target.files[0];
+        if (file === undefined)
+            return;
         await collectionService.upload(file);
         onUpload();
     }
