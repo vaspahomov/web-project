@@ -7,10 +7,12 @@ using AutoMapper;
 using backend.Data.Entities;
 using backend.Helpers;
 using backend.Models;
+using backend.Models.User;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -22,16 +24,16 @@ namespace backend.Controllers
     public class AuthController : Controller
     {
         private IUserService _userService;
-        private IMapper _mapper;
+        private readonly ILogger<AuthController> _logger;
         private readonly AppSettings _appSettings;
 
         public AuthController(
             IUserService userService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<AuthController> logger)
         {
             _userService = userService;
-            _mapper = mapper;
+            _logger = logger;
             _appSettings = appSettings.Value;
         }
 
@@ -43,6 +45,8 @@ namespace backend.Controllers
 
             if (user == null)
                 return BadRequest(new {message = "Username or password is incorrect"});
+
+            _logger.LogInformation($"Authenticated user {user}");
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -61,14 +65,10 @@ namespace backend.Controllers
             var tokenString = tokenHandler.WriteToken(token);
             var cookieOptions = new CookieOptions
             {
-                Path = "/", HttpOnly = false, IsEssential = true,
                 Expires = DateTime.Now.AddMonths(1)
             };
-            
-            //TODO: think about cookieOptions, it should be secured enough
-            //TODO: learn how to get user info from cookie
-            Response.Cookies.Append("user_token", tokenString, cookieOptions);
 
+            Response.Cookies.Append("user_token", tokenString, cookieOptions);
             return Ok(new
             {
                 Token = tokenString
@@ -80,28 +80,19 @@ namespace backend.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            // map model to entity
             var user = new UserModel(model.Username);
 
             try
             {
-                // create user
                 var userEntity = await _userService.Create(user, model.Password);
+                _logger.LogInformation($"Created user {userEntity}");
+
                 return Ok(userEntity.Id);
             }
             catch (AppException ex)
             {
-                // return error message if there was an exception
                 return BadRequest(new {message = ex.Message});
             }
         }
-
-        // [HttpGet]
-        // public IActionResult GetAll()
-        // {
-        //     var users = _userService.GetAll();
-        //     var model = _mapper.Map<IList<UserModel>>(users);
-        //     return Ok(model);
-        // }
     }
 }

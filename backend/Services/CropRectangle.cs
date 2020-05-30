@@ -1,25 +1,29 @@
 using System;
-using System.IO;
 using ImageProcessor.Imaging;
+using SixLabors.ImageSharp;
 
 namespace backend.Services
 {
     public class CropRectangle
     {
+        public CropRectangle()
+        {
+        }
+
         public CropRectangle(float left, float top, float right, float bottom)
         {
-            if ((double) left < 0.0)
+            if (left < 0.0)
                 throw new ArgumentOutOfRangeException(nameof(left));
-            if ((double) top < 0.0)
+            if (top < 0.0)
                 throw new ArgumentOutOfRangeException(nameof(top));
-            if ((double) right < 0.0)
+            if (right < 0.0)
                 throw new ArgumentOutOfRangeException(nameof(right));
-            if ((double) bottom < 0.0)
+            if (bottom < 0.0)
                 throw new ArgumentOutOfRangeException(nameof(bottom));
-            this.Left = left;
-            this.Top = top;
-            this.Right = right;
-            this.Bottom = bottom;
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
         }
 
         public float Left { get; set; }
@@ -31,5 +35,8 @@ namespace backend.Services
             top: Top,
             right: Right,
             bottom: Bottom);
+
+        public Rectangle ToRectangle =>
+            new Rectangle((int) Left, (int) Top, (int) (Right - Left), (int) (Bottom - Top));
     }
 }

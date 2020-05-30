@@ -4,6 +4,7 @@ const defaultHeaders = {
     'Content-Type': 'application/json'
 };
 
+
 export class LoginService {
     async login(username: string, password: string) {
         const resp = await fetch(`${serverUrl}/auth/authenticate`,
