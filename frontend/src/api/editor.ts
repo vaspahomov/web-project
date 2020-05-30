@@ -47,9 +47,10 @@ export class EditorService {
         if (!jwt) {
             throw new Error('Empty jwt');
         }
-        const resp = await fetch(`${serverUrl}/rotation/${pictureId}/angle/${angle}`,
+        const resp = await fetch(`${serverUrl}/${pictureId}/rotate`,
             {
                 method: 'PATCH',
+                body: String(angle),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)

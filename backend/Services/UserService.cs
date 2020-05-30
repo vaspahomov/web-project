@@ -8,15 +8,15 @@ using backend.Models;
 
 namespace backend.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        
+
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
-        
+
         public async Task<UserEntity?> Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -29,7 +29,13 @@ namespace backend.Services
 
             return IsVerifiedPassword(password, userEntity.PasswordHash, userEntity.PasswordSalt) ? userEntity : null;
         }
-        
+
+        public async Task<UserEntity> GetUserById(Guid userId)
+        {
+            var userEntity = await _userRepository.FindByIdAsync(userId);
+            return userEntity;
+        }
+
         public async Task<UserEntity> Create(UserModel user, string password)
         {
             // validation
@@ -43,17 +49,18 @@ namespace backend.Services
 
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            
+
             var userEntity = new UserEntity(Guid.NewGuid(), user.Username, passwordHash, passwordSalt);
 
             await _userRepository.InsertAsync(userEntity);
             return userEntity;
         }
-        
+
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
 
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
@@ -61,13 +68,16 @@ namespace backend.Services
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
-        
+
         private static bool IsVerifiedPassword(string password, byte[] storedHash, byte[] storedSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
-            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+            if (storedHash.Length != 64)
+                throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            if (storedSalt.Length != 128)
+                throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
 
             using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {
@@ -81,10 +91,11 @@ namespace backend.Services
             return true;
         }
     }
-    
+
     public interface IUserService
     {
         Task<UserEntity?> Authenticate(string username, string password);
         Task<UserEntity> Create(UserModel user, string password);
+        Task<UserEntity> GetUserById(Guid userId);
     }
 }
