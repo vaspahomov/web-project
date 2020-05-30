@@ -27,6 +27,13 @@ namespace backend.Controllers
         BlackAndWhite
     }
 
+    public class BlurRequest
+    {
+        public int Size { get; set; }
+        public BlurType Type { get; set; }
+    }
+
+
     [Authorize]
     [Route("api/pictures")]
     [ApiController]
@@ -111,15 +118,17 @@ namespace backend.Controllers
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
 
         [HttpPost("{id}/blur")]
-        public async Task<ActionResult<PictureEntity>> AddBlur(string id, [FromBody] int size, [FromBody] BlurType type)
+        public async Task<ActionResult<PictureEntity>> AddBlur(string id, [FromBody] BlurRequest req)
         {
-            return type switch
+            return req.Type switch
             {
-                BlurType.Gaussian => await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size)),
+                BlurType.Gaussian => await ModifyPictureAndSaveForUser(id,
+                    pic => _modifier.AddGaussianBlur(pic, req.Size)),
                 BlurType.Circular => await ModifyPictureAndSaveForUser(id, _modifier.AddCircularBlur),
-                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+                _ => BadRequest("invalid type")
             };
         }
+
 
         [HttpPost("{id}/filter")]
         public async Task<ActionResult<PictureEntity>> AddFilter(string id, [FromBody] FilterType type)
@@ -128,7 +137,7 @@ namespace backend.Controllers
             {
                 FilterType.Sepia => await ModifyPictureAndSaveForUser(id, _modifier.AddSepiaFilter),
                 FilterType.BlackAndWhite => await ModifyPictureAndSaveForUser(id, _modifier.AddBlackAndWhiteFilter),
-                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+                _ => BadRequest("invalid type")
             };
         }
 
