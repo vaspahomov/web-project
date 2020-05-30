@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace backend.Models
+namespace backend.Models.User
 {
     public class AuthenticateModel
     {
@@ -9,5 +9,10 @@ namespace backend.Models
 
         [Required]
         public string Password { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Username)}: {Username}, {nameof(Password)}: *****";
+        }
     }
 }

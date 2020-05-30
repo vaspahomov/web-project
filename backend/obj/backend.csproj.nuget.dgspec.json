@@ -44,17 +44,9 @@
               "target": "Package",
               "version": "[7.0.0, )"
             },
-            "ImageProcessor": {
+            "ImageProcessor.Core.CoreCompat": {
               "target": "Package",
-              "version": "[2.9.0, )"
-            },
-            "ImageProcessor.Web": {
-              "target": "Package",
-              "version": "[4.12.0, )"
-            },
-            "ImageProcessor.Web.Config": {
-              "target": "Package",
-              "version": "[2.6.0, )"
+              "version": "[1.3.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -79,6 +71,18 @@
             "MongoDB.Driver.GridFS": {
               "target": "Package",
               "version": "[2.10.4, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[1.0.0-rc0001, )"
+            },
+            "SixLabors.ImageSharp.Drawing": {
+              "target": "Package",
+              "version": "[1.0.0-beta0008, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.4.1, )"
             },
             "System.Drawing.Common": {
               "target": "Package",
