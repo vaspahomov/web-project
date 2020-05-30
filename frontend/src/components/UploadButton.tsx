@@ -1,8 +1,10 @@
 import * as React from "react";
 import {Button} from "@material-ui/core";
-import {CollectionService} from "../api/collection";
+import {PicturesService} from "../api/pictures";
 
-type Props = {}
+type Props = {
+    onUpload: () => void
+}
 
 const styles = {
     rootContainer: {
@@ -20,12 +22,13 @@ const styles = {
     }
 }
 
-const UploadButton: React.FunctionComponent<Props> = () => {
+const UploadButton: React.FunctionComponent<Props> = ({onUpload}) => {
     const {rootContainer, input, description} = styles;
-    const collectionService = new CollectionService();
+    const collectionService = new PicturesService();
     const handleFile = async (e: any) => {
         const file = e.target.files[0];
         await collectionService.upload(file);
+        onUpload();
     }
 
     return (
