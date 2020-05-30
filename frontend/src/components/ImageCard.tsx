@@ -33,8 +33,8 @@ const ImageCard: React.FunctionComponent<Props> = ({width, name, src, imageId, r
         <Card style={{...rootContainer, maxWidth: maxWidthCSS, maxHeight: maxCardHeightCSS}}>
             <Link href={{pathname: "/editor", query: {id: imageId}}} >
                 <CardActionArea>
-                        <ImageContainer height={heightCSS} width={widthCSS} src={src} maxHeight={maxHeightCSS}
-                                        maxWidth={maxWidthCSS}/>
+                    <ImageContainer height={heightCSS} width={widthCSS} src={src} maxHeight={maxHeightCSS}
+                                    maxWidth={maxWidthCSS}/>
                 </CardActionArea>
             </Link>
             <div style={description}>

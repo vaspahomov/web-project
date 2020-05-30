@@ -1,4 +1,4 @@
-const serverUrl = 'https://api-picture.herokuapp.com'
+const serverUrl = 'https://api-picture.herokuapp.com/auth'
 
 const defaultHeaders = {
     'Content-Type': 'application/json'
@@ -7,7 +7,7 @@ const defaultHeaders = {
 
 export class LoginService {
     async login(username: string, password: string) {
-        const resp = await fetch(`${serverUrl}/auth/authenticate`,
+        const resp = await fetch(`${serverUrl}/authenticate`,
             {
                 method: 'POST',
                 body: JSON.stringify({username, password}),
@@ -21,7 +21,7 @@ export class LoginService {
     }
 
     async register(username: string, password: string) {
-        const resp = await fetch(`${serverUrl}/auth/register`,
+        const resp = await fetch(`${serverUrl}/register`,
             {
                 method: 'POST',
                 body: JSON.stringify({username, password}),
