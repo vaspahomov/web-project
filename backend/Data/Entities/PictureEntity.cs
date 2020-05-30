@@ -6,11 +6,17 @@ namespace backend.Data.Entities
     public class PictureEntity
     {
         public ObjectId Id { get; private set; }
-        
+        public string Name { get; private set; }
+        public int Height { get; private set; }
+        public int Width { get; private set; }
+
         [BsonConstructor]
-        public PictureEntity(ObjectId id)
+        public PictureEntity(ObjectId id, string name = "", int height = 300, int width = 400)
         {
             Id = id;
+            Name = name;
+            Height = height;
+            Width = width;
         }
     }
 }
