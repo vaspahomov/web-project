@@ -33,6 +33,16 @@ namespace backend.Controllers
         public BlurType Type { get; set; }
     }
 
+    public class PictureMetaResponse
+    {
+        public PictureMetaResponse(string filename)
+        {
+            Filename = filename;
+        }
+
+        public string Filename { get; set; }
+    }
+
 
     [Authorize]
     [Route("api/pictures")]
@@ -89,6 +99,16 @@ namespace backend.Controllers
             var picture = await _pictureRepository.Get(entity);
             if (picture != null)
                 return File(picture.AsBytes, "image/jpeg");
+            return NotFound();
+        }
+
+        [HttpGet("{id}/meta")]
+        public async Task<ActionResult<PictureMetaResponse>> GetImageMeta([FromRoute] string id)
+        {
+            var entity = new PictureEntity(new ObjectId(id));
+            var picture = await _pictureRepository.Get(entity);
+            if (picture != null)
+                return new PictureMetaResponse(picture.Filename);
             return NotFound();
         }
 
