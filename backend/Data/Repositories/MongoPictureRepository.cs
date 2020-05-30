@@ -46,17 +46,17 @@ namespace backend.Data
             var pic = await _gridFs.DownloadAsBytesAsync(picture.Id);
             _logger.LogInformation($"Got picture data for {pictureId} with length {pic.Length}");
 
-            return new Picture(pic, picture.Filename, picture.Id);
+            return new Picture(pic, picture.Filename, picture.Id, picture.Width, picture.Height);
         }
 
-        public async Task<Picture> Save(byte[] data, string filename)
+        public async Task<ObjectId> Save(byte[] data, string filename)
         {
             var imageId = await _gridFs.UploadFromBytesAsync(filename, data);
             _logger.LogInformation($"Saved picture {filename} for {imageId}");
 
             var pictureEntity = new PictureEntity(filename, imageId, new List<ObjectId>());
             await  _pictures.InsertOneAsync(pictureEntity);
-            return new Picture(data, filename, imageId);
+            return imageId;
         }
 
         public async Task<bool> TryUpdate(Picture newPicture, ObjectId id)
