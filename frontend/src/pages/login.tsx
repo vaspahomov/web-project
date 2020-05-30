@@ -67,21 +67,19 @@ export default function Login() {
                                             handleOperation(setSuccess)
                                         }}>Log in</Button>
                             </Link>
-                            <Link href={'myCollection'}>
-                                <Button style={{width: '50%', height: '100%'}}
-                                        href="#text-buttons"
-                                        variant="outlined"
-                                        color="primary"
-                                        onClick={async () => {
-                                            handleOperation(setInProgress);
-                                            try {
-                                                await loginService.register(username, password)
-                                            } catch {
-                                                return handleOperation(setError)
-                                            }
-                                            handleOperation(setSuccess)
-                                        }}>Register</Button>
-                            </Link>
+                            <Button style={{width: '50%', height: '100%'}}
+                                    href="#text-buttons"
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={async () => {
+                                        handleOperation(setInProgress);
+                                        try {
+                                            await loginService.register(username, password)
+                                        } catch {
+                                            return handleOperation(setError)
+                                        }
+                                        handleOperation(setSuccess)
+                                    }}>Register</Button>
                         </div>
                     </form>
                     {success ?

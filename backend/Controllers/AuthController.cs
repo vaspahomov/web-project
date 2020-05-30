@@ -15,12 +15,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace backend.Controllers
 {
+    public class UserDTO
+    {
+        public UserDTO(string username)
+        {
+            Username = username;
+        }
+
+        [JsonProperty("username")] public string Username { get; set; }
+    }
+
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/auth")]
     public class AuthController : Controller
     {
         private IUserService _userService;
@@ -87,6 +98,23 @@ namespace backend.Controllers
                 _logger.LogInformation($"Created user {userEntity}");
 
                 return Ok(userEntity.Id);
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDTO>> GetUser()
+        {
+            var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = new Guid(user);
+            try
+            {
+                var userEntity = await _userService.GetUserById(userId);
+                return Ok(new UserDTO(userEntity.Username));
             }
             catch (AppException ex)
             {

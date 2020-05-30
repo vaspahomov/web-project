@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 
 namespace backend.Controllers
 {
@@ -26,6 +27,17 @@ namespace backend.Controllers
         Sepia,
         BlackAndWhite
     }
+
+    public class PictureMetaResponse
+    {
+        public PictureMetaResponse(string filename)
+        {
+            Filename = filename;
+        }
+
+        public string Filename { get; set; }
+    }
+
 
     [Authorize]
     [Route("api/pictures")]
@@ -86,8 +98,35 @@ namespace backend.Controllers
             return NotFound();
         }
 
-        [HttpGet("/")]
-        public async Task<ActionResult<IEnumerable<ObjectId>>> DownloadAllForUser()
+        [HttpGet("{id}/meta")]
+        public async Task<ActionResult<PictureMetaResponse>> GetImageMeta([FromRoute] string id)
+        {
+            var entity = new PictureEntity(new ObjectId(id));
+            var picture = await _pictureRepository.Get(entity);
+            if (picture != null)
+                return new PictureMetaResponse(picture.Filename);
+            return NotFound();
+        }
+
+
+        public class DownloadResponse
+        {
+            public DownloadResponse(string id, string filename, int height, int width)
+            {
+                Id = id;
+                Filename = filename;
+                Height = height;
+                Width = width;
+            }
+
+            [JsonProperty("id")] public string Id { get; set; }
+            [JsonProperty("filename")] public string Filename { get; set; }
+            [JsonProperty("height")] public int Height { get; set; }
+            [JsonProperty("width")] public int Width { get; set; }
+        }
+
+        [HttpGet("")]
+        public async Task<ActionResult<IEnumerable<DownloadResponse>>> DownloadAllForUser()
         {
             var user = GetUser();
             if (user == null)
@@ -95,41 +134,68 @@ namespace backend.Controllers
             var userId = user.Value;
             _logger.LogInformation($"{userId}");
             var entities = await _userRepository.GetUserPictures(userId);
-            var ids = entities.Select(e => e.Id.ToString());
+            var ids = entities.Select(e => new DownloadResponse(e.Id.ToString(), e.Name, e.Height, e.Width));
             return Ok(ids);
         }
 
+        public class RotateRequest
+        {
+            [JsonProperty("angle")] public float Angle { get; set; }
+        }
+
         [HttpPost("{id}/rotate")]
-        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromBody] float angle) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, angle));
+        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromBody] RotateRequest req) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, req.Angle));
+
+        public class AddTextRequest
+        {
+            [JsonProperty("text")] public string Text { get; set; }
+        }
 
         [HttpPost("{id}/addText")]
-        public async Task<ActionResult<PictureEntity>> AddText(string id, string text) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, text));
+        public async Task<ActionResult<PictureEntity>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, req.Text));
+
+        public class CropRequest
+        {
+            [JsonProperty("rectangle")] public CropRectangle Rectangle { get; set; }
+        }
 
         [HttpPost("{id}/crop")]
-        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRectangle rectangle) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
+        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRequest req) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, req.Rectangle));
+
+        public class BlurRequest
+        {
+            public int Size { get; set; }
+            public BlurType Type { get; set; }
+        }
 
         [HttpPost("{id}/blur")]
-        public async Task<ActionResult<PictureEntity>> AddBlur(string id, [FromBody] int size, [FromBody] BlurType type)
+        public async Task<ActionResult<PictureEntity>> AddBlur(string id, [FromBody] BlurRequest req)
         {
-            return type switch
+            return req.Type switch
             {
-                BlurType.Gaussian => await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size)),
+                BlurType.Gaussian => await ModifyPictureAndSaveForUser(id,
+                    pic => _modifier.AddGaussianBlur(pic, req.Size)),
                 BlurType.Circular => await ModifyPictureAndSaveForUser(id, _modifier.AddCircularBlur),
-                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+                _ => BadRequest("invalid type")
             };
         }
 
-        [HttpPost("{id}/filter")]
-        public async Task<ActionResult<PictureEntity>> AddFilter(string id, [FromBody] FilterType type)
+        public class FilterRequest
         {
-            return type switch
+            public FilterType Type { get; set; }
+        }
+
+        [HttpPost("{id}/filter")]
+        public async Task<ActionResult<PictureEntity>> AddFilter(string id, [FromBody] FilterRequest req)
+        {
+            return req.Type switch
             {
                 FilterType.Sepia => await ModifyPictureAndSaveForUser(id, _modifier.AddSepiaFilter),
                 FilterType.BlackAndWhite => await ModifyPictureAndSaveForUser(id, _modifier.AddBlackAndWhiteFilter),
-                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+                _ => BadRequest("invalid type")
             };
         }
 

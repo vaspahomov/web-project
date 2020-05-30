@@ -29,6 +29,11 @@ namespace backend.Services
 
             return IsVerifiedPassword(password, userEntity.PasswordHash, userEntity.PasswordSalt) ? userEntity : null;
         }
+public async Task<UserEntity> GetUserById(Guid userId)
+        {
+            var userEntity = await _userRepository.FindByIdAsync(userId);
+            return userEntity;
+        }
 
         public async Task<UserEntity> Create(string username, string password)
         {
@@ -82,5 +87,6 @@ namespace backend.Services
     {
         Task<UserEntity?> Authenticate(string username, string password);
         Task<UserEntity> Create(string username, string password);
+        Task<UserEntity> GetUserById(Guid userId);
     }
 }
