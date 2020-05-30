@@ -7,10 +7,6 @@ const defaultHeaders = {
     'Content-Type': 'application/json'
 };
 
-interface ImageResp {
-    filename: string;
-}
-
 export class PicturesService {
     async getAll(jwt: string): Promise<Image[]> {
         if (!jwt) {
@@ -22,13 +18,13 @@ export class PicturesService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return (await resp.json()).map((x: ImageResp) => {
+        return (await resp.json()).map((x: string) => {
             return {
-                url: serverUrl + '/' + x.filename,
+                url: serverUrl + '/' + x,
                 name: 'Test image',
                 height: 300,
                 width: 400,
-                id: x.filename,
+                id: x,
             }
         });
     }

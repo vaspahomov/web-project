@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 
 import Layout from "../components/Layout";
 import ImageCollectionWrapper from "../components/ImageCollectionWrapper";
@@ -9,14 +9,17 @@ import {LoginService} from "../api/login";
 import {Typography} from "@material-ui/core";
 
 const authService = new LoginService();
+const imagesCollection = new ImagesCollection();
 
 export default function MyCollection() {
-    const imagesCollection = new ImagesCollection();
-    let images: Image[] = [];
+    const [images, setImages] = useState([] as Image[]);
     useEffect(() => {
         const jwt = localStorage.getItem('jwt');
-        if (jwt) imagesCollection.getAllImages(jwt).then(r => images = r);
-    })
+        if (jwt) imagesCollection.getAllImages(jwt).then(r => {
+            console.log(r);
+            setImages(r)
+        });
+    }, []);
     return (
         <Layout title="Photokek | Collection" disableLibrary>
             <ImageCollectionWrapper>

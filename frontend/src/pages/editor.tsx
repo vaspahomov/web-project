@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {NextPageContext} from "next";
 
 import Layout from "../components/Layout";
@@ -11,18 +11,16 @@ interface Props {
 }
 
 const Editor = ({id}: Props) => {
-    let image: Image | undefined = undefined;
+    const [image, setImage] = useState(undefined as Image | undefined);
     useEffect(() => {
         const imagesCollection = new ImagesCollection()
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
             imagesCollection
                 .getImage(jwt, id === undefined ? "0" : id as string)
-                .then(r => {
-                    image = r
-                });
+                .then(r => {setImage(r)});
         }
-    })
+    }, []);
     return (
         <Layout title="Photokek | Editor">
             {image !== undefined ?
