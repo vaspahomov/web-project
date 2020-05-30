@@ -1,3 +1,5 @@
+import {PicturesService} from "../api/pictures";
+
 export interface Image {
     name: string;
     url: string;
@@ -17,7 +19,7 @@ const images = [
     {
         id: "1",
         name: "Картинка 2",
-        url: "https://lh3.googleusercontent.com/proxy/gwh7CbYhaLMSnWe0piivSeeXYZ-5hBPNAarql8KCOarKsJiW8nW3YhwKfDqDoXWUkOePz1UcXqEIVHewUGZmpZh0pEpD23CrQaiK",
+        url: "https://www.meme-arsenal.com/memes/bd4489bf8ba9cfc10e8fcf3601ef986f.jpg",
         height: 540,
         width: 720
     },
@@ -37,14 +39,16 @@ const images = [
     }
 ]
 
+const pictureService = new PicturesService();
+
 const imagesMap = new Map<string, Image>(images.map(e => [e.id, e]));
 
 export class ImagesCollection {
-    getImage(id: string): Image | undefined {
-        return imagesMap.get(id);
+    async getImage(id: string): Promise<Image | undefined> {
+        return pictureService.getAll().then(r => r.filter(p => p.id === id)[0]);
     }
 
-    getAllImages(): Image[] {
-        return images;
+    getAllImages(): Promise<Image[]> {
+        return pictureService.getAll();
     }
 }

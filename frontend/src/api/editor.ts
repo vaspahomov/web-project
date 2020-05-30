@@ -1,4 +1,4 @@
-const serverUrl = 'https://api-picture.herokuapp.com'
+const serverUrl = 'https://api-picture.herokuapp.com/api/picture'
 
 export enum CropForm {
     Round,
@@ -27,11 +27,15 @@ const defaultHeaders = {
 
 export class EditorService {
     async crop(pictureId: string, form: CropForm) {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            throw new Error('Empty jwt');
+        }
         const resp = await fetch(`${serverUrl}/crop/${pictureId}`,
             {
                 method: 'PATCH',
                 body: JSON.stringify({cropForm: form}),
-                headers: defaultHeaders,
+                headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
             throw new Error('Bad server response');
@@ -39,11 +43,14 @@ export class EditorService {
     }
 
     async rotate(pictureId: string, angle: number): Promise<string> {
-        const resp = await fetch(`${serverUrl}/rotate/${pictureId}`,
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            throw new Error('Empty jwt');
+        }
+        const resp = await fetch(`${serverUrl}/rotation/${pictureId}/angle/${angle}`,
             {
                 method: 'PATCH',
-                body: JSON.stringify({degrees: angle}),
-                headers: defaultHeaders,
+                headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
             throw new Error('Bad server response');
@@ -51,11 +58,15 @@ export class EditorService {
     }
 
     async addText(pictureId: string, text: string, color: string): Promise<string> {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            throw new Error('Empty jwt');
+        }
         const resp = await fetch(`${serverUrl}/text/${pictureId}`,
             {
                 method: 'PATCH',
                 body: JSON.stringify({text}),
-                headers: defaultHeaders,
+                headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
             throw new Error('Bad server response');
@@ -63,9 +74,14 @@ export class EditorService {
     }
 
     async applyColorFilter(pictureId: string, colorFilter: ColorFilters): Promise<string> {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            throw new Error('Empty jwt');
+        }
         const resp = await fetch(`${serverUrl}/${colorFilter}/${pictureId}`,
             {
                 method: 'PATCH',
+                headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
             throw new Error('Bad server response');
@@ -73,9 +89,14 @@ export class EditorService {
     }
 
     async applyBlurFilter(pictureId: string, blurFilter: BlurFilters): Promise<string> {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            throw new Error('Empty jwt');
+        }
         const resp = await fetch(`${serverUrl}/blur/${blurFilter}/${pictureId}`,
             {
                 method: 'PATCH',
+                headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
             throw new Error('Bad server response');
@@ -83,11 +104,21 @@ export class EditorService {
     }
 
     async downloadImage(pictureId: string, format: ImageFormat): Promise<string> {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            throw new Error('Empty jwt');
+        }
         return '';
     }
 
     async getImage(pictureId: string): Promise<string> {
-        const resp = await fetch(`${serverUrl}/download/${pictureId}`);
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) {
+            throw new Error('Empty jwt');
+        }
+        const resp = await fetch(`${serverUrl}/download/${pictureId}`, {
+            headers: {...defaultHeaders, 'Authorization': jwt},
+        });
         if (!resp.ok)
             throw new Error('Bad server response');
         return resp.text();
