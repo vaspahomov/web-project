@@ -33,7 +33,7 @@ export class EditorService {
         }
         const resp = await fetch(`${serverUrl}/crop/${pictureId}`,
             {
-                method: 'PATCH',
+                method: 'POST',
                 body: JSON.stringify({cropForm: form}),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });

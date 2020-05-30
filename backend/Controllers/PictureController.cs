@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 
 namespace backend.Controllers
 {
@@ -25,12 +26,6 @@ namespace backend.Controllers
     {
         Sepia,
         BlackAndWhite
-    }
-
-    public class BlurRequest
-    {
-        public int Size { get; set; }
-        public BlurType Type { get; set; }
     }
 
     public class PictureMetaResponse
@@ -125,17 +120,38 @@ namespace backend.Controllers
             return Ok(ids);
         }
 
+        public class RotateRequest
+        {
+            [JsonProperty("angle")] public float Angle { get; set; }
+        }
+
         [HttpPost("{id}/rotate")]
-        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromBody] float angle) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, angle));
+        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromBody] RotateRequest req) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, req.Angle));
+
+        public class AddTextRequest
+        {
+            [JsonProperty("text")] public string Text { get; set; }
+        }
 
         [HttpPost("{id}/addText")]
-        public async Task<ActionResult<PictureEntity>> AddText(string id, string text) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, text));
+        public async Task<ActionResult<PictureEntity>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, req.Text));
+
+        public class CropRequest
+        {
+            [JsonProperty("rectangle")] public CropRectangle Rectangle { get; set; }
+        }
 
         [HttpPost("{id}/crop")]
-        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRectangle rectangle) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
+        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRequest req) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, req.Rectangle));
+
+        public class BlurRequest
+        {
+            public int Size { get; set; }
+            public BlurType Type { get; set; }
+        }
 
         [HttpPost("{id}/blur")]
         public async Task<ActionResult<PictureEntity>> AddBlur(string id, [FromBody] BlurRequest req)
@@ -149,11 +165,15 @@ namespace backend.Controllers
             };
         }
 
+        public class FilterRequest
+        {
+            public FilterType Type { get; set; }
+        }
 
         [HttpPost("{id}/filter")]
-        public async Task<ActionResult<PictureEntity>> AddFilter(string id, [FromBody] FilterType type)
+        public async Task<ActionResult<PictureEntity>> AddFilter(string id, [FromBody] FilterRequest req)
         {
-            return type switch
+            return req.Type switch
             {
                 FilterType.Sepia => await ModifyPictureAndSaveForUser(id, _modifier.AddSepiaFilter),
                 FilterType.BlackAndWhite => await ModifyPictureAndSaveForUser(id, _modifier.AddBlackAndWhiteFilter),
