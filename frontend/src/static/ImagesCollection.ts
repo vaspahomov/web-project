@@ -44,11 +44,11 @@ const pictureService = new PicturesService();
 const imagesMap = new Map<string, Image>(images.map(e => [e.id, e]));
 
 export class ImagesCollection {
-    async getImage(id: string): Promise<Image | undefined> {
-        return pictureService.getAll().then(r => r.filter(p => p.id === id)[0]);
+    async getImage(jwt: string, id: string): Promise<Image | undefined> {
+        return pictureService.getAll(jwt).then(r => r.filter(p => p.id === id)[0]);
     }
 
-    getAllImages(): Promise<Image[]> {
-        return pictureService.getAll();
+    getAllImages(jwt: string): Promise<Image[]> {
+        return pictureService.getAll(jwt);
     }
 }

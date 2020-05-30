@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {useEffect} from 'react'
 import {NextPageContext} from "next";
 
 import Layout from "../components/Layout";
@@ -6,37 +7,37 @@ import EditorContainer from "../components/EditorContainer";
 import {Image, ImagesCollection} from "../static/ImagesCollection";
 
 interface Props {
-    image?: Image;
+    id: string;
 }
 
-const Editor = ({image}: Props) => {
-    if (!image) {
-        return (
-            <Layout title="Photokek | Editor">
-                Картинка не была найдена
-            </Layout>
-        );
-    }
-    const ratio = image.width / image.height;
-    const maxHeightCSS = `${image.height}px`;
-    const maxWidthCSS = `${image.width}px`;
-    const widthCSS = '90vw';
-    const heightCSS = `${90 / ratio}vw`;
+const Editor = ({id}: Props) => {
+    let image: Image | undefined = undefined;
+    useEffect(() => {
+        const imagesCollection = new ImagesCollection()
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            imagesCollection
+                .getImage(jwt, id === undefined ? "0" : id as string)
+                .then(r => {
+                    image = r
+                });
+        }
+    })
     return (
         <Layout title="Photokek | Editor">
-            {image &&
-            <EditorContainer height={heightCSS} width={widthCSS} maxWidth={maxWidthCSS} maxHeight={maxHeightCSS}
-                             image={image}>
-            </EditorContainer>}
+            {image !== undefined ?
+                <EditorContainer height={`${90 / ((image as Image).width / (image as Image).height)}vw`} width={'90vw'}
+                                 maxWidth={`${(image as Image).width}px`} maxHeight={`${(image as Image).height}px`}
+                                 image={image}>
+                </EditorContainer> : 'Картинка не была найдена'
+            }
         </Layout>
     );
 }
 
 Editor.getInitialProps = async function (ctx: NextPageContext): Promise<Props> {
-    const imagesCollection = new ImagesCollection()
     const id = ctx.query.id;
-    const image = await imagesCollection.getImage(id === undefined ? "0" : id as string);
-    return {image};
+    return {id: String(id)};
 }
 
 export default Editor;

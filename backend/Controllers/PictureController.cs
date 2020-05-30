@@ -92,7 +92,7 @@ namespace backend.Controllers
             return NotFound();
         }
 
-        [HttpGet("/")]
+        [HttpGet("")]
         public async Task<ActionResult<IEnumerable<Picture>>> DownloadAllForUser()
         {
             var user = GetUser();

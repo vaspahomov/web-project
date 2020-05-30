@@ -9,11 +9,13 @@ import {LoginService} from "../api/login";
 import {Typography} from "@material-ui/core";
 
 const authService = new LoginService();
+
 export default function MyCollection() {
     const imagesCollection = new ImagesCollection();
     let images: Image[] = [];
     useEffect(() => {
-        imagesCollection.getAllImages().then(r => images = r);
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) imagesCollection.getAllImages(jwt).then(r => images = r);
     })
     return (
         <Layout title="Photokek | Collection" disableLibrary>
