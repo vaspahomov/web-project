@@ -18,8 +18,10 @@ export class PicturesService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return (await resp.json()).map((x: string) => {            return {
-                url: serverUrl + '/' + x,                name: 'Test image',
+        return (await resp.json()).map((x: string) => {
+            return {
+                url: serverUrl + '/' + x,
+                name: 'Test image',
                 height: 300,
                 width: 400,
                 id: x,
@@ -27,7 +29,7 @@ export class PicturesService {
         });
     }
 
-    async upload(image: any){
+    async upload(image: any) {
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
             throw new Error('Empty jwt');
