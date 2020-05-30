@@ -35,7 +35,7 @@ const Editor = ({image}: Props) => {
 Editor.getInitialProps = async function (ctx: NextPageContext): Promise<Props> {
     const imagesCollection = new ImagesCollection()
     const id = ctx.query.id;
-    const image = imagesCollection.getImage(id === undefined ? "0" : id as string);
+    const image = await imagesCollection.getImage(id === undefined ? "0" : id as string);
     return {image};
 }
 

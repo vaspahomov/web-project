@@ -15,7 +15,8 @@ export class LoginService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return resp.text();
+        const jwt = (await resp.json()).token;
+        localStorage.setItem('jwt', `Bearer ${jwt}`);
     }
 
     async register(username: string, password: string) {
@@ -29,5 +30,9 @@ export class LoginService {
         if (!resp.ok)
             throw new Error('Bad server response');
         return resp.text();
+    }
+
+    authSuccess(): boolean {
+        return localStorage.getItem('jwt') != null;
     }
 }

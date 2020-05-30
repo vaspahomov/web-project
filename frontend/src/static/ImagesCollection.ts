@@ -1,3 +1,5 @@
+import {PicturesService} from "../api/pictures";
+
 export interface Image {
     name: string;
     url: string;
@@ -37,14 +39,16 @@ const images = [
     }
 ]
 
+const pictureService = new PicturesService();
+
 const imagesMap = new Map<string, Image>(images.map(e => [e.id, e]));
 
 export class ImagesCollection {
-    getImage(id: string): Image | undefined {
-        return imagesMap.get(id);
+    async getImage(id: string): Promise<Image | undefined> {
+        return pictureService.getAll().then(r => r.filter(p => p.id === id)[0]);
     }
 
-    getAllImages(): Image[] {
-        return images;
+    getAllImages(): Promise<Image[]> {
+        return pictureService.getAll();
     }
 }

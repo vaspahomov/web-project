@@ -15,8 +15,20 @@ using MongoDB.Bson;
 
 namespace backend.Controllers
 {
+    public enum BlurType
+    {
+        Gaussian,
+        Circular
+    }
+
+    public enum FilterType
+    {
+        Sepia,
+        BlackAndWhite
+    }
+
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/pictures")]
     [ApiController]
     public class PictureController : Controller
     {
@@ -63,7 +75,7 @@ namespace backend.Controllers
             return null;
         }
 
-        [HttpGet("download/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<byte[]>> DownloadFile([FromRoute] string id)
         {
             var entity = new PictureEntity(new ObjectId(id));
@@ -73,48 +85,52 @@ namespace backend.Controllers
             return NotFound();
         }
 
-        [HttpGet("download/all")]
+        [HttpGet("/")]
         public async Task<ActionResult<IEnumerable<Picture>>> DownloadAllForUser()
         {
             var user = GetUser();
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-            Console.WriteLine(userId);
+            _logger.LogInformation($"{userId}");
             var entities = await _userRepository.GetUserPictures(userId);
             var ids = entities.Select(e => e.Id.ToString());
             return Ok(ids);
         }
 
-        [HttpPatch("rotation/{id}/angle/{degrees}")]
-        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromRoute] float degrees) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, degrees));
+        [HttpPost("{id}/rotate")]
+        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromBody] float angle) =>
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, angle));
 
-        [HttpPatch("text_addition/{id}/text/{text}")]
-        public async Task<ActionResult<PictureEntity>> AddText([FromRoute] string id, [FromRoute] string text) =>
+        [HttpPost("{id}/addText")]
+        public async Task<ActionResult<PictureEntity>> AddText(string id, string text) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, text));
 
-        [HttpPatch("crop/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddText([FromRoute] string id,
-            [FromBody] CropRectangle rectangle) =>
+        [HttpPost("{id}/crop")]
+        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRectangle rectangle) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, rectangle));
 
-        [HttpPatch("blur/gaussian/{id}/size/{size}")]
-        public async Task<ActionResult<PictureEntity>> AddGaussianBlur([FromRoute] string id, [FromRoute] int size) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size));
+        [HttpPost("{id}/blur")]
+        public async Task<ActionResult<PictureEntity>> AddBlur(string id, [FromBody] int size, [FromBody] BlurType type)
+        {
+            return type switch
+            {
+                BlurType.Gaussian => await ModifyPictureAndSaveForUser(id, pic => _modifier.AddGaussianBlur(pic, size)),
+                BlurType.Circular => await ModifyPictureAndSaveForUser(id, _modifier.AddCircularBlur),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
+        }
 
-        [HttpPatch("blur/circular/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddCircularBlur(string id) =>
-            await ModifyPictureAndSaveForUser(id, _modifier.AddCircularBlur);
-
-        [HttpPatch("filter/sepia/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddSepiaFilter(string id) =>
-            await ModifyPictureAndSaveForUser(id, _modifier.AddSepiaFilter);
-
-        [HttpPatch("filter/bw/{id}")]
-        public async Task<ActionResult<PictureEntity>> AddBnWFilter(string id) =>
-            await ModifyPictureAndSaveForUser(id, _modifier.AddBlackAndWhiteFilter);
-
+        [HttpPost("{id}/filter")]
+        public async Task<ActionResult<PictureEntity>> AddFilter(string id, [FromBody] FilterType type)
+        {
+            return type switch
+            {
+                FilterType.Sepia => await ModifyPictureAndSaveForUser(id, _modifier.AddSepiaFilter),
+                FilterType.BlackAndWhite => await ModifyPictureAndSaveForUser(id, _modifier.AddBlackAndWhiteFilter),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
+        }
 
         private async Task<ActionResult<PictureEntity>> ModifyPictureAndSaveForUser(string id, Func<Picture, Picture> f)
         {
@@ -123,7 +139,6 @@ namespace backend.Controllers
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-
             var entity = new PictureEntity(new ObjectId(id));
             var picture = await _pictureRepository.Get(entity);
             if (picture == null)
