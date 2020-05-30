@@ -107,8 +107,25 @@ namespace backend.Controllers
             return NotFound();
         }
 
+
+        public class DownloadResponse
+        {
+            public DownloadResponse(string id, string filename, int height, int width)
+            {
+                Id = id;
+                Filename = filename;
+                Height = height;
+                Width = width;
+            }
+
+            [JsonProperty("id")] public string Id { get; set; }
+            [JsonProperty("filename")] public string Filename { get; set; }
+            [JsonProperty("height")] public int Height { get; set; }
+            [JsonProperty("width")] public int Width { get; set; }
+        }
+
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<Picture>>> DownloadAllForUser()
+        public async Task<ActionResult<IEnumerable<DownloadResponse>>> DownloadAllForUser()
         {
             var user = GetUser();
             if (user == null)
@@ -116,7 +133,7 @@ namespace backend.Controllers
             var userId = user.Value;
             _logger.LogInformation($"{userId}");
             var entities = await _userRepository.GetUserPictures(userId);
-            var ids = entities.Select(e => e.Id.ToString());
+            var ids = entities.Select(e => new DownloadResponse(e.Id.ToString(), e.Name, e.Height, e.Width));
             return Ok(ids);
         }
 

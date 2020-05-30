@@ -1,4 +1,4 @@
-const serverUrl = 'https://api-picture.herokuapp.com/api/picture'
+const serverUrl = 'https://api-picture.herokuapp.com/api/pictures'
 
 export enum CropForm {
     Round,
@@ -49,7 +49,7 @@ export class EditorService {
         }
         const resp = await fetch(`${serverUrl}/${pictureId}/rotate`,
             {
-                method: 'PATCH',
+                method: 'POST',
                 body: String(angle),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
@@ -65,7 +65,7 @@ export class EditorService {
         }
         const resp = await fetch(`${serverUrl}/text/${pictureId}`,
             {
-                method: 'PATCH',
+                method: 'POST',
                 body: JSON.stringify({text}),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
@@ -81,7 +81,7 @@ export class EditorService {
         }
         const resp = await fetch(`${serverUrl}/${colorFilter}/${pictureId}`,
             {
-                method: 'PATCH',
+                method: 'POST',
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
@@ -96,7 +96,7 @@ export class EditorService {
         }
         const resp = await fetch(`${serverUrl}/blur/${blurFilter}/${pictureId}`,
             {
-                method: 'PATCH',
+                method: 'POST',
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
