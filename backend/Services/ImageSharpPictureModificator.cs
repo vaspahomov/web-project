@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using ImageProcessor;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
 using Color = SixLabors.ImageSharp.Color;
@@ -70,7 +72,8 @@ namespace backend.Services
         {
             using var inputStream = new MemoryStream(picture.AsBytes);
             using ImageFactory imageFactory = new ImageFactory();
-            return imageFactory.Load(inputStream).CurrentImageFormat.MimeType;
+            using Image image = Image.Load(picture.AsBytes);
+            return image.GetConfiguration().ImageFormats.FirstOrDefault()?.DefaultMimeType;
         }
     }
 }
