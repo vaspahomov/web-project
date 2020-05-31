@@ -65,5 +65,12 @@ namespace backend.Services
             image.SaveAsJpeg(outputStream);
             return new Picture(outputStream.ToArray(), picture.Filename);
         }
+
+        public string GetImageMimetype(Picture picture)
+        {
+            using var inputStream = new MemoryStream(picture.AsBytes);
+            using ImageFactory imageFactory = new ImageFactory();
+            return imageFactory.Load(inputStream).CurrentImageFormat.MimeType;
+        }
     }
 }

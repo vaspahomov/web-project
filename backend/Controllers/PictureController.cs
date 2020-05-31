@@ -92,9 +92,9 @@ namespace backend.Controllers
         {
             var entity = new PictureEntity(new ObjectId(id));
             var picture = await _pictureRepository.Get(entity);
-            if (picture != null)
-                return File(picture.AsBytes, "image/jpeg");
-            return NotFound();
+            if (picture == null) return NotFound();
+            var mimetype = _modifier.GetImageMimetype(picture);
+            return File(picture.AsBytes, mimetype);
         }
 
         [HttpGet("{id}/meta")]
@@ -212,7 +212,7 @@ namespace backend.Controllers
             var modified = f(picture);
             var savedId = await _pictureRepository.Save(modified);
             await _userRepository.AddPictureAsync(userId, savedId, DateTime.Now);
-            return File(modified.AsBytes, "image/jpeg");
+            return entity;
         }
     }
 }
