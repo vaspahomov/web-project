@@ -12,8 +12,8 @@ export enum ColorFilters {
 }
 
 export enum BlurFilters {
-    Round = 'circular',
-    Gauss = 'gaussian',
+    Round = 0,
+    Gauss = 1,
 }
 
 export enum ImageFormat {
@@ -50,7 +50,7 @@ export class EditorService {
         const resp = await fetch(`${serverUrl}/${pictureId}/rotate`,
             {
                 method: 'POST',
-                body: String(angle),
+                body: JSON.stringify({angle}),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
@@ -63,7 +63,7 @@ export class EditorService {
         if (!jwt) {
             throw new Error('Empty jwt');
         }
-        const resp = await fetch(`${serverUrl}/text/${pictureId}`,
+        const resp = await fetch(`${serverUrl}/${pictureId}/addText`,
             {
                 method: 'POST',
                 body: JSON.stringify({text}),
@@ -79,9 +79,10 @@ export class EditorService {
         if (!jwt) {
             throw new Error('Empty jwt');
         }
-        const resp = await fetch(`${serverUrl}/${colorFilter}/${pictureId}`,
+        const resp = await fetch(`${serverUrl}/${pictureId}/filter`,
             {
                 method: 'POST',
+                body: JSON.stringify({type: colorFilter.valueOf()}),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
@@ -94,9 +95,10 @@ export class EditorService {
         if (!jwt) {
             throw new Error('Empty jwt');
         }
-        const resp = await fetch(`${serverUrl}/blur/${blurFilter}/${pictureId}`,
+        const resp = await fetch(`${serverUrl}/${pictureId}/blur`,
             {
                 method: 'POST',
+                body: JSON.stringify({type: blurFilter.valueOf(), size: 10}),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)

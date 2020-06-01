@@ -106,9 +106,9 @@ namespace backend.Controllers
         {
             var entity = new ObjectId(id);
             var picture = await _pictureRepository.Get(entity);
-            if (picture != null)
-                return File(picture.AsBytes, "image/jpeg");
-            return NotFound();
+            if (picture == null) return NotFound();
+            var mimetype = _modifier.GetImageMimetype(picture);
+            return File(picture.AsBytes, mimetype);
         }
 
         [HttpGet("{id}/meta")]
@@ -226,7 +226,7 @@ namespace backend.Controllers
             if (!saved)
                 return BadRequest($"Что-то пошло не так во время сохранения картинки в Монгу для {id}");
             await _userRepository.AddPictureAsync(userId, picture, DateTime.Now);
-            return File(modified.AsBytes, "image/jpeg");
+            return entity;
         }
     }
 }

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using ImageProcessor;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
 using Color = SixLabors.ImageSharp.Color;
@@ -70,6 +72,14 @@ namespace backend.Services
             image.Mutate(x => f(x, image.Size()));
             image.SaveAsJpeg(outputStream);
             return new Picture(outputStream.ToArray(), picture.Filename, picture.Id, picture.Width, picture.Height);
+        }
+
+        public string GetImageMimetype(Picture picture)
+        {
+            using var inputStream = new MemoryStream(picture.AsBytes);
+            using ImageFactory imageFactory = new ImageFactory();
+            using Image image = Image.Load(picture.AsBytes);
+            return image.GetConfiguration().ImageFormats.FirstOrDefault()?.DefaultMimeType;
         }
     }
 }

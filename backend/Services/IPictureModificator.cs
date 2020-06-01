@@ -10,5 +10,6 @@ namespace backend.Services
         Picture AddSepiaFilter(Picture picture);
         Picture AddGaussianBlur(Picture picture, int size);
         Picture AddCircularBlur(Picture picture);
+        string GetImageMimetype(Picture picture);
     }
 }
