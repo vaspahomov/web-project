@@ -90,7 +90,7 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<byte[]>> DownloadFile([FromRoute] string id)
         {
-            var entity = new PictureEntity(new ObjectId(id));
+            var entity = new PictureEntity(id);
             var picture = await _pictureRepository.Get(entity);
             if (picture == null) return NotFound();
             var mimetype = _modifier.GetImageMimetype(picture);
@@ -100,7 +100,7 @@ namespace backend.Controllers
         [HttpGet("{id}/meta")]
         public async Task<ActionResult<PictureMetaResponse>> GetImageMeta([FromRoute] string id)
         {
-            var entity = new PictureEntity(new ObjectId(id));
+            var entity = new PictureEntity(id);
             var picture = await _pictureRepository.Get(entity);
             if (picture != null)
                 return new PictureMetaResponse(picture.Filename);
@@ -205,7 +205,7 @@ namespace backend.Controllers
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-            var entity = new PictureEntity(new ObjectId(id));
+            var entity = new PictureEntity(id);
             var picture = await _pictureRepository.Get(entity);
             if (picture == null)
                 return NotFound();

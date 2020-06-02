@@ -46,7 +46,7 @@ namespace backend.Data
             var imageId = await _gridFs.UploadFromBytesAsync(picture.Filename, picture.AsBytes);
             _logger.LogInformation($"Saved picture {picture.Filename} for {imageId}");
 
-            var pictureEntity = new PictureEntity(imageId);
+            var pictureEntity = new PictureEntity(imageId.ToString());
             return pictureEntity;
         }
     }
