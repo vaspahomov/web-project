@@ -17,10 +17,12 @@ namespace backend.Data.Entities
         [BsonElement] public int Height { get; set; }
 
         [BsonConstructor]
-        public PictureEntity(string filename, ObjectId? pictureMadeFrom, List<ObjectId> gridFsIds)
+        public PictureEntity(ObjectId id, string name = "", int height = 300, int width = 400)
         {
-            Filename = filename;
-            GridFsIds = gridFsIds;
+            Id = id;
+            Filename = name;
+            Height = height;
+            Width = width;
         }
     }
 }
