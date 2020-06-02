@@ -31,7 +31,7 @@ namespace backend.Data
 
         public async Task<Picture?> Get(PictureEntity picture)
         {
-            var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", picture.Id);
+            var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", new ObjectId(picture.Id));
             var fileInfos = await _gridFs.FindAsync(filter);
             var fileInfo = fileInfos.FirstOrDefault();
             if (fileInfo == null)
