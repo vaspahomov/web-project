@@ -165,7 +165,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/addText")]
-        public async Task<ActionResult<PictureDTO>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
+        public async Task<ActionResult<PictureDTO>> AddText(string id, [FromBody] AddTextRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, req.Text, req.Color));
 
         public class CropRequest
@@ -174,7 +174,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/crop")]
-        public async Task<ActionResult<PictureDTO>> AddText(string id, [FromBody] CropRequest req) =>
+        public async Task<ActionResult<PictureDTO>> Crop(string id, [FromBody] CropRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, req.Rectangle));
 
         public class BlurRequest
