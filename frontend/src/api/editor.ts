@@ -53,10 +53,10 @@ export class EditorService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return resp.text();
+        return resp.json();
     }
 
-    async rotate(pictureId: string, angle: number): Promise<string> {
+    async rotate(pictureId: string, angle: number): Promise<any> {
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
             throw new Error('Empty jwt');
@@ -69,10 +69,10 @@ export class EditorService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return resp.text();
+        return resp.json();
     }
 
-    async addText(pictureId: string, text: string, color: string): Promise<string> {
+    async addText(pictureId: string, text: string, color: string): Promise<any> {
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
             throw new Error('Empty jwt');
@@ -85,10 +85,10 @@ export class EditorService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return resp.text();
+        return resp.json();
     }
 
-    async applyColorFilter(pictureId: string, colorFilter: ColorFilters): Promise<string> {
+    async applyColorFilter(pictureId: string, colorFilter: ColorFilters): Promise<any> {
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
             throw new Error('Empty jwt');
@@ -101,10 +101,10 @@ export class EditorService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return resp.text();
+        return resp.json();
     }
 
-    async applyBlurFilter(pictureId: string, blurFilter: BlurFilters): Promise<string> {
+    async applyBlurFilter(pictureId: string, blurFilter: BlurFilters): Promise<any> {
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
             throw new Error('Empty jwt');
@@ -117,7 +117,7 @@ export class EditorService {
             });
         if (!resp.ok)
             throw new Error('Bad server response');
-        return resp.text();
+        return resp.json();
     }
 
     async downloadImage(pictureId: string, format: ImageFormat): Promise<string> {
