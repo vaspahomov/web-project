@@ -224,7 +224,6 @@ namespace backend.Controllers
             var saved = await _pictureRepository.TryUpdate(modified, pictureId);
             if (!saved)
                 return BadRequest($"Что-то пошло не так во время сохранения картинки в Монгу для {id}");
-            await _userRepository.AddPictureAsync(userId, picture, DateTime.Now);
             return new PictureDTO(picture.Filename, picture.Id.ToString(), picture.Width, picture.Height);
         }
 
