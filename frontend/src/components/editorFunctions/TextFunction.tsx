@@ -11,7 +11,7 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-import {EditorService} from "../../api/editor";
+import {EditorService, Rectangle} from "../../api/editor";
 import MuiAlert from "@material-ui/lab/Alert";
 
 
@@ -40,9 +40,20 @@ const handleOperation = (setCtx: Dispatch<boolean>) => {
 
 const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId, setPictureId}) => {
     const {card, control} = styles;
+    const [color, setColor] = React.useState('#fff');
+    const [text, setText] = React.useState('');
     const [inProgress, setInProgress] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+
+    const handleChangeColor = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setColor(event.target.value as string);
+    };
+
+    const handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setText(event.target.value);
+    };
+
     return (
         <div style={style}>
             <Card>
@@ -51,15 +62,13 @@ const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pic
                         <Typography>Text to append:</Typography>
                     </FormControl>
                     <FormControl style={control}>
-                        <TextField label="" variant="outlined"/>
+                        <TextField label="" variant="outlined" onChange={handleChangeText}/>
                     </FormControl>
                     <FormControl style={control}>
                         <InputLabel>Color</InputLabel>
                         <Select
-                            value={'#fff'}
-                            onChange={(event) => {
-                                return event.target;
-                            }}
+                            value={color}
+                            onChange={handleChangeColor}
                         >
                             <MenuItem value={'#fff'}>White</MenuItem>
                             <MenuItem value={'#000'}>Black</MenuItem>
@@ -70,7 +79,21 @@ const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pic
                         </Select>
                     </FormControl>
                     <FormControl style={control}>
-                        <Button variant="contained" color="primary">Submit</Button>
+                        <Button variant="contained" color="primary" onClick={
+                            async () => {
+                                handleOperation(setInProgress);
+                                let resp;
+                                try {
+                                    resp = await editorService.addText(pictureId, text, color)
+                                } catch {
+                                    return handleOperation(setError)
+                                }
+                                handleOperation(setSuccess)
+                                setPictureId(resp.id);
+                            }
+                        }>
+                            Submit
+                        </Button>
                     </FormControl>
                 </CardContent>
             </Card>

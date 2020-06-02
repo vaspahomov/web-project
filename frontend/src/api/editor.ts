@@ -45,7 +45,7 @@ export class EditorService {
         if (!jwt) {
             throw new Error('Empty jwt');
         }
-        const resp = await fetch(`${serverUrl}/${pictureId}/crop    `,
+        const resp = await fetch(`${serverUrl}/${pictureId}/crop`,
             {
                 method: 'POST',
                 body: JSON.stringify({rectangle: rectangle}),
@@ -80,7 +80,7 @@ export class EditorService {
         const resp = await fetch(`${serverUrl}/${pictureId}/addText`,
             {
                 method: 'POST',
-                body: JSON.stringify({text}),
+                body: JSON.stringify({form: {text: text, color: color}}),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)

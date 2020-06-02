@@ -72,7 +72,7 @@ function a11yProps(index: any) {
 const EditorContainer: React.FunctionComponent<Props> = ({children, width, height, maxWidth, maxHeight, image}) => {
     const {wrapper, mainWrapper, editorFunctionsContainer, inputGroupWrapper, card} = styles;
     const [value, setValue] = React.useState(0);
-    const [upd, updateState] = React.useState(false);
+    const [upd, updateState] = React.useState(false); //если появится какой то адекватный стейт который будет сеттиться там же где этот то можно заменить
     const editorService = new EditorService();
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
