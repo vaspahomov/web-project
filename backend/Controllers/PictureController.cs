@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using backend.Data.Entities;
 using backend.Data.Repositories;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -155,7 +154,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/rotate")]
-        public async Task<ActionResult<Picture>> Rotate([FromRoute] string id, [FromBody] RotateRequest req) =>
+        public async Task<ActionResult<PictureDTO>> Rotate([FromRoute] string id, [FromBody] RotateRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, req.Angle));
 
         public class AddTextRequest
@@ -164,7 +163,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/addText")]
-        public async Task<ActionResult<Picture>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
+        public async Task<ActionResult<PictureDTO>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, req.Text));
 
         public class CropRequest
@@ -173,7 +172,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/crop")]
-        public async Task<ActionResult<Picture>> AddText(string id, [FromBody] CropRequest req) =>
+        public async Task<ActionResult<PictureDTO>> AddText(string id, [FromBody] CropRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, req.Rectangle));
 
         public class BlurRequest
@@ -183,7 +182,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/blur")]
-        public async Task<ActionResult<Picture>> AddBlur(string id, [FromBody] BlurRequest req)
+        public async Task<ActionResult<PictureDTO>> AddBlur(string id, [FromBody] BlurRequest req)
         {
             return req.Type switch
             {
@@ -200,7 +199,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/filter")]
-        public async Task<ActionResult<Picture>> AddFilter(string id, [FromBody] FilterRequest req)
+        public async Task<ActionResult<PictureDTO>> AddFilter(string id, [FromBody] FilterRequest req)
         {
             return req.Type switch
             {
@@ -210,7 +209,7 @@ namespace backend.Controllers
             };
         }
 
-        private async Task<ActionResult<Picture>> ModifyPictureAndSaveForUser(string id, Func<Picture, Picture> f)
+        private async Task<ActionResult<PictureDTO>> ModifyPictureAndSaveForUser(string id, Func<Picture, Picture> f)
         {
             var user = GetUser();
             if (user == null)
@@ -226,7 +225,26 @@ namespace backend.Controllers
             if (!saved)
                 return BadRequest($"Что-то пошло не так во время сохранения картинки в Монгу для {id}");
             await _userRepository.AddPictureAsync(userId, picture, DateTime.Now);
-            return picture;
+            return new PictureDTO(picture.Filename, picture.Id.ToString(), picture.Width, picture.Height);
         }
+
+        public class PictureDTO
+        {
+            public PictureDTO(string filename, string id, int width, int height)
+            {
+                Filename = filename;
+                Id = id;
+                Width = width;
+                Height = height;
+            }
+
+            public string Filename { get; }
+            public string Id { get; }
+
+            public int Width { get;  }
+
+            public int Height { get; }
+        }
+
     }
 }
