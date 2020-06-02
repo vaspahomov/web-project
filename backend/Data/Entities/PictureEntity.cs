@@ -5,6 +5,8 @@ namespace backend.Data.Entities
 {
     public class PictureEntity
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; private set; }
         public string Name { get; private set; }
         public int Height { get; private set; }
