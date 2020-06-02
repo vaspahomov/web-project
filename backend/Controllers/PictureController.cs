@@ -221,6 +221,7 @@ namespace backend.Controllers
             var picture = await _pictureRepository.Get(pictureId);
             if (picture == null)
                 return NotFound();
+            
             var modified = f(picture);
             var saved = await _pictureRepository.TryUpdate(modified, pictureId);
             if (!saved)
