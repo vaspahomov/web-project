@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {CSSProperties, Dispatch, useState} from 'react';
-import {Button, ButtonGroup, Card, CardContent, Typography} from "@material-ui/core";
-import {EditorService} from "../../api/editor";
+import {Button, ButtonGroup, Card, CardContent} from "@material-ui/core";
+import {EditorService, ImageFormat} from "../../api/editor";
 import MuiAlert from "@material-ui/lab/Alert";
 
 type Props = {
@@ -26,8 +26,18 @@ const SaveFunction: React.FunctionComponent<Props> = ({style, editorService, pic
                 <CardContent>
                     <ButtonGroup variant="contained" color="primary"
                                  aria-label="contained primary button group">
-                        <Button>PNG</Button>
-                        <Button>JPEG</Button>
+                        /todo: {/*<Button>PNG</Button>*/}
+                        <Button onClick={async () => {
+                            handleOperation(setInProgress);
+                            try {
+                                await editorService.downloadImage(pictureId, ImageFormat.JPEG);
+                            } catch {
+                                return handleOperation(setError)
+                            }
+                            handleOperation(setSuccess)
+                        }}>
+                            JPEG
+                        </Button>
                     </ButtonGroup>
                 </CardContent>
             </Card>

@@ -38,6 +38,7 @@ const CutFunction: React.FunctionComponent<Props> = ({style, editorService, pict
                             handleOperation(setSuccess)
                             setPictureId(resp.id);
                         }}>Rectangle</Button>
+                        /todo:
                         {/*<Button onClick={async () => {*/}
                         {/*    handleOperation(setInProgress);*/}
                         {/*    try {*/}
