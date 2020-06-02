@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {CSSProperties, Dispatch, useState} from 'react';
 import {Button, ButtonGroup, Card, CardContent} from "@material-ui/core";
-import {ColorFilters, CropForm, EditorService, Rectangle} from "../../api/editor";
+import {EditorService, Rectangle} from "../../api/editor";
 import MuiAlert from "@material-ui/lab/Alert";
 
 type Props = {
@@ -31,7 +31,7 @@ const CutFunction: React.FunctionComponent<Props> = ({style, editorService, pict
                             handleOperation(setInProgress);
                             let resp;
                             try {
-                                resp = await editorService.crop(pictureId, new Rectangle(1, 2, 3,4))
+                                resp = await editorService.crop(pictureId, new Rectangle(400, 2, 400,3))
                             } catch {
                                 return handleOperation(setError)
                             }
