@@ -17,12 +17,15 @@ namespace backend.Data
     public class MongoPictureRepository : IPictureRepository
     {
         private readonly ILogger<MongoPictureRepository> _logger;
+        private readonly IPictureModificator _modificator;
         private readonly IMongoCollection<PictureEntity> _pictures;
         private readonly GridFSBucket _gridFs;
 
-        public MongoPictureRepository(IMongoDatabase database, DatabaseSettings settings, ILogger<MongoPictureRepository> logger)
+        public MongoPictureRepository(IMongoDatabase database, DatabaseSettings settings,
+            ILogger<MongoPictureRepository> logger, IPictureModificator modificator)
         {
             _logger = logger;
+            _modificator = modificator;
             _gridFs = new GridFSBucket(database);
             _pictures = database.GetCollection<PictureEntity>(settings.PictureCollectionName);
             _pictures.Indexes.CreateOne(
@@ -51,17 +54,17 @@ namespace backend.Data
 
         public async Task<ObjectId> Save(byte[] data, string filename)
         {
-            var imageId = await _gridFs.UploadFromBytesAsync(filename, data);
-            _logger.LogInformation($"Saved picture {filename} for {imageId}");
+            var (w, h ) = _modificator.GetSize(data);
+            var gridFsImageId = await _gridFs.UploadFromBytesAsync(filename, data);
+            _logger.LogInformation($"Saved picture {filename} for {gridFsImageId}");
 
-            var pictureEntity = new PictureEntity(filename, imageId, new List<ObjectId>());
-            await  _pictures.InsertOneAsync(pictureEntity);
-            return imageId;
+            var pictureEntity = PictureEntity.WithNoId(filename, h, w, new List<ObjectId> {gridFsImageId});
+            await _pictures.InsertOneAsync(pictureEntity);
+            return pictureEntity.Id;
         }
 
         public async Task<bool> TryUpdate(Picture newPicture, ObjectId id)
         {
-
             var pictures = await _pictures.FindAsync(p => p.Id == id);
             var pictureEntities = pictures.Current.ToList();
             if (!pictureEntities.Any())
@@ -70,15 +73,16 @@ namespace backend.Data
             var picture = pictures.First();
             var imageId = await _gridFs.UploadFromBytesAsync(picture.Filename, newPicture.AsBytes);
 
-            var pictureEntity = new PictureEntity(picture.Filename, picture.Id, picture.GridFsIds.Append(imageId).ToList());
+            var pictureEntity = new PictureEntity(picture.Id, picture.Filename, picture.Height, picture.Width,
+                picture.GridFsIds.Append(imageId).ToList());
 
-            await  _pictures.ReplaceOneAsync(new FilterDefinitionBuilder<PictureEntity>().Eq("_id", picture.Id),pictureEntity);
+            await _pictures.ReplaceOneAsync(new FilterDefinitionBuilder<PictureEntity>().Eq("_id", picture.Id),
+                pictureEntity);
             return true;
         }
 
         public async Task<bool> TryRollback(ObjectId pictureId)
         {
-
             var pictures = await _pictures.FindAsync(p => p.Id == pictureId);
             var pictureEntities = pictures.Current.ToList();
             if (!pictureEntities.Any())
@@ -91,10 +95,10 @@ namespace backend.Data
             picture.GridFsIds.RemoveAt(picture.GridFsIds.Count - 1);
 
             await _gridFs.DeleteAsync(old);
-            await  _pictures.ReplaceOneAsync(new FilterDefinitionBuilder<PictureEntity>().Eq("_id", picture.Id), picture);
+            await _pictures.ReplaceOneAsync(new FilterDefinitionBuilder<PictureEntity>().Eq("_id", picture.Id),
+                picture);
 
             return true;
-
         }
     }
 }
