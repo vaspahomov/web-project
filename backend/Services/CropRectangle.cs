@@ -1,5 +1,6 @@
 using System;
 using ImageProcessor.Imaging;
+using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 
 namespace backend.Services
@@ -26,9 +27,13 @@ namespace backend.Services
             Bottom = bottom;
         }
 
+        [JsonProperty("left")]
         public float Left { get; set; }
+        [JsonProperty("top")]
         public float Top { get; set; }
+        [JsonProperty("right")]
         public float Right { get; set; }
+        [JsonProperty("bottom")]
         public float Bottom { get; set; }
 
         public CropLayer ToCropLayer => new CropLayer(left: Left,
