@@ -29,28 +29,26 @@ namespace backend.Services
 
             return IsVerifiedPassword(password, userEntity.PasswordHash, userEntity.PasswordSalt) ? userEntity : null;
         }
-
-        public async Task<UserEntity> GetUserById(Guid userId)
+public async Task<UserEntity> GetUserById(Guid userId)
         {
             var userEntity = await _userRepository.FindByIdAsync(userId);
             return userEntity;
         }
 
-        public async Task<UserEntity> Create(UserModel user, string password)
+        public async Task<UserEntity> Create(string username, string password)
         {
             // validation
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Password is required");
 
-            var found = await _userRepository.FindByUsernameAsync(user.Username);
+            var found = await _userRepository.FindByUsernameAsync(username);
 
             if (found != null)
-                throw new AppException("Username \"" + user.Username + "\" is already taken");
+                throw new AppException($"Username \"{username}\" is already taken");
 
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
-            var userEntity = new UserEntity(Guid.NewGuid(), user.Username, passwordHash, passwordSalt);
+            var userEntity = new UserEntity(Guid.NewGuid(), username, passwordHash, passwordSalt);
 
             await _userRepository.InsertAsync(userEntity);
             return userEntity;
@@ -62,40 +60,33 @@ namespace backend.Services
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+            using var hmac = new System.Security.Cryptography.HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
 
         private static bool IsVerifiedPassword(string password, byte[] storedHash, byte[] storedSalt)
         {
-            if (password == null) throw new ArgumentNullException("password");
+            if (password == null)
+                throw new ArgumentNullException(nameof(password));
             if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
             if (storedHash.Length != 64)
-                throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+                throw new ArgumentException("Invalid length of password hash (64 bytes expected).", nameof(storedHash));
             if (storedSalt.Length != 128)
-                throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+                throw new ArgumentException("Invalid length of password salt (128 bytes expected).",
+                    nameof(storedSalt));
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != storedHash[i]) return false;
-                }
-            }
-
-            return true;
+            using var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt);
+            var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return !computedHash.Where((t, i) => t != storedHash[i]).Any();
         }
     }
 
     public interface IUserService
     {
         Task<UserEntity?> Authenticate(string username, string password);
-        Task<UserEntity> Create(UserModel user, string password);
+        Task<UserEntity> Create(string username, string password);
         Task<UserEntity> GetUserById(Guid userId);
     }
 }

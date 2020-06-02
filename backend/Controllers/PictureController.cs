@@ -49,11 +49,11 @@ namespace backend.Controllers
         private readonly IUserRepository _userRepository;
         private readonly ILogger<PictureController> _logger;
 
-        private static Picture GetPictureFromFormFile(IFormFile file)
+        private static (byte[] imageData, string name) GetPictureFromFormFile(IFormFile file)
         {
             using var ms = new MemoryStream();
             file.CopyToAsync(ms);
-            return new Picture(ms.ToArray(), file.FileName);
+            return (ms.ToArray(), file.FileName);
         }
 
         public PictureController(IPictureModificator modifier, IPictureRepository pictureRepository,
@@ -68,15 +68,29 @@ namespace backend.Controllers
         [HttpPost("upload")]
         public async Task<ActionResult<string>> UploadFile(IFormFile file)
         {
-            var picture = GetPictureFromFormFile(file);
+            var (imgData, name) = GetPictureFromFormFile(file);
             _logger.LogInformation("Uploading picture");
-            var pictureEntity = await _pictureRepository.Save(picture);
+            var pictureId = await _pictureRepository.Save(imgData, name);
+            var (w, h) = _modifier.GetSize(imgData);
+            var picture = new Picture(imgData, name, pictureId, w, h);
             var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (user == null) return pictureEntity.Id.ToString();
+            _logger.LogWarning($"Did not find the user for image {file.FileName}");
+            if (user == null)
+                return picture.Id.ToString();
             var userId = new Guid(user);
             _logger.LogInformation($"User was not found; Created user {userId}");
-            await _userRepository.AddPictureAsync(userId, pictureEntity, DateTime.Now);
-            return pictureEntity.Id.ToString();
+            await _userRepository.AddPictureAsync(userId, picture, DateTime.Now);
+            return picture.Id.ToString();
+        }
+
+        [HttpPost("{id}/rollback")]
+        public async Task<ActionResult> Rollback(string id)
+        {
+            var pictureId = ObjectId.Parse(id);
+            var result = await _pictureRepository.TryRollback(pictureId);
+            if (result)
+                return Ok();
+            return BadRequest($"Чет произошло во время роллбека для {id}");
         }
 
         private Guid? GetUser()
@@ -90,7 +104,7 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<byte[]>> DownloadFile([FromRoute] string id)
         {
-            var entity = new PictureEntity(id);
+            var entity = new ObjectId(id);
             var picture = await _pictureRepository.Get(entity);
             if (picture == null) return NotFound();
             var mimetype = _modifier.GetImageMimetype(picture);
@@ -100,8 +114,7 @@ namespace backend.Controllers
         [HttpGet("{id}/meta")]
         public async Task<ActionResult<PictureMetaResponse>> GetImageMeta([FromRoute] string id)
         {
-            var entity = new PictureEntity(id);
-            var picture = await _pictureRepository.Get(entity);
+            var picture = await _pictureRepository.Get(ObjectId.Parse(id));
             if (picture != null)
                 return new PictureMetaResponse(picture.Filename);
             return NotFound();
@@ -133,7 +146,7 @@ namespace backend.Controllers
             var userId = user.Value;
             _logger.LogInformation($"{userId}");
             var entities = await _userRepository.GetUserPictures(userId);
-            var ids = entities.Select(e => new DownloadResponse(e.Id.ToString(), e.Name, e.Height, e.Width));
+            var ids = entities.Select(e => new DownloadResponse(e.Id.ToString(), e.Filename, e.Height, e.Width));
             return Ok(ids);
         }
 
@@ -143,7 +156,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/rotate")]
-        public async Task<ActionResult<PictureEntity>> Rotate([FromRoute] string id, [FromBody] RotateRequest req) =>
+        public async Task<ActionResult<Picture>> Rotate([FromRoute] string id, [FromBody] RotateRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Rotate(pic, req.Angle));
 
         public class AddTextRequest
@@ -152,7 +165,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/addText")]
-        public async Task<ActionResult<PictureEntity>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
+        public async Task<ActionResult<Picture>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, req.Text));
 
         public class CropRequest
@@ -161,7 +174,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/crop")]
-        public async Task<ActionResult<PictureEntity>> AddText(string id, [FromBody] CropRequest req) =>
+        public async Task<ActionResult<Picture>> AddText(string id, [FromBody] CropRequest req) =>
             await ModifyPictureAndSaveForUser(id, pic => _modifier.Crop(pic, req.Rectangle));
 
         public class BlurRequest
@@ -171,7 +184,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/blur")]
-        public async Task<ActionResult<PictureEntity>> AddBlur(string id, [FromBody] BlurRequest req)
+        public async Task<ActionResult<Picture>> AddBlur(string id, [FromBody] BlurRequest req)
         {
             return req.Type switch
             {
@@ -188,7 +201,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/filter")]
-        public async Task<ActionResult<PictureEntity>> AddFilter(string id, [FromBody] FilterRequest req)
+        public async Task<ActionResult<Picture>> AddFilter(string id, [FromBody] FilterRequest req)
         {
             return req.Type switch
             {
@@ -198,21 +211,22 @@ namespace backend.Controllers
             };
         }
 
-        private async Task<ActionResult<PictureEntity>> ModifyPictureAndSaveForUser(string id, Func<Picture, Picture> f)
+        private async Task<ActionResult<Picture>> ModifyPictureAndSaveForUser(string id, Func<Picture, Picture> f)
         {
-            //TODO: add converter between PictureEntity ObjectId and Guid
             var user = GetUser();
             if (user == null)
                 return NotFound();
             var userId = user.Value;
-            var entity = new PictureEntity(id);
-            var picture = await _pictureRepository.Get(entity);
+            var pictureId = ObjectId.Parse(id);
+            var picture = await _pictureRepository.Get(pictureId);
             if (picture == null)
                 return NotFound();
             var modified = f(picture);
-            var savedId = await _pictureRepository.Save(modified);
-            await _userRepository.AddPictureAsync(userId, savedId, DateTime.Now);
-            return entity;
+            var saved = await _pictureRepository.TryUpdate(modified, pictureId);
+            if (!saved)
+                return BadRequest($"Что-то пошло не так во время сохранения картинки в Монгу для {id}");
+            await _userRepository.AddPictureAsync(userId, picture, DateTime.Now);
+            return picture;
         }
     }
 }

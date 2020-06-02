@@ -91,11 +91,10 @@ namespace backend.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var user = new UserModel(model.Username);
 
             try
             {
-                var userEntity = await _userService.Create(user, model.Password);
+                var userEntity = await _userService.Create(model.Username, model.Password);
                 _logger.LogInformation($"Created user {userEntity}");
 
                 return Ok(userEntity.Id);

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using backend.Services;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -11,10 +13,10 @@ namespace backend.Data.Entities
         [BsonElement] public readonly string Username;
         [BsonElement] public readonly byte[] PasswordHash;
         [BsonElement] public readonly byte[] PasswordSalt;
-        [BsonElement] public readonly List<PictureEntity> Pictures;
+        [BsonElement] public readonly List<Picture> Pictures;
 
         [BsonConstructor]
-        public UserEntity(Guid id, string username, byte[] passwordHash, byte[] passwordSalt, List<PictureEntity> pictures)
+        public UserEntity(Guid id, string username, byte[] passwordHash, byte[] passwordSalt, List<Picture> pictures)
         {
             Id = id;
             Username = username;
@@ -29,7 +31,7 @@ namespace backend.Data.Entities
             Username = username;
             PasswordHash = passwordHash;
             PasswordSalt = passwordSalt;
-            Pictures = new List<PictureEntity>();
+            Pictures = new List<Picture>();
         }     
     }
 }

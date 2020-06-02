@@ -9,9 +9,9 @@ namespace backend.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
-        public string Title { get; set; }
-        public string FileName { get; set; }
-        [BsonElement("expireAt")]
-        public DateTime expireAt { get; set; }
+
+        public ObjectId GridFsId { get; set; }
+
+        public ObjectId MadeFrom { get; set; }
     }
 }

@@ -7,8 +7,8 @@ export enum CropForm {
 }
 
 export enum ColorFilters {
-    BlackAndWhite,
     Sepia,
+    BlackAndWhite,
 }
 
 export enum BlurFilters {

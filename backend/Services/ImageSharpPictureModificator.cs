@@ -20,6 +20,12 @@ namespace backend.Services
 {
     internal class ImageSharpPictureModificator : IPictureModificator
     {
+        public (int width, int height) GetSize(byte[] data)
+        {
+            var (width, height) = Image.Load(data).Size();
+            return (width, height);
+        }
+
         public Picture Crop(Picture picture, CropRectangle cropRectangle)
             => MapWithImageContext(picture, x => x.Crop(cropRectangle.ToRectangle));
 
@@ -65,7 +71,7 @@ namespace backend.Services
             using Image image = Image.Load(picture.AsBytes);
             image.Mutate(x => f(x, image.Size()));
             image.SaveAsJpeg(outputStream);
-            return new Picture(outputStream.ToArray(), picture.Filename);
+            return new Picture(outputStream.ToArray(), picture.Filename, picture.Id, picture.Width, picture.Height);
         }
 
         public string GetImageMimetype(Picture picture)
