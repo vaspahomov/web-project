@@ -16,7 +16,6 @@ namespace backend.Data.Entities
 
         [BsonElement] public int Height { get; set; }
 
-        [BsonConstructor]
         public PictureEntity(ObjectId id, string name, int height, int width, List<ObjectId> gridFsIds)
         {
             Id = id;
