@@ -160,11 +160,13 @@ namespace backend.Controllers
         public class AddTextRequest
         {
             [JsonProperty("text")] public string Text { get; set; }
+            [JsonProperty("color")] public string Color { get; set; }
+
         }
 
         [HttpPost("{id}/addText")]
         public async Task<ActionResult<PictureDTO>> AddText([FromRoute] string id, [FromBody] AddTextRequest req) =>
-            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, req.Text));
+            await ModifyPictureAndSaveForUser(id, pic => _modifier.AddText(pic, req.Text, req.Color));
 
         public class CropRequest
         {

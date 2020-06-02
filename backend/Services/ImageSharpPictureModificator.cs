@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using ImageProcessor;
@@ -32,16 +30,19 @@ namespace backend.Services
         public Picture Rotate(Picture picture, float degrees)
             => MapWithImageContext(picture, x => x.Rotate(degrees));
 
-        public Picture AddText(Picture picture, string text)
+        public Picture AddText(Picture picture, string text, string color)
         {
             var collection = new FontCollection();
             var family = collection.Install("fonts/OpenSans-Regular.ttf");
             var font = family.CreateFont(12, FontStyle.Regular);
 
+            if (!Color.TryParse(color, out var finalColor)) 
+                finalColor = Color.Azure;
+
             return MapWithImageContext(picture, (x, size) =>
             {
                 var center = new PointF(x: size.Width / 2f, y: size.Height / 2f);
-                return x.DrawText(text, font, Color.Azure, center);
+                return x.DrawText(text, font, finalColor, center);
             });
         }
 
