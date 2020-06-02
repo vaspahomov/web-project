@@ -25,7 +25,7 @@ namespace backend.Data.Entities
             GridFsIds = gridFsIds;
         }
 
-        private PictureEntity()
+        public PictureEntity()
         {
         }
 
