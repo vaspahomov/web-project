@@ -10,6 +10,7 @@ type Props = {
     editorService: EditorService;
     changeLoaded: Dispatch<boolean>;
     pictureId: string;
+    setPictureId: (id: any) => void;
 }
 
 const handleOperation = (setCtx: Dispatch<boolean>) => {
@@ -17,7 +18,7 @@ const handleOperation = (setCtx: Dispatch<boolean>) => {
     setTimeout(() => setCtx(false), 3000);
 }
 
-const ColorFilterFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
+const ColorFilterFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId, setPictureId}) => {
     const [inProgress, setInProgress] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -29,21 +30,25 @@ const ColorFilterFunction: React.FunctionComponent<Props> = ({style, editorServi
                                  aria-label="contained primary button group">
                         <Button onClick={async () => {
                             handleOperation(setInProgress);
+                            let resp;
                             try {
-                                await editorService.applyColorFilter(pictureId, ColorFilters.BlackAndWhite)
+                                resp = await editorService.applyColorFilter(pictureId, ColorFilters.BlackAndWhite)
                             } catch {
                                 return handleOperation(setError)
                             }
-                            handleOperation(setSuccess)
+                            handleOperation(setSuccess);
+                            setPictureId(resp.id);
                         }}>Black and white</Button>
                         <Button onClick={async () => {
                             handleOperation(setInProgress);
+                            let resp;
                             try {
-                                await editorService.applyColorFilter(pictureId, ColorFilters.Sepia)
+                                resp = await editorService.applyColorFilter(pictureId, ColorFilters.Sepia)
                             } catch {
                                 return handleOperation(setError)
                             }
                             handleOperation(setSuccess)
+                            setPictureId(resp.id);
                         }}>Sepia</Button>
                     </ButtonGroup>
                 </CardContent>

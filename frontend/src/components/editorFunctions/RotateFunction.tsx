@@ -10,6 +10,7 @@ type Props = {
     editorService: EditorService;
     changeLoaded: Dispatch<boolean>;
     pictureId: string;
+    setPictureId: (id: any) => void;
 }
 
 const rotateAngleMarks = [
@@ -45,7 +46,7 @@ const handleOperation = (setCtx: Dispatch<boolean>) => {
     setTimeout(() => setCtx(false), 3000);
 }
 
-const RotateFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
+const RotateFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId, setPictureId}) => {
     const [value, changeValue] = useState(90);
     const [inProgress, setInProgress] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -69,12 +70,14 @@ const RotateFunction: React.FunctionComponent<Props> = ({style, editorService, p
                         variant="contained"
                         color="primary" onClick={async () => {
                         handleOperation(setInProgress);
+                        let resp;
                         try {
-                            await editorService.rotate(pictureId, value)
+                            resp = await editorService.rotate(pictureId, value)
                         } catch {
                             return handleOperation(setError)
                         }
-                        handleOperation(setSuccess)
+                        handleOperation(setSuccess);
+                        setPictureId(resp.id);
                     }}>Submit</Button>
                 </CardContent>
             </Card>

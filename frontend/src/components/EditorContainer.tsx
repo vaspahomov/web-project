@@ -72,6 +72,7 @@ function a11yProps(index: any) {
 const EditorContainer: React.FunctionComponent<Props> = ({children, width, height, maxWidth, maxHeight, image}) => {
     const {wrapper, mainWrapper, editorFunctionsContainer, inputGroupWrapper, card} = styles;
     const [value, setValue] = React.useState(0);
+    const [imageId, setPictureId] = React.useState(image.id);
     const editorService = new EditorService();
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
@@ -105,42 +106,52 @@ const EditorContainer: React.FunctionComponent<Props> = ({children, width, heigh
                         <CutFunction style={inputGroupWrapper}
                                      editorService={editorService}
                                      changeLoaded={changeLoaded}
-                                     pictureId={image.id}/>
+                                     pictureId={imageId}
+                                     setPictureId={(id: any) => setPictureId(id)}
+                        />
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         <RotateFunction style={inputGroupWrapper}
                                         editorService={editorService}
                                         changeLoaded={changeLoaded}
-                                        pictureId={image.id}/>
+                                        pictureId={imageId}
+                                        setPictureId={(id: any) => setPictureId(id)}
+                        />
                     </TabPanel>
                     <TabPanel value={value} index={2}>
                         <TextFunction style={inputGroupWrapper}
                                       editorService={editorService}
                                       changeLoaded={changeLoaded}
-                                      pictureId={image.id}/>
+                                      pictureId={imageId}
+                                      setPictureId={(id: any) => setPictureId(id)}
+                        />
                     </TabPanel>
                     <TabPanel value={value} index={3}>
                         <ColorFilterFunction style={inputGroupWrapper}
                                              editorService={editorService}
                                              changeLoaded={changeLoaded}
-                                             pictureId={image.id}/>
+                                             pictureId={imageId}
+                                             setPictureId={(id: any) => setPictureId(id)}
+                        />
                     </TabPanel>
                     <TabPanel value={value} index={4}>
                         <BlurFunction style={inputGroupWrapper}
                                       editorService={editorService}
                                       changeLoaded={changeLoaded}
-                                      pictureId={image.id}/>
+                                      pictureId={imageId}
+                                      setPictureId={(id: any) => setPictureId(id)}
+                        />
                     </TabPanel>
                     <TabPanel value={value} index={5}>
                         <SaveFunction style={inputGroupWrapper}
                                       editorService={editorService}
                                       changeLoaded={changeLoaded}
-                                      pictureId={image.id}/>
+                                      pictureId={imageId}/>
                     </TabPanel>
                 </SwipeableViews>
             </div>
             <div style={{...wrapper, height, width, maxWidth, maxHeight}}>
-                <ImageContainer src={image === undefined ? "" : image.url}
+                <ImageContainer src={editorService.buildUri(imageId)}
                                 height={height} width={width}
                                 maxWidth={maxWidth} maxHeight={maxHeight}
                                 onLoad={() => changeLoaded(true)}/>

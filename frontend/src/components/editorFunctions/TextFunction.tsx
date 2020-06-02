@@ -20,6 +20,7 @@ type Props = {
     editorService: EditorService;
     changeLoaded: Dispatch<boolean>;
     pictureId: string;
+    setPictureId: (id: any) => void;
 }
 
 const styles = {
@@ -37,7 +38,7 @@ const handleOperation = (setCtx: Dispatch<boolean>) => {
     setTimeout(() => setCtx(false), 3000);
 }
 
-const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
+const TextFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId, setPictureId}) => {
     const {card, control} = styles;
     const [inProgress, setInProgress] = useState(false);
     const [success, setSuccess] = useState(false);

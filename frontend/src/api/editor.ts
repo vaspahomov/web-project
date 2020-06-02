@@ -1,5 +1,19 @@
 const serverUrl = 'https://api-picture.herokuapp.com/api/pictures'
 
+export class Rectangle {
+    public left: number;
+    public right: number;
+    public top: number;
+    public bottom: number;
+
+    public constructor(bottom: number, top: number, right: number, left: number) {
+        this.bottom = bottom;
+        this.top = top;
+        this.left = left;
+        this.right = right;
+    }
+}
+
 export enum CropForm {
     Round,
     Oval,
@@ -26,15 +40,15 @@ const defaultHeaders = {
 };
 
 export class EditorService {
-    async crop(pictureId: string, form: CropForm) {
+    async crop(pictureId: string, rectangle: Rectangle) {
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
             throw new Error('Empty jwt');
         }
-        const resp = await fetch(`${serverUrl}/crop/${pictureId}`,
+        const resp = await fetch(`${serverUrl}/${pictureId}/crop    `,
             {
                 method: 'POST',
-                body: JSON.stringify({cropForm: form}),
+                body: JSON.stringify({rectangle: rectangle}),
                 headers: {...defaultHeaders, 'Authorization': jwt},
             });
         if (!resp.ok)
@@ -125,5 +139,9 @@ export class EditorService {
         if (!resp.ok)
             throw new Error('Bad server response');
         return resp.text();
+    }
+
+    buildUri(id: string): string {
+        return `${serverUrl}/${id}`;
     }
 }

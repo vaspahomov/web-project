@@ -10,6 +10,7 @@ type Props = {
     editorService: EditorService;
     changeLoaded: Dispatch<boolean>;
     pictureId: string;
+    setPictureId: (id: any) => void;
 }
 
 const handleOperation = (setCtx: Dispatch<boolean>) => {
@@ -17,7 +18,7 @@ const handleOperation = (setCtx: Dispatch<boolean>) => {
     setTimeout(() => setCtx(false), 3000);
 }
 
-const BlurFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
+const BlurFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId, setPictureId}) => {
     const [inProgress, setInProgress] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -29,21 +30,25 @@ const BlurFunction: React.FunctionComponent<Props> = ({style, editorService, pic
                                  aria-label="contained primary button group">
                         <Button onClick={async () => {
                             handleOperation(setInProgress);
+                            let resp;
                             try {
-                                await editorService.applyBlurFilter(pictureId, BlurFilters.Round)
+                                resp = await editorService.applyBlurFilter(pictureId, BlurFilters.Round)
                             } catch {
                                 return handleOperation(setError)
                             }
                             handleOperation(setSuccess)
+                            setPictureId(resp.id);
                         }}>Round</Button>
                         <Button onClick={async () => {
                             handleOperation(setInProgress);
+                            let resp;
                             try {
-                                await editorService.applyBlurFilter(pictureId, BlurFilters.Gauss)
+                                resp = await editorService.applyBlurFilter(pictureId, BlurFilters.Gauss)
                             } catch {
                                 return handleOperation(setError)
                             }
                             handleOperation(setSuccess)
+                            setPictureId(resp.id);
                         }}>Gauss</Button>
                     </ButtonGroup>
                 </CardContent>

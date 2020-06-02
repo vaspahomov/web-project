@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {CSSProperties, Dispatch, useState} from 'react';
 import {Button, ButtonGroup, Card, CardContent} from "@material-ui/core";
-import {ColorFilters, CropForm, EditorService} from "../../api/editor";
+import {ColorFilters, CropForm, EditorService, Rectangle} from "../../api/editor";
 import MuiAlert from "@material-ui/lab/Alert";
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
     editorService: EditorService;
     changeLoaded: Dispatch<boolean>;
     pictureId: string;
+    setPictureId: (id: any) => void;
 }
 
 const handleOperation = (setCtx: Dispatch<boolean>) => {
@@ -16,7 +17,7 @@ const handleOperation = (setCtx: Dispatch<boolean>) => {
     setTimeout(() => setCtx(false), 3000);
 }
 
-const CutFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId}) => {
+const CutFunction: React.FunctionComponent<Props> = ({style, editorService, pictureId, setPictureId}) => {
     const [inProgress, setInProgress] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -28,31 +29,33 @@ const CutFunction: React.FunctionComponent<Props> = ({style, editorService, pict
                                  aria-label="contained primary button group">
                         <Button onClick={async () => {
                             handleOperation(setInProgress);
+                            let resp;
                             try {
-                                await editorService.crop(pictureId, CropForm.Round)
+                                resp = await editorService.crop(pictureId, new Rectangle(1, 2, 3,4))
                             } catch {
                                 return handleOperation(setError)
                             }
                             handleOperation(setSuccess)
-                        }}>Round</Button>
-                        <Button onClick={async () => {
-                            handleOperation(setInProgress);
-                            try {
-                                await editorService.crop(pictureId, CropForm.Oval)
-                            } catch {
-                                return handleOperation(setError)
-                            }
-                            handleOperation(setSuccess)
-                        }}>Oval</Button>
-                        <Button onClick={async () => {
-                            handleOperation(setInProgress);
-                            try {
-                                await editorService.crop(pictureId, CropForm.HeartShape)
-                            } catch {
-                                return handleOperation(setError)
-                            }
-                            handleOperation(setSuccess)
-                        }}>Heart shaped</Button>
+                            setPictureId(resp.id);
+                        }}>Rectangle</Button>
+                        {/*<Button onClick={async () => {*/}
+                        {/*    handleOperation(setInProgress);*/}
+                        {/*    try {*/}
+                        {/*        await editorService.crop(pictureId, CropForm.Oval)*/}
+                        {/*    } catch {*/}
+                        {/*        return handleOperation(setError)*/}
+                        {/*    }*/}
+                        {/*    handleOperation(setSuccess)*/}
+                        {/*}}>Oval</Button>*/}
+                        {/*<Button onClick={async () => {*/}
+                        {/*    handleOperation(setInProgress);*/}
+                        {/*    try {*/}
+                        {/*        await editorService.crop(pictureId, CropForm.HeartShape)*/}
+                        {/*    } catch {*/}
+                        {/*        return handleOperation(setError)*/}
+                        {/*    }*/}
+                        {/*    handleOperation(setSuccess)*/}
+                        {/*}}>Heart shaped</Button>*/}
                     </ButtonGroup>
                 </CardContent>
             </Card>
