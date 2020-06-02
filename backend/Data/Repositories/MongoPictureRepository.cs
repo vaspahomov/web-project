@@ -40,6 +40,7 @@ namespace backend.Data
             var pictureEntities = pictures.Current.ToList();
             if (!pictureEntities.Any())
                 return null;
+            _logger.LogDebug($"Got pictures from mongo: {string.Concat(pictureEntities.Select(e => e.ToString()))}");
             var picture = pictures.First();
             var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", picture.GridFsIds.Last());
             var fileInfos = await _gridFs.FindAsync(filter);
