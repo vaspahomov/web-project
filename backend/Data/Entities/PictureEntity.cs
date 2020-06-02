@@ -7,19 +7,20 @@ namespace backend.Data.Entities
 {
     public class PictureEntity
     {
-        [BsonId] public ObjectId Id { get; set; }
+        public ObjectId Id { get; set; }
 
-        [BsonElement] public List<ObjectId> GridFsIds { get; set; }
-        [BsonElement] public string Filename { get; set; }
+        public List<ObjectId> GridFsIds { get; set; }
+        public string Filename { get; set; }
 
-        [BsonElement] public int Width { get; set; }
+        public int Width { get; set; }
 
-        [BsonElement] public int Height { get; set; }
+        public int Height { get; set; }
 
-        public PictureEntity(ObjectId id, string name, int height, int width, List<ObjectId> gridFsIds)
+
+        public PictureEntity(ObjectId id, string filename, int height, int width, List<ObjectId> gridFsIds)
         {
             Id = id;
-            Filename = name;
+            Filename = filename;
             Height = height;
             Width = width;
             GridFsIds = gridFsIds;

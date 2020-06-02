@@ -9,14 +9,19 @@ namespace backend.Data.Entities
 {
     public class UserEntity
     {
+        public override string ToString()
+        {
+            return $"{nameof(Username)}: {Username}, {nameof(PasswordHash)}: {PasswordHash}, {nameof(PasswordSalt)}: {PasswordSalt}, {nameof(Pictures)}: {Pictures}, {nameof(Id)}: {Id}";
+        }
+
         public Guid Id { get; private set; }
         [BsonElement] public readonly string Username;
         [BsonElement] public readonly byte[] PasswordHash;
         [BsonElement] public readonly byte[] PasswordSalt;
-        [BsonElement] public readonly List<Picture> Pictures;
+        [BsonElement] public readonly List<ObjectId> Pictures;
 
         [BsonConstructor]
-        public UserEntity(Guid id, string username, byte[] passwordHash, byte[] passwordSalt, List<Picture> pictures)
+        public UserEntity(Guid id, string username, byte[] passwordHash, byte[] passwordSalt, List<ObjectId> pictures)
         {
             Id = id;
             Username = username;
@@ -31,7 +36,8 @@ namespace backend.Data.Entities
             Username = username;
             PasswordHash = passwordHash;
             PasswordSalt = passwordSalt;
-            Pictures = new List<Picture>();
+            Pictures = new List<ObjectId>();
         }     
     }
+
 }

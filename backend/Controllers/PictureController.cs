@@ -70,9 +70,7 @@ namespace backend.Controllers
         {
             var (imgData, name) = GetPictureFromFormFile(file);
             _logger.LogInformation("Uploading picture");
-            var pictureId = await _pictureRepository.Save(imgData, name);
-            var (w, h) = _modifier.GetSize(imgData);
-            var picture = new Picture(imgData, name, pictureId, w, h);
+            var picture = await _pictureRepository.Save(imgData, name);
             var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             _logger.LogWarning($"Did not find the user for image {file.FileName}");
             if (user == null)
@@ -146,7 +144,8 @@ namespace backend.Controllers
             var userId = user.Value;
             _logger.LogInformation($"{userId}");
             var entities = await _userRepository.GetUserPictures(userId);
-            var ids = entities.Select(e => new DownloadResponse(e.Id.ToString(), e.Filename, e.Height, e.Width));
+            var pics = await Task.WhenAll(entities.Select(id => _pictureRepository.Get(id)));
+            var ids = pics.Select(e => new DownloadResponse(e.Id.ToString(), e.Filename, e.Height, e.Width));
             return Ok(ids);
         }
 
@@ -221,7 +220,7 @@ namespace backend.Controllers
             var picture = await _pictureRepository.Get(pictureId);
             if (picture == null)
                 return NotFound();
-            
+
             var modified = f(picture);
             var saved = await _pictureRepository.TryUpdate(modified, pictureId);
             if (!saved)

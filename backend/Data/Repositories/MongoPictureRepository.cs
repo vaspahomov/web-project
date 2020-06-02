@@ -36,24 +36,20 @@ namespace backend.Data
 
         public async Task<Picture?> Get(ObjectId pictureId)
         {
-            var pictures = await _pictures.FindAsync(p => p.Id == pictureId);
-            var pictureEntities = pictures.Current.ToList();
-            if (!pictureEntities.Any())
-                return null;
-            _logger.LogDebug($"Got pictures from mongo: {string.Concat(pictureEntities.Select(e => e.ToString()))}");
-            var picture = pictures.First();
-            var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", picture.GridFsIds.Last());
+            var picture = await _pictures.Find(p => p.Id == pictureId).FirstAsync();
+            var objectId = picture.GridFsIds.Last();
+            var filter = Builders<GridFSFileInfo>.Filter.Eq<ObjectId>("_id", objectId);
             var fileInfos = await _gridFs.FindAsync(filter);
             var fileInfo = fileInfos.FirstOrDefault();
             if (fileInfo == null)
                 return null;
-            var pic = await _gridFs.DownloadAsBytesAsync(picture.Id);
+            var pic = await _gridFs.DownloadAsBytesAsync(objectId);
             _logger.LogInformation($"Got picture data for {pictureId} with length {pic.Length}");
 
             return new Picture(pic, picture.Filename, picture.Id, picture.Width, picture.Height);
         }
 
-        public async Task<ObjectId> Save(byte[] data, string filename)
+        public async Task<Picture> Save(byte[] data, string filename)
         {
             var (w, h ) = _modificator.GetSize(data);
             var gridFsImageId = await _gridFs.UploadFromBytesAsync(filename, data);
@@ -61,17 +57,13 @@ namespace backend.Data
 
             var pictureEntity = PictureEntity.WithNoId(filename, h, w, new List<ObjectId> {gridFsImageId});
             await _pictures.InsertOneAsync(pictureEntity);
-            return pictureEntity.Id;
+            return new Picture(data, filename, pictureEntity.Id, w, h);
         }
 
         public async Task<bool> TryUpdate(Picture newPicture, ObjectId id)
         {
-            var pictures = await _pictures.FindAsync(p => p.Id == id);
-            var pictureEntities = pictures.Current.ToList();
-            if (!pictureEntities.Any())
-                return false;
+            var picture = await _pictures.Find(p => p.Id == id).FirstAsync();
 
-            var picture = pictures.First();
             var imageId = await _gridFs.UploadFromBytesAsync(picture.Filename, newPicture.AsBytes);
 
             var pictureEntity = new PictureEntity(picture.Id, picture.Filename, picture.Height, picture.Width,

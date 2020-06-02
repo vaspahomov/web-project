@@ -14,7 +14,7 @@ namespace backend.Data.Repositories
         //TODO: Why we need this? Looks useless
         Task<UserEntity[]> GetAllUsers();
         Task<bool> AddPictureAsync(Guid userId, Picture picture, DateTime time);
-        Task<List<Picture>> GetUserPictures(Guid userId);
+        Task<List<ObjectId>> GetUserPictures(Guid userId);
         Task<UserEntity> FindByIdAsync(Guid userId);
         Task<UserEntity> FindByUsernameAsync(string username);
     }
