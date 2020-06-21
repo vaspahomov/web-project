@@ -1,10 +1,12 @@
 import * as React from 'react'
-import {Dispatch, useState} from 'react'
+import {Dispatch, useEffect, useState} from 'react'
 import Layout from "../components/Layout";
 import {Button, TextField} from "@material-ui/core";
 import {LoginService} from "../api/login";
 import MuiAlert from "@material-ui/lab/Alert";
 import Link from "next/link";
+import { useRouter } from 'next/router'
+
 
 
 const styles = {
@@ -36,6 +38,15 @@ export default function Login() {
     const [username, changeUsername] = useState('');
     const [password, changePassword] = useState('');
     const loginService = new LoginService();
+    const router = useRouter();
+
+    useEffect(() => {
+        const jwt = localStorage.getItem('jwt');
+        if (jwt){
+            router.push('/myCollection').then();
+            return;
+        }
+    }, []);
     return (
         <Layout title="Photokek | Login" disableUserCard>
             <main style={root}>

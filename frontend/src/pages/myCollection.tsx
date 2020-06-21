@@ -6,14 +6,20 @@ import ImageCard from "../components/ImageCard";
 import {Image, ImagesCollection} from "../static/ImagesCollection";
 import {Typography} from "@material-ui/core";
 import UploadButton from "../components/UploadButton";
+import { useRouter } from 'next/router'
 
 const imagesCollection = new ImagesCollection();
 
 export default function MyCollection() {
     const [images, setImages] = useState([] as Image[]);
+    const router = useRouter();
     const update = () => {
         const jwt = localStorage.getItem('jwt');
-        if (jwt) imagesCollection.getAllImages(jwt).then(r => {
+        if (!jwt){
+            router.push('/login').then();
+            return;
+        }
+        imagesCollection.getAllImages(jwt).then(r => {
             console.log(r);
             setImages(r)
         });

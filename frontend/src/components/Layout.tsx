@@ -34,7 +34,8 @@ const Layout: React.FunctionComponent<Props> = (
     const {footer, footerLink} = styles;
     const [user, setUser] = useState(null as UserEntity | null);
     useEffect(() => {
-        authService.me().then(r => setUser(r));
+        if (!disableUserCard)
+            authService.me().then(r => setUser(r));
     }, []);
     return (<div>
         <Head>
@@ -53,7 +54,9 @@ const Layout: React.FunctionComponent<Props> = (
             <link rel="apple-touch-icon" href="/apple-icon.png"></link>
             <meta name="theme-color" content="#317EFB"/>
         </Head>
-        {!disableUserCard? <UserCard username={user? user.username: ''} handleLogout={() => {}} disableLibrary={disableLibrary}/>: null}
+        {!disableUserCard ? <UserCard username={user ? user.username : ''} handleLogout={() => {
+            localStorage.removeItem('jwt')
+        }} disableLibrary={disableLibrary}/> : null}
         {children}
         <footer style={footer as CSSProperties}>
             <hr/>

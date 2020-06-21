@@ -125,6 +125,17 @@ export class EditorService {
         if (!jwt) {
             throw new Error('Empty jwt');
         }
+        const resp = await fetch(`${serverUrl}/${pictureId}`,
+            {
+                headers: {...defaultHeaders, 'Authorization': jwt},
+            });
+        const buffer = await resp.arrayBuffer();
+        const url = window.URL.createObjectURL(new Blob([buffer]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "image.jpg");
+        document.body.appendChild(link);
+        link.click();
         return '';
     }
 

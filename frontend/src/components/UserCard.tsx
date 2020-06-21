@@ -24,7 +24,6 @@ const styles = {
 };
 
 
-
 const UserCard: React.FunctionComponent<Props> = (
     {
         username,
@@ -44,13 +43,15 @@ const UserCard: React.FunctionComponent<Props> = (
             subheader="September 14, 2016"
         />
         <CardActions disableSpacing>
-            <IconButton
-                onClick={handleLogout}
-                aria-label="log out"
-            >
-                <Typography variant="button">Log out</Typography>
-                <ExitToAppIcon/>
-            </IconButton>
+            <Link href={'login'}>
+                <IconButton
+                    onClick={handleLogout}
+                    aria-label="log out"
+                >
+                    <Typography variant="button">Log out</Typography>
+                    <ExitToAppIcon/>
+                </IconButton>
+            </Link>
             {!disableLibrary ?
                 <Link href={'myCollection'}>
                     <IconButton

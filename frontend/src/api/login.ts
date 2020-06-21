@@ -38,7 +38,7 @@ export class LoginService {
     async me(): Promise<UserEntity> {
         const jwt = localStorage.getItem('jwt');
         if (!jwt) {
-            throw new Error('Empty jwt');
+            return "" as any;
         }
         const resp = await fetch(`${serverUrl}/me`,
             {

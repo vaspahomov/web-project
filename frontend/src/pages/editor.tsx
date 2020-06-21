@@ -5,6 +5,7 @@ import {NextPageContext} from "next";
 import Layout from "../components/Layout";
 import EditorContainer from "../components/EditorContainer";
 import {Image, ImagesCollection} from "../static/ImagesCollection";
+import {useRouter} from "next/router";
 
 interface Props {
     id: string;
@@ -12,14 +13,20 @@ interface Props {
 
 const Editor = ({id}: Props) => {
     const [image, setImage] = useState(undefined as Image | undefined);
+    const router = useRouter();
+
     useEffect(() => {
         const imagesCollection = new ImagesCollection()
         const jwt = localStorage.getItem('jwt');
-        if (jwt) {
-            imagesCollection
-                .getImage(jwt, id === undefined ? "0" : id as string)
-                .then(r => {setImage(r)});
+        if (!jwt) {
+            router.push('/login').then();
+            return;
         }
+        imagesCollection
+            .getImage(jwt, id === undefined ? "0" : id as string)
+            .then(r => {
+                setImage(r)
+            });
     }, []);
     return (
         <Layout title="Photokek | Editor">
